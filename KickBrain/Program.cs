@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace SerialAudio
 {
@@ -10,7 +11,9 @@ namespace SerialAudio
 	{
 		static void Main(string[] args)
 		{
-			KickBrain.KB.ui.ShowDialog();
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(KickBrain.KB.ui);
 		}
 	}
 }

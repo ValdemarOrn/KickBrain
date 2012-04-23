@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KickBrain", "KickBrain\KickBrain.csproj", "{F9EFBB55-169E-429C-8337-92A10E83E965}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiTest", "MidiTest\MidiTest.csproj", "{230A6C9F-996D-45E3-BC44-4D7513C57AE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{F9EFBB55-169E-429C-8337-92A10E83E965}.Debug|x86.Build.0 = Debug|x86
 		{F9EFBB55-169E-429C-8337-92A10E83E965}.Release|x86.ActiveCfg = Release|x86
 		{F9EFBB55-169E-429C-8337-92A10E83E965}.Release|x86.Build.0 = Release|x86
+		{230A6C9F-996D-45E3-BC44-4D7513C57AE3}.Debug|x86.ActiveCfg = Debug|x86
+		{230A6C9F-996D-45E3-BC44-4D7513C57AE3}.Debug|x86.Build.0 = Debug|x86
+		{230A6C9F-996D-45E3-BC44-4D7513C57AE3}.Release|x86.ActiveCfg = Release|x86
+		{230A6C9F-996D-45E3-BC44-4D7513C57AE3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

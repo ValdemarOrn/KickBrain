@@ -28,7 +28,7 @@ namespace SerialAudio
 		{
 			try
 			{
-				input = new SerialInput(comboBox1.Text, Convert.ToInt32(textBox2.Text), Convert.ToInt32(textBox1.Text));
+				input = new SerialInput(comboBox1.Text, Convert.ToInt32(textBox2.Text), Convert.ToInt32(textBox3.Text), Convert.ToInt32(textBox1.Text));
 			}
 			catch (Exception ex)
 			{

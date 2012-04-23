@@ -94,11 +94,11 @@ namespace SerialAudio
 			// if triggering, measure power and decrement timer
 			if (triggerTime > 0)
 			{
-				triggerPower += value;
+				triggerPower = (value >= triggerPower) ? value : triggerPower;
 				triggerTime--;
 
 				if (triggerTime == 0 && Config.Enabled)
-					TriggerEvent(this, triggerPower / (Config.TriggerHold + 1));
+					TriggerEvent(this, triggerPower);
 			}
 			else
 			{

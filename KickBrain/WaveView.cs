@@ -23,12 +23,21 @@ namespace SerialAudio
 		Timer RefreshTimer;
 
 		List<double> Values;
+		int ScanPos;
+
+		Pen redPen;
+		Pen bluePen;
+		Pen blackPen;
 
 		public WaveView()
 		{
 			Values = new List<double>();
 			TriggerPos = new List<int>();
 			TriggerOffPos = new List<int>();
+
+			redPen = new Pen(Color.FromArgb(255, 200, 200), 3.0f);
+			bluePen = new Pen(Color.FromArgb(200, 200, 255), 3.0f);
+			blackPen = Pens.Black;
 
 			this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
 			RefreshTimer = new Timer();
@@ -40,36 +49,59 @@ namespace SerialAudio
 			RefreshTimer.Start();
 		}
 
+		int LastPaintPos;
+
+		Bitmap buffer;
+
 		protected override void OnPaint(PaintEventArgs e)
 		{
+			if (buffer == null || buffer.Width != this.Width || buffer.Height != this.Height)
+				buffer = new Bitmap(this.Width, this.Height);
+
+			var context = Graphics.FromImage(buffer);
+
 			// Values can be modified by the AddData method while we're painting
 			// create copy so we don't have to use locks
 			List<double> ValCopy = null;
 			int i = 0;
+			int finalPaintPos = -1;
 
 			try
 			{
 				lock (Values)
 				{
+					finalPaintPos = ScanPos; // we paint values between LastPaintPos and current ScanPos
 					ValCopy = new List<double>(Values);
 				}
 
-				e.Graphics.Clear(Color.White);
+
+				// Clear the area we are about to refresh
+				/*if (finalPaintPos >= LastPaintPos)
+					context.FillRectangle(Brushes.White, (float)(LastPaintPos + 1), 0, (float)(finalPaintPos - LastPaintPos), (float)this.Height);
+				else
+				{
+					context.FillRectangle(Brushes.White, 0, 0, (float)(finalPaintPos), this.Height);
+					context.FillRectangle(Brushes.White, LastPaintPos, 0, this.Width - LastP, this.Height);
+				}*/
+
+				context.Clear(Color.White);
+
+
 
 				for (i = 0; i < ValCopy.Count - 1; i++)
 				{
 					double y = 1 - ValCopy[i];
 					double y2 = 1 - ValCopy[i + 1];
 
-					var redPen = new Pen(Color.FromArgb(255, 200, 200), 3.0f);
-					var bluePen = new Pen(Color.FromArgb(200, 200, 255), 3.0f);
 					if (TriggerPos.Contains(i))
-						e.Graphics.DrawLine(redPen, (float)(ZoomX * i), 0, (float)(ZoomX * i), 256);
+						context.DrawLine(redPen, (float)(ZoomX * i), 0, (float)(ZoomX * i), this.Height - 1);
 					if (TriggerOffPos.Contains(i))
-						e.Graphics.DrawLine(bluePen, (float)(ZoomX * i), 0, (float)(ZoomX * i), 256);
+						context.DrawLine(bluePen, (float)(ZoomX * i), 0, (float)(ZoomX * i), this.Height - 1);
 
-					e.Graphics.DrawLine(Pens.Black, (float)(ZoomX * i), (float)(y*256), (float)(ZoomX * (i + 1)), (float)(y2*256));
+					context.DrawLine(blackPen, (float)(ZoomX * i), (float)(y * this.Height - 1), (float)(ZoomX * (i + 1)), (float)(y2 * this.Height - 1));
 				}
+
+				e.Graphics.DrawImageUnscaled(buffer, 0, 0);
 			}
 			catch (Exception ex)
 			{
@@ -88,8 +120,6 @@ namespace SerialAudio
 			if(power == 0.0)
 				TriggerOffPos.Add(ScanPos - delay);
 		}
-
-		int ScanPos;
 
 		public void AddData(WaveChannel sender, double data)
 		{

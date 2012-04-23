@@ -32,8 +32,8 @@ namespace SerialAudio
 				view.Channel = channel;
 				view.Top = 0;
 				view.Left = 0;
-				view.Height = 257;
-				view.Width = ui.Width - 50;
+				view.Height = ui.WaveTabs.Height - 30;
+				view.Width = ui.WaveTabs.ClientSize.Width - 8;
 				view.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 					| System.Windows.Forms.AnchorStyles.Right))); // Resize waveView with the window
 				view.ZoomX = Convert.ToDouble(ui.textBoxZoomX.Text);

@@ -71,7 +71,6 @@
 			// 
 			// textBoxZoomX
 			// 
-			this.textBoxZoomX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxZoomX.Location = new System.Drawing.Point(12, 316);
 			this.textBoxZoomX.Name = "textBoxZoomX";
 			this.textBoxZoomX.Size = new System.Drawing.Size(65, 20);
@@ -80,7 +79,6 @@
 			// 
 			// buttonZoomX
 			// 
-			this.buttonZoomX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonZoomX.Location = new System.Drawing.Point(93, 314);
 			this.buttonZoomX.Name = "buttonZoomX";
 			this.buttonZoomX.Size = new System.Drawing.Size(105, 23);
@@ -91,7 +89,6 @@
 			// 
 			// buttonRefresh
 			// 
-			this.buttonRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonRefresh.Location = new System.Drawing.Point(93, 343);
 			this.buttonRefresh.Name = "buttonRefresh";
 			this.buttonRefresh.Size = new System.Drawing.Size(105, 23);
@@ -102,7 +99,6 @@
 			// 
 			// textBoxRefresh
 			// 
-			this.textBoxRefresh.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxRefresh.Location = new System.Drawing.Point(12, 345);
 			this.textBoxRefresh.Name = "textBoxRefresh";
 			this.textBoxRefresh.Size = new System.Drawing.Size(65, 20);
@@ -111,10 +107,10 @@
 			// 
 			// WaveTabs
 			// 
-			this.WaveTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
 			this.WaveTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.WaveTabs.Location = new System.Drawing.Point(12, 12);
+			this.WaveTabs.Multiline = true;
 			this.WaveTabs.Name = "WaveTabs";
 			this.WaveTabs.SelectedIndex = 0;
 			this.WaveTabs.Size = new System.Drawing.Size(912, 286);
@@ -123,7 +119,6 @@
 			// 
 			// buttonAddPort
 			// 
-			this.buttonAddPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonAddPort.Location = new System.Drawing.Point(93, 372);
 			this.buttonAddPort.Name = "buttonAddPort";
 			this.buttonAddPort.Size = new System.Drawing.Size(105, 23);
@@ -171,16 +166,15 @@
 			// checkBoxSlewFactor
 			// 
 			this.checkBoxSlewFactor.AutoSize = true;
-			this.checkBoxSlewFactor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxSlewFactor.Location = new System.Drawing.Point(169, 149);
+			this.checkBoxSlewFactor.Location = new System.Drawing.Point(175, 136);
 			this.checkBoxSlewFactor.Name = "checkBoxSlewFactor";
-			this.checkBoxSlewFactor.Size = new System.Drawing.Size(12, 11);
+			this.checkBoxSlewFactor.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxSlewFactor.TabIndex = 31;
 			this.checkBoxSlewFactor.UseVisualStyleBackColor = true;
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(11, 148);
+			this.label12.Location = new System.Drawing.Point(17, 136);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(80, 18);
 			this.label12.TabIndex = 30;
@@ -189,15 +183,14 @@
 			// 
 			// textBoxSlewFactor
 			// 
-			this.textBoxSlewFactor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxSlewFactor.Location = new System.Drawing.Point(97, 145);
+			this.textBoxSlewFactor.Location = new System.Drawing.Point(103, 133);
 			this.textBoxSlewFactor.Name = "textBoxSlewFactor";
 			this.textBoxSlewFactor.Size = new System.Drawing.Size(66, 20);
 			this.textBoxSlewFactor.TabIndex = 29;
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(203, 148);
+			this.label11.Location = new System.Drawing.Point(209, 136);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(103, 18);
 			this.label11.TabIndex = 28;
@@ -206,15 +199,14 @@
 			// 
 			// textBoxTriggerBlock
 			// 
-			this.textBoxTriggerBlock.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxTriggerBlock.Location = new System.Drawing.Point(312, 145);
+			this.textBoxTriggerBlock.Location = new System.Drawing.Point(318, 133);
 			this.textBoxTriggerBlock.Name = "textBoxTriggerBlock";
 			this.textBoxTriggerBlock.Size = new System.Drawing.Size(66, 20);
 			this.textBoxTriggerBlock.TabIndex = 27;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(203, 122);
+			this.label8.Location = new System.Drawing.Point(209, 110);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(103, 18);
 			this.label8.TabIndex = 26;
@@ -223,7 +215,7 @@
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(191, 96);
+			this.label9.Location = new System.Drawing.Point(197, 84);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(115, 18);
 			this.label9.TabIndex = 25;
@@ -232,7 +224,7 @@
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(203, 71);
+			this.label10.Location = new System.Drawing.Point(209, 59);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(103, 18);
 			this.label10.TabIndex = 24;
@@ -241,31 +233,28 @@
 			// 
 			// textBoxTriggerFactor
 			// 
-			this.textBoxTriggerFactor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxTriggerFactor.Location = new System.Drawing.Point(312, 119);
+			this.textBoxTriggerFactor.Location = new System.Drawing.Point(318, 107);
 			this.textBoxTriggerFactor.Name = "textBoxTriggerFactor";
 			this.textBoxTriggerFactor.Size = new System.Drawing.Size(66, 20);
 			this.textBoxTriggerFactor.TabIndex = 23;
 			// 
 			// textBoxTriggerThreshold
 			// 
-			this.textBoxTriggerThreshold.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxTriggerThreshold.Location = new System.Drawing.Point(312, 93);
+			this.textBoxTriggerThreshold.Location = new System.Drawing.Point(318, 81);
 			this.textBoxTriggerThreshold.Name = "textBoxTriggerThreshold";
 			this.textBoxTriggerThreshold.Size = new System.Drawing.Size(66, 20);
 			this.textBoxTriggerThreshold.TabIndex = 22;
 			// 
 			// textBoxTriggerHold
 			// 
-			this.textBoxTriggerHold.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxTriggerHold.Location = new System.Drawing.Point(312, 67);
+			this.textBoxTriggerHold.Location = new System.Drawing.Point(318, 55);
 			this.textBoxTriggerHold.Name = "textBoxTriggerHold";
 			this.textBoxTriggerHold.Size = new System.Drawing.Size(66, 20);
 			this.textBoxTriggerHold.TabIndex = 21;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(203, 44);
+			this.label7.Location = new System.Drawing.Point(209, 32);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(103, 18);
 			this.label7.TabIndex = 20;
@@ -274,8 +263,7 @@
 			// 
 			// textBoxThreshold
 			// 
-			this.textBoxThreshold.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxThreshold.Location = new System.Drawing.Point(312, 41);
+			this.textBoxThreshold.Location = new System.Drawing.Point(318, 29);
 			this.textBoxThreshold.Name = "textBoxThreshold";
 			this.textBoxThreshold.Size = new System.Drawing.Size(66, 20);
 			this.textBoxThreshold.TabIndex = 19;
@@ -283,16 +271,15 @@
 			// checkBoxCurve
 			// 
 			this.checkBoxCurve.AutoSize = true;
-			this.checkBoxCurve.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxCurve.Location = new System.Drawing.Point(169, 123);
+			this.checkBoxCurve.Location = new System.Drawing.Point(175, 110);
 			this.checkBoxCurve.Name = "checkBoxCurve";
-			this.checkBoxCurve.Size = new System.Drawing.Size(12, 11);
+			this.checkBoxCurve.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxCurve.TabIndex = 18;
 			this.checkBoxCurve.UseVisualStyleBackColor = true;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(11, 122);
+			this.label4.Location = new System.Drawing.Point(17, 110);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(80, 18);
 			this.label4.TabIndex = 11;
@@ -301,8 +288,7 @@
 			// 
 			// textBoxGain
 			// 
-			this.textBoxGain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxGain.Location = new System.Drawing.Point(97, 119);
+			this.textBoxGain.Location = new System.Drawing.Point(103, 107);
 			this.textBoxGain.Name = "textBoxGain";
 			this.textBoxGain.Size = new System.Drawing.Size(66, 20);
 			this.textBoxGain.TabIndex = 10;
@@ -310,36 +296,33 @@
 			// checkBoxLowpass
 			// 
 			this.checkBoxLowpass.AutoSize = true;
-			this.checkBoxLowpass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxLowpass.Location = new System.Drawing.Point(169, 97);
+			this.checkBoxLowpass.Location = new System.Drawing.Point(175, 84);
 			this.checkBoxLowpass.Name = "checkBoxLowpass";
-			this.checkBoxLowpass.Size = new System.Drawing.Size(12, 11);
+			this.checkBoxLowpass.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxLowpass.TabIndex = 9;
 			this.checkBoxLowpass.UseVisualStyleBackColor = true;
 			// 
 			// checkBoxSlewRate
 			// 
 			this.checkBoxSlewRate.AutoSize = true;
-			this.checkBoxSlewRate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxSlewRate.Location = new System.Drawing.Point(169, 71);
+			this.checkBoxSlewRate.Location = new System.Drawing.Point(175, 58);
 			this.checkBoxSlewRate.Name = "checkBoxSlewRate";
-			this.checkBoxSlewRate.Size = new System.Drawing.Size(12, 11);
+			this.checkBoxSlewRate.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxSlewRate.TabIndex = 8;
 			this.checkBoxSlewRate.UseVisualStyleBackColor = true;
 			// 
 			// checkBoxHighpass
 			// 
 			this.checkBoxHighpass.AutoSize = true;
-			this.checkBoxHighpass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.checkBoxHighpass.Location = new System.Drawing.Point(169, 45);
+			this.checkBoxHighpass.Location = new System.Drawing.Point(175, 32);
 			this.checkBoxHighpass.Name = "checkBoxHighpass";
-			this.checkBoxHighpass.Size = new System.Drawing.Size(12, 11);
+			this.checkBoxHighpass.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxHighpass.TabIndex = 7;
 			this.checkBoxHighpass.UseVisualStyleBackColor = true;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(11, 96);
+			this.label3.Location = new System.Drawing.Point(17, 84);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(80, 18);
 			this.label3.TabIndex = 6;
@@ -348,7 +331,7 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11, 70);
+			this.label2.Location = new System.Drawing.Point(17, 58);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(80, 18);
 			this.label2.TabIndex = 5;
@@ -357,7 +340,7 @@
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11, 44);
+			this.label1.Location = new System.Drawing.Point(17, 32);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(80, 18);
 			this.label1.TabIndex = 4;
@@ -366,34 +349,30 @@
 			// 
 			// textBoxLowpass
 			// 
-			this.textBoxLowpass.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxLowpass.Location = new System.Drawing.Point(97, 93);
+			this.textBoxLowpass.Location = new System.Drawing.Point(103, 81);
 			this.textBoxLowpass.Name = "textBoxLowpass";
 			this.textBoxLowpass.Size = new System.Drawing.Size(66, 20);
 			this.textBoxLowpass.TabIndex = 3;
 			// 
 			// textBoxSlewRate
 			// 
-			this.textBoxSlewRate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxSlewRate.Location = new System.Drawing.Point(97, 67);
+			this.textBoxSlewRate.Location = new System.Drawing.Point(103, 55);
 			this.textBoxSlewRate.Name = "textBoxSlewRate";
 			this.textBoxSlewRate.Size = new System.Drawing.Size(66, 20);
 			this.textBoxSlewRate.TabIndex = 2;
 			// 
 			// textBoxHighpass
 			// 
-			this.textBoxHighpass.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBoxHighpass.Location = new System.Drawing.Point(97, 41);
+			this.textBoxHighpass.Location = new System.Drawing.Point(103, 29);
 			this.textBoxHighpass.Name = "textBoxHighpass";
 			this.textBoxHighpass.Size = new System.Drawing.Size(66, 20);
 			this.textBoxHighpass.TabIndex = 1;
 			// 
 			// button1
 			// 
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Location = new System.Drawing.Point(97, 182);
+			this.button1.Location = new System.Drawing.Point(103, 170);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(66, 23);
+			this.button1.Size = new System.Drawing.Size(87, 23);
 			this.button1.TabIndex = 0;
 			this.button1.Text = "Set";
 			this.button1.UseVisualStyleBackColor = true;
@@ -430,10 +409,9 @@
 			// checkBoxEnabled
 			// 
 			this.checkBoxEnabled.AutoSize = true;
-			this.checkBoxEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.checkBoxEnabled.Location = new System.Drawing.Point(142, 449);
 			this.checkBoxEnabled.Name = "checkBoxEnabled";
-			this.checkBoxEnabled.Size = new System.Drawing.Size(12, 11);
+			this.checkBoxEnabled.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxEnabled.TabIndex = 32;
 			this.checkBoxEnabled.UseVisualStyleBackColor = true;
 			this.checkBoxEnabled.CheckedChanged += new System.EventHandler(this.checkBoxEnabled_CheckedChanged);

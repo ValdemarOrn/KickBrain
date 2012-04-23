@@ -35,11 +35,14 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// comboBox1
 			// 
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new System.Drawing.Point(90, 23);
 			this.comboBox1.Name = "comboBox1";
@@ -48,7 +51,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(90, 102);
+			this.button1.Location = new System.Drawing.Point(90, 128);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 1;
@@ -67,7 +70,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(33, 53);
+			this.label1.Location = new System.Drawing.Point(29, 53);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(51, 13);
 			this.label1.TabIndex = 3;
@@ -76,7 +79,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(26, 79);
+			this.label2.Location = new System.Drawing.Point(22, 105);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(58, 13);
 			this.label2.TabIndex = 5;
@@ -84,7 +87,7 @@
 			// 
 			// textBox2
 			// 
-			this.textBox2.Location = new System.Drawing.Point(90, 76);
+			this.textBox2.Location = new System.Drawing.Point(90, 102);
 			this.textBox2.Name = "textBox2";
 			this.textBox2.Size = new System.Drawing.Size(107, 20);
 			this.textBox2.TabIndex = 4;
@@ -93,18 +96,37 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(58, 26);
+			this.label3.Location = new System.Drawing.Point(54, 26);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(26, 13);
 			this.label3.TabIndex = 6;
 			this.label3.Text = "Port";
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(12, 79);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(68, 13);
+			this.label4.TabIndex = 8;
+			this.label4.Text = "Sample Rate";
+			// 
+			// textBox3
+			// 
+			this.textBox3.Location = new System.Drawing.Point(90, 76);
+			this.textBox3.Name = "textBox3";
+			this.textBox3.Size = new System.Drawing.Size(107, 20);
+			this.textBox3.TabIndex = 7;
+			this.textBox3.Text = "1000";
 			// 
 			// AddPort
 			// 
 			this.AcceptButton = this.button1;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(237, 154);
+			this.ClientSize = new System.Drawing.Size(237, 185);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.textBox3);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textBox2);
@@ -112,7 +134,7 @@
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.comboBox1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "AddPort";
 			this.Text = "Add Serial Port";
 			this.ResumeLayout(false);
@@ -129,5 +151,7 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.TextBox textBox3;
 	}
 }

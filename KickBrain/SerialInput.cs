@@ -31,14 +31,16 @@ namespace SerialAudio
 		public List<WaveChannel> Channels;
 		public string Name { get; private set; }
 		public int ChannelCount { get; private set; }
+		public int SampleRate { get; private set; }
 
-		public SerialInput(string portName, int baud, int channelCount)
+		public SerialInput(string portName, int baud, int sampleRate, int channelCount)
 		{
 			port = new SerialPort();
 
 			Channels = new List<WaveChannel>();
 			Name = portName;
 			ChannelCount = channelCount;
+			SampleRate = sampleRate;
 
 			port.PortName = portName;
 
@@ -51,7 +53,12 @@ namespace SerialAudio
 			port.Open();
 
 			// set the channel number on the Arduino
-			port.Write(new byte[] { (byte)channelCount }, 0, 1);
+			sampleRate = (int)(sampleRate / 50.0);
+			if (sampleRate > 100)
+				sampleRate = 100;
+			sampleRate += 128; // set the top bit to true
+
+			port.Write(new byte[] { (byte)channelCount, (byte)sampleRate }, 0, 2);
 
 			// Create the Channels
 			int i = 0;
@@ -79,8 +86,8 @@ namespace SerialAudio
 		{
 			while (true)
 			{
-				byte[] buf = new byte[ChannelCount];
-				int count = port.Read(buf, 0, ChannelCount);
+				byte[] buf = new byte[ChannelCount + 1];
+				int count = port.Read(buf, 0, ChannelCount + 1);
 
 				// Data rate
 				PerSecond += count;
