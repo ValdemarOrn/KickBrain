@@ -10,44 +10,36 @@ namespace SerialAudio
 		public bool Enabled;
 
 		public double HighpassFrequency;
-		public double LowpassFrequency;
 
-		public double SlewRate;
-		public double SlewFactor;
+		public double DecayRate;
 
 		public double Gain;
-		public double Threshold;
+		public double NoiseFloor;
 
-		public int TriggerHold;
+		public int TriggerAttack;
+		public int TriggerLength;
 		public double TriggerThreshold;
-		public double TriggerFactor;
-		public int TriggerBlock;
+		public double TriggerScale;
+		public int TriggerRetrigger;
 
-		public bool SlewRateEnabled;
-		public bool SlewFactorEnabled;
-		public bool LowpassEnabled;
+		public bool DecayEnabled;
 		public bool HighpassEnabled;
-		public bool CurveEnabled;
 
 		public WaveChannelConfig()
 		{
 			HighpassFrequency = 0.05;
-			LowpassFrequency = 0.2;
-			SlewRate = 0.997;
+			DecayRate = 0.997;
 			Gain = 1.0;
-			Threshold = 0.02;
-			SlewFactor = 1.2;
+			NoiseFloor = 0.02;
 
 			TriggerThreshold = 0.02;
-			TriggerHold = 100;
-			TriggerFactor = 1.4;
-			TriggerBlock = 200;
+			TriggerAttack = 4;
+			TriggerLength = 10;
+			TriggerScale = 1.25;
+			TriggerRetrigger = 25;
 
 			HighpassEnabled = true;
-			LowpassEnabled = false;
-			CurveEnabled = false;
-			SlewRateEnabled = true;
-			SlewFactorEnabled = false;
+			DecayEnabled = true;
 
 			Enabled = true;
 		}

@@ -93,7 +93,7 @@ namespace SerialAudio
 				PerSecond += count;
 				if ((DateTime.Now - Start).TotalMilliseconds >= 1000)
 				{
-					Console.WriteLine("Samples per sec: " + PerSecond);
+					Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
 					PerSecond = 0;
 					Start = DateTime.Now;
 				}

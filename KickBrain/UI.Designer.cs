@@ -35,29 +35,22 @@
 			this.WaveTabs = new System.Windows.Forms.TabControl();
 			this.buttonAddPort = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.checkBoxSlewFactor = new System.Windows.Forms.CheckBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.textBoxSlewFactor = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.textBoxTriggerBlock = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
-			this.textBoxTriggerFactor = new System.Windows.Forms.TextBox();
+			this.textBoxTriggerScale = new System.Windows.Forms.TextBox();
 			this.textBoxTriggerThreshold = new System.Windows.Forms.TextBox();
-			this.textBoxTriggerHold = new System.Windows.Forms.TextBox();
+			this.textBoxTriggerAttack = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.textBoxThreshold = new System.Windows.Forms.TextBox();
-			this.checkBoxCurve = new System.Windows.Forms.CheckBox();
+			this.textBoxNoiseFloor = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textBoxGain = new System.Windows.Forms.TextBox();
-			this.checkBoxLowpass = new System.Windows.Forms.CheckBox();
 			this.checkBoxSlewRate = new System.Windows.Forms.CheckBox();
 			this.checkBoxHighpass = new System.Windows.Forms.CheckBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textBoxLowpass = new System.Windows.Forms.TextBox();
 			this.textBoxSlewRate = new System.Windows.Forms.TextBox();
 			this.textBoxHighpass = new System.Windows.Forms.TextBox();
 			this.button1 = new System.Windows.Forms.Button();
@@ -66,6 +59,8 @@
 			this.labelCount = new System.Windows.Forms.Label();
 			this.checkBoxEnabled = new System.Windows.Forms.CheckBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textBoxTriggerLength = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -129,29 +124,24 @@
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.checkBoxSlewFactor);
-			this.groupBox1.Controls.Add(this.label12);
-			this.groupBox1.Controls.Add(this.textBoxSlewFactor);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.textBoxTriggerLength);
 			this.groupBox1.Controls.Add(this.label11);
 			this.groupBox1.Controls.Add(this.textBoxTriggerBlock);
 			this.groupBox1.Controls.Add(this.label8);
 			this.groupBox1.Controls.Add(this.label9);
 			this.groupBox1.Controls.Add(this.label10);
-			this.groupBox1.Controls.Add(this.textBoxTriggerFactor);
+			this.groupBox1.Controls.Add(this.textBoxTriggerScale);
 			this.groupBox1.Controls.Add(this.textBoxTriggerThreshold);
-			this.groupBox1.Controls.Add(this.textBoxTriggerHold);
+			this.groupBox1.Controls.Add(this.textBoxTriggerAttack);
 			this.groupBox1.Controls.Add(this.label7);
-			this.groupBox1.Controls.Add(this.textBoxThreshold);
-			this.groupBox1.Controls.Add(this.checkBoxCurve);
+			this.groupBox1.Controls.Add(this.textBoxNoiseFloor);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.textBoxGain);
-			this.groupBox1.Controls.Add(this.checkBoxLowpass);
 			this.groupBox1.Controls.Add(this.checkBoxSlewRate);
 			this.groupBox1.Controls.Add(this.checkBoxHighpass);
-			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.textBoxLowpass);
 			this.groupBox1.Controls.Add(this.textBoxSlewRate);
 			this.groupBox1.Controls.Add(this.textBoxHighpass);
 			this.groupBox1.Controls.Add(this.button1);
@@ -163,38 +153,13 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Processing";
 			// 
-			// checkBoxSlewFactor
-			// 
-			this.checkBoxSlewFactor.AutoSize = true;
-			this.checkBoxSlewFactor.Location = new System.Drawing.Point(175, 136);
-			this.checkBoxSlewFactor.Name = "checkBoxSlewFactor";
-			this.checkBoxSlewFactor.Size = new System.Drawing.Size(15, 14);
-			this.checkBoxSlewFactor.TabIndex = 31;
-			this.checkBoxSlewFactor.UseVisualStyleBackColor = true;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(17, 136);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(80, 18);
-			this.label12.TabIndex = 30;
-			this.label12.Text = "Slew Factor";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBoxSlewFactor
-			// 
-			this.textBoxSlewFactor.Location = new System.Drawing.Point(103, 133);
-			this.textBoxSlewFactor.Name = "textBoxSlewFactor";
-			this.textBoxSlewFactor.Size = new System.Drawing.Size(66, 20);
-			this.textBoxSlewFactor.TabIndex = 29;
-			// 
 			// label11
 			// 
 			this.label11.Location = new System.Drawing.Point(209, 136);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(103, 18);
 			this.label11.TabIndex = 28;
-			this.label11.Text = "Trigger Block";
+			this.label11.Text = "Retrigger";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textBoxTriggerBlock
@@ -210,7 +175,7 @@
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(103, 18);
 			this.label8.TabIndex = 26;
-			this.label8.Text = "Trigger Factor";
+			this.label8.Text = "Trigger Scale";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label9
@@ -224,19 +189,19 @@
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(209, 59);
+			this.label10.Location = new System.Drawing.Point(-6, 110);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(103, 18);
 			this.label10.TabIndex = 24;
-			this.label10.Text = "Trigger Hold";
+			this.label10.Text = "Trigger Attack";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textBoxTriggerFactor
+			// textBoxTriggerScale
 			// 
-			this.textBoxTriggerFactor.Location = new System.Drawing.Point(318, 107);
-			this.textBoxTriggerFactor.Name = "textBoxTriggerFactor";
-			this.textBoxTriggerFactor.Size = new System.Drawing.Size(66, 20);
-			this.textBoxTriggerFactor.TabIndex = 23;
+			this.textBoxTriggerScale.Location = new System.Drawing.Point(318, 107);
+			this.textBoxTriggerScale.Name = "textBoxTriggerScale";
+			this.textBoxTriggerScale.Size = new System.Drawing.Size(66, 20);
+			this.textBoxTriggerScale.TabIndex = 23;
 			// 
 			// textBoxTriggerThreshold
 			// 
@@ -245,12 +210,12 @@
 			this.textBoxTriggerThreshold.Size = new System.Drawing.Size(66, 20);
 			this.textBoxTriggerThreshold.TabIndex = 22;
 			// 
-			// textBoxTriggerHold
+			// textBoxTriggerAttack
 			// 
-			this.textBoxTriggerHold.Location = new System.Drawing.Point(318, 55);
-			this.textBoxTriggerHold.Name = "textBoxTriggerHold";
-			this.textBoxTriggerHold.Size = new System.Drawing.Size(66, 20);
-			this.textBoxTriggerHold.TabIndex = 21;
+			this.textBoxTriggerAttack.Location = new System.Drawing.Point(103, 106);
+			this.textBoxTriggerAttack.Name = "textBoxTriggerAttack";
+			this.textBoxTriggerAttack.Size = new System.Drawing.Size(66, 20);
+			this.textBoxTriggerAttack.TabIndex = 21;
 			// 
 			// label7
 			// 
@@ -258,28 +223,19 @@
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(103, 18);
 			this.label7.TabIndex = 20;
-			this.label7.Text = "Threshold";
+			this.label7.Text = "Noise Floor";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textBoxThreshold
+			// textBoxNoiseFloor
 			// 
-			this.textBoxThreshold.Location = new System.Drawing.Point(318, 29);
-			this.textBoxThreshold.Name = "textBoxThreshold";
-			this.textBoxThreshold.Size = new System.Drawing.Size(66, 20);
-			this.textBoxThreshold.TabIndex = 19;
-			// 
-			// checkBoxCurve
-			// 
-			this.checkBoxCurve.AutoSize = true;
-			this.checkBoxCurve.Location = new System.Drawing.Point(175, 110);
-			this.checkBoxCurve.Name = "checkBoxCurve";
-			this.checkBoxCurve.Size = new System.Drawing.Size(15, 14);
-			this.checkBoxCurve.TabIndex = 18;
-			this.checkBoxCurve.UseVisualStyleBackColor = true;
+			this.textBoxNoiseFloor.Location = new System.Drawing.Point(318, 29);
+			this.textBoxNoiseFloor.Name = "textBoxNoiseFloor";
+			this.textBoxNoiseFloor.Size = new System.Drawing.Size(66, 20);
+			this.textBoxNoiseFloor.TabIndex = 19;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(17, 110);
+			this.label4.Location = new System.Drawing.Point(17, 84);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(80, 18);
 			this.label4.TabIndex = 11;
@@ -288,19 +244,10 @@
 			// 
 			// textBoxGain
 			// 
-			this.textBoxGain.Location = new System.Drawing.Point(103, 107);
+			this.textBoxGain.Location = new System.Drawing.Point(103, 81);
 			this.textBoxGain.Name = "textBoxGain";
 			this.textBoxGain.Size = new System.Drawing.Size(66, 20);
 			this.textBoxGain.TabIndex = 10;
-			// 
-			// checkBoxLowpass
-			// 
-			this.checkBoxLowpass.AutoSize = true;
-			this.checkBoxLowpass.Location = new System.Drawing.Point(175, 84);
-			this.checkBoxLowpass.Name = "checkBoxLowpass";
-			this.checkBoxLowpass.Size = new System.Drawing.Size(15, 14);
-			this.checkBoxLowpass.TabIndex = 9;
-			this.checkBoxLowpass.UseVisualStyleBackColor = true;
 			// 
 			// checkBoxSlewRate
 			// 
@@ -320,22 +267,13 @@
 			this.checkBoxHighpass.TabIndex = 7;
 			this.checkBoxHighpass.UseVisualStyleBackColor = true;
 			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(17, 84);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(80, 18);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "Lowpass filter";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(17, 58);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(80, 18);
 			this.label2.TabIndex = 5;
-			this.label2.Text = "Slew Rate";
+			this.label2.Text = "Decay Rate";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label1
@@ -346,13 +284,6 @@
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Highpass Filter";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBoxLowpass
-			// 
-			this.textBoxLowpass.Location = new System.Drawing.Point(103, 81);
-			this.textBoxLowpass.Name = "textBoxLowpass";
-			this.textBoxLowpass.Size = new System.Drawing.Size(66, 20);
-			this.textBoxLowpass.TabIndex = 3;
 			// 
 			// textBoxSlewRate
 			// 
@@ -425,6 +356,22 @@
 			this.label5.TabIndex = 34;
 			this.label5.Text = "Enabled";
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(-6, 136);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(103, 18);
+			this.label3.TabIndex = 30;
+			this.label3.Text = "Trigger Length";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textBoxTriggerLength
+			// 
+			this.textBoxTriggerLength.Location = new System.Drawing.Point(103, 132);
+			this.textBoxTriggerLength.Name = "textBoxTriggerLength";
+			this.textBoxTriggerLength.Size = new System.Drawing.Size(66, 20);
+			this.textBoxTriggerLength.TabIndex = 29;
+			// 
 			// UI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -458,7 +405,6 @@
 		private System.Windows.Forms.Button buttonRefresh;
 		private System.Windows.Forms.Button buttonAddPort;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button button1;
@@ -468,29 +414,25 @@
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label5;
 		internal System.Windows.Forms.TextBox textBoxZoomX;
 		internal System.Windows.Forms.TextBox textBoxRefresh;
-		internal System.Windows.Forms.TextBox textBoxLowpass;
 		internal System.Windows.Forms.TextBox textBoxSlewRate;
 		internal System.Windows.Forms.TextBox textBoxHighpass;
-		internal System.Windows.Forms.CheckBox checkBoxLowpass;
 		internal System.Windows.Forms.CheckBox checkBoxSlewRate;
 		internal System.Windows.Forms.CheckBox checkBoxHighpass;
 		internal System.Windows.Forms.TextBox textBoxGain;
-		internal System.Windows.Forms.CheckBox checkBoxCurve;
-		internal System.Windows.Forms.TextBox textBoxThreshold;
-		internal System.Windows.Forms.TextBox textBoxTriggerFactor;
+		internal System.Windows.Forms.TextBox textBoxNoiseFloor;
+		internal System.Windows.Forms.TextBox textBoxTriggerScale;
 		internal System.Windows.Forms.TextBox textBoxTriggerThreshold;
-		internal System.Windows.Forms.TextBox textBoxTriggerHold;
+		internal System.Windows.Forms.TextBox textBoxTriggerAttack;
 		internal System.Windows.Forms.ProgressBar progressBarVelocity;
 		internal System.Windows.Forms.Label labelVelocity;
 		internal System.Windows.Forms.TextBox textBoxTriggerBlock;
-		internal System.Windows.Forms.TextBox textBoxSlewFactor;
-		internal System.Windows.Forms.CheckBox checkBoxSlewFactor;
 		internal System.Windows.Forms.Label labelCount;
 		internal System.Windows.Forms.CheckBox checkBoxEnabled;
 		internal System.Windows.Forms.TabControl WaveTabs;
+		private System.Windows.Forms.Label label3;
+		internal System.Windows.Forms.TextBox textBoxTriggerLength;
 	}
 }

@@ -100,26 +100,21 @@ namespace SerialAudio
 
 			try
 			{
-				var lp = Convert.ToDouble(ui.textBoxLowpass.Text);
-				config.LowpassFrequency = (lp < 1.0) ? lp : 1.0;
 				var hp = Convert.ToDouble(ui.textBoxHighpass.Text);
 				config.HighpassFrequency = (hp < 1.0) ? hp : 1.0;
-				config.SlewRate = Convert.ToSingle(ui.textBoxSlewRate.Text);
-				config.SlewFactor = Convert.ToSingle(ui.textBoxSlewFactor.Text);
+				config.DecayRate = Convert.ToSingle(ui.textBoxSlewRate.Text);
 
 				config.Gain = Convert.ToDouble(ui.textBoxGain.Text);
-				config.Threshold = Convert.ToDouble(ui.textBoxThreshold.Text);
+				config.NoiseFloor = Convert.ToDouble(ui.textBoxNoiseFloor.Text);
 
-				config.TriggerHold = Convert.ToInt32(ui.textBoxTriggerHold.Text);
+				config.TriggerAttack = Convert.ToInt32(ui.textBoxTriggerAttack.Text);
+				config.TriggerLength = Convert.ToInt32(ui.textBoxTriggerLength.Text);
 				config.TriggerThreshold = Convert.ToDouble(ui.textBoxTriggerThreshold.Text);
-				config.TriggerFactor = Convert.ToDouble(ui.textBoxTriggerFactor.Text);
-				config.TriggerBlock = Convert.ToInt32(ui.textBoxTriggerBlock.Text);
+				config.TriggerScale = Convert.ToDouble(ui.textBoxTriggerScale.Text);
+				config.TriggerRetrigger = Convert.ToInt32(ui.textBoxTriggerBlock.Text);
 
 				config.HighpassEnabled = ui.checkBoxHighpass.Checked;
-				config.LowpassEnabled = ui.checkBoxLowpass.Checked;
-				config.SlewRateEnabled = ui.checkBoxSlewRate.Checked;
-				config.SlewFactorEnabled = ui.checkBoxSlewFactor.Checked;
-				config.CurveEnabled = ui.checkBoxCurve.Checked;
+				config.DecayEnabled = ui.checkBoxSlewRate.Checked;
 
 				config.Enabled = ui.checkBoxEnabled.Checked;
 			}
@@ -144,23 +139,19 @@ namespace SerialAudio
 			ui.checkBoxEnabled.Checked = config.Enabled;
 
 			ui.textBoxHighpass.Text = Math.Round(config.HighpassFrequency, 4).ToString();
-			ui.textBoxSlewRate.Text = Math.Round(config.SlewRate, 4).ToString();
-			ui.textBoxSlewFactor.Text = Math.Round(config.SlewFactor, 4).ToString();
-			ui.textBoxLowpass.Text = Math.Round(config.LowpassFrequency, 4).ToString();
+			ui.textBoxSlewRate.Text = Math.Round(config.DecayRate, 4).ToString();
 
 			ui.textBoxGain.Text = Math.Round(config.Gain, 4).ToString();
-			ui.textBoxThreshold.Text = Math.Round(config.Threshold, 4).ToString();
+			ui.textBoxNoiseFloor.Text = Math.Round(config.NoiseFloor, 4).ToString();
 
-			ui.textBoxTriggerHold.Text = config.TriggerHold.ToString();
+			ui.textBoxTriggerAttack.Text = config.TriggerAttack.ToString();
+			ui.textBoxTriggerLength.Text = config.TriggerLength.ToString();
 			ui.textBoxTriggerThreshold.Text = config.TriggerThreshold.ToString();
-			ui.textBoxTriggerFactor.Text = Math.Round(config.TriggerFactor, 4).ToString();
-			ui.textBoxTriggerBlock.Text = config.TriggerBlock.ToString();
+			ui.textBoxTriggerScale.Text = Math.Round(config.TriggerScale, 4).ToString();
+			ui.textBoxTriggerBlock.Text = config.TriggerRetrigger.ToString();
 
 			ui.checkBoxHighpass.Checked = config.HighpassEnabled;
-			ui.checkBoxLowpass.Checked = config.LowpassEnabled;
-			ui.checkBoxSlewRate.Checked = config.SlewRateEnabled;
-			ui.checkBoxSlewFactor.Checked = config.SlewFactorEnabled;
-			ui.checkBoxCurve.Checked = config.CurveEnabled;
+			ui.checkBoxSlewRate.Checked = config.DecayEnabled;
 		}
 
 		public void SetChannelEnabled(bool enabled)

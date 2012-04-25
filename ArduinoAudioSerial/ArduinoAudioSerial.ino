@@ -30,7 +30,7 @@ void setup() {
   lastTime = 0;
   setMicrosPerSample();
   
-  Serial.begin(260000);
+  Serial.begin(115200);
 }
 
 void loop() {

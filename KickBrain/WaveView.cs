@@ -49,59 +49,75 @@ namespace SerialAudio
 			RefreshTimer.Start();
 		}
 
-		int LastPaintPos;
+		int LastPainted;
 
 		Bitmap buffer;
+
+		Graphics context;
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if (buffer == null || buffer.Width != this.Width || buffer.Height != this.Height)
+			{
 				buffer = new Bitmap(this.Width, this.Height);
-
-			var context = Graphics.FromImage(buffer);
+				context = Graphics.FromImage(buffer);
+				context.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+				context.Clear(Color.White);
+				//context.ScaleTransform(4.0f, 4.0f);
+			}
 
 			// Values can be modified by the AddData method while we're painting
 			// create copy so we don't have to use locks
 			List<double> ValCopy = null;
 			int i = 0;
-			int finalPaintPos = -1;
+			int PaintTo = -1;
 
 			try
 			{
 				lock (Values)
 				{
-					finalPaintPos = ScanPos; // we paint values between LastPaintPos and current ScanPos
+					PaintTo = ScanPos; // we paint values between LastPaintPos and current ScanPos
 					ValCopy = new List<double>(Values);
 				}
 
-
-				// Clear the area we are about to refresh
-				/*if (finalPaintPos >= LastPaintPos)
-					context.FillRectangle(Brushes.White, (float)(LastPaintPos + 1), 0, (float)(finalPaintPos - LastPaintPos), (float)this.Height);
-				else
+				// come full circle, clear the context
+				if (PaintTo < LastPainted)
 				{
-					context.FillRectangle(Brushes.White, 0, 0, (float)(finalPaintPos), this.Height);
-					context.FillRectangle(Brushes.White, LastPaintPos, 0, this.Width - LastP, this.Height);
-				}*/
+					context.Clear(Color.White);
+					LastPainted = 0;
+				}
 
-				context.Clear(Color.White);
+				// Paint On Triggers
+				while (TriggerPos.Count > 0)
+				{
+					i = TriggerPos[0];
+					context.DrawLine(redPen, (float)(ZoomX * i), 0, (float)(ZoomX * i), this.Height - 1);
+					TriggerPos.RemoveAt(0);
+				}
 
+				// Paint off triggers
+				while (TriggerOffPos.Count > 0)
+				{
+					i = TriggerOffPos[0];
+					context.DrawLine(bluePen, (float)(ZoomX * i), 0, (float)(ZoomX * i), this.Height - 1);
+					TriggerOffPos.RemoveAt(0);
+				}
 
-
-				for (i = 0; i < ValCopy.Count - 1; i++)
+				// Paint signal
+				for (i = LastPainted; i < (ValCopy.Count - 1) && i < (PaintTo - 1); i++)
 				{
 					double y = 1 - ValCopy[i];
 					double y2 = 1 - ValCopy[i + 1];
 
-					if (TriggerPos.Contains(i))
-						context.DrawLine(redPen, (float)(ZoomX * i), 0, (float)(ZoomX * i), this.Height - 1);
-					if (TriggerOffPos.Contains(i))
-						context.DrawLine(bluePen, (float)(ZoomX * i), 0, (float)(ZoomX * i), this.Height - 1);
-
 					context.DrawLine(blackPen, (float)(ZoomX * i), (float)(y * this.Height - 1), (float)(ZoomX * (i + 1)), (float)(y2 * this.Height - 1));
 				}
 
+				
 				e.Graphics.DrawImageUnscaled(buffer, 0, 0);
+
+				LastPainted = PaintTo - 1;
+				if (LastPainted < 0)
+					LastPainted = 0;
 			}
 			catch (Exception ex)
 			{
@@ -114,7 +130,7 @@ namespace SerialAudio
 
 		public void Trigger(WaveChannel sender, double power)
 		{
-			int delay = Channel.Config.TriggerHold;
+			int delay = 0;// Channel.Config.TriggerLength;
 			if(power > 0.0)
 				TriggerPos.Add(ScanPos - delay);
 			if(power == 0.0)
@@ -141,6 +157,18 @@ namespace SerialAudio
 				if (ScanPos < Values.Count) // because width might be zero
 				{
 					Values[ScanPos] = data;
+
+					if (ScanPos == 0)
+					{
+						for (int i = 1; i < Values.Count; i++)
+						{
+							Values[i] = 0;
+						}
+
+						TriggerPos.Clear();
+						TriggerOffPos.Clear();
+					}
+
 					ScanPos = (ScanPos + 1) % maxLen;
 
 					// Remove any previous trigger

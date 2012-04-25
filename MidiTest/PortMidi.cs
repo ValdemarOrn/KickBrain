@@ -256,7 +256,8 @@ namespace MidiTest
 		[DllImport("PortMidi.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Pt_Started();
 
-		// Pt_Stop
+		[DllImport("PortMidi.dll", CallingConvention = CallingConvention.Cdecl)]
+		public static extern PtError Pt_Stop();
 
 		[DllImport("PortMidi.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Pt_Time(IntPtr t);

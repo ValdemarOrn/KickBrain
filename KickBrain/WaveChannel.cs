@@ -26,19 +26,25 @@ namespace SerialAudio
 			Channel = channel;
 			//Data = new List<double>();
 			hp = new AudioLib.TF.Highpass1(2);
-			lp = new AudioLib.TF.Lowpass1(2);
+			Buffer = new Buffer(1000);
 
 			Config = new WaveChannelConfig();
 		}
 
-		double lastValue;
+		DateTime LastTriggered;
 
-		// the number of samples remaining from the time the trigger went off
-		// the signal strength in this time period is used to calculate the velocity of the hit
-		int triggerTime;
+		/// Boolean state that tells if a trigger is currently on. Used to
+		/// turn off triggers after the go below the noise floor
+		bool triggerIsOn;
 
-		// the power of the current hit.
-		double triggerPower;
+		/// Running counter, incremented every time a sample is added
+		long currentSample;
+
+		/// the sample number for when to actually fire the trigger
+		/// This is used because after the trigger threshold has been reached
+		/// We still need to allow a few samples (TriggerLength) to pass so that
+		/// we can measure the peak of the signal.
+		long triggerAtSample;
 
 		public void AddData(int data)
 		{
@@ -51,76 +57,61 @@ namespace SerialAudio
 
 			value = Math.Abs(value); // Rectify
 
-			if (Config.CurveEnabled)
-			{
-				double curve = 3 - 3 * (Math.Log(value + 0.1) + 1) + 1;
-				value = value * curve;
-			}
-
 			value = value * Config.Gain;
 
-			if (Config.LowpassEnabled)
-				value = lp.process(value);
-
-			if (value < Config.Threshold)
+			// noise floor
+			if (value < Config.NoiseFloor)
 				value = 0;
 
-			double unslewed = value;
-
-			// SlewFactor prevents spikes in the signal unless they are larger than some factor of the previous sample
-			if (Config.SlewFactorEnabled)
-			{
-				if ((value / lastValue) < Config.SlewFactor)
-					value = lastValue;
-			}
-
 			// SlewRate prevents the signal from decreasing by more than a specified amount between each sample
-			if (Config.SlewRateEnabled)
+			if (Config.DecayEnabled)
 			{
-				if (value < (lastValue * Config.SlewRate))
-					value = lastValue * Config.SlewRate;
+				double lastValue = Buffer.GetSample(0);
+				if (value < (lastValue * Config.DecayRate))
+					value = lastValue * Config.DecayRate;
 			}
 
-			
+			Buffer.Add(value);
+			int x = Buffer.GetIndex(Config.TriggerAttack);
+			double valuePre = Buffer.Data[x];
 
 			// -------------------Trigger sensor---------------------------
 
-			if (((value - lastValue) >= Config.TriggerThreshold) && ((value / lastValue) >= Config.TriggerFactor) && ((triggerTime + Config.TriggerBlock) < 0))
+			// Start a new trigger
+			if (((value - valuePre) >= Config.TriggerThreshold) && ((value / valuePre) >= Config.TriggerScale))
 			{
-				triggerTime = Config.TriggerHold + 1;
-				triggerPower = 0;
+				// Trigger if retrigger time has passed
+				if (LastTriggered.AddMilliseconds(Config.TriggerRetrigger) <= DateTime.Now)
+				{
+					triggerIsOn = true;
+					LastTriggered = DateTime.Now;
+					triggerAtSample = currentSample + Config.TriggerLength;
+				}
 			}
 
-			// if triggering, measure power and decrement timer
-			if (triggerTime > 0)
+			// execute the trigger event once TriggerLength has passed
+			if (triggerAtSample == currentSample)
 			{
-				triggerPower = (value >= triggerPower) ? value : triggerPower;
-				triggerTime--;
-
-				if (triggerTime == 0 && Config.Enabled)
-					TriggerEvent(this, triggerPower);
-			}
-			else
-			{
-				triggerTime--;
+				double power = Buffer.GetMax(Config.TriggerLength + Config.TriggerAttack);
+				TriggerEvent(this, power);
 			}
 
 			// turn off
-			if ((triggerTime + Config.TriggerBlock) <= 0 && value < Config.TriggerThreshold && triggerPower > 0.0)
+			if (value < Config.NoiseFloor && triggerIsOn)
 			{
-				triggerPower = 0.0;
+				triggerIsOn = false;
 				if (Config.Enabled)
 					TriggerEvent(this, 0.0);
 			}
 
-			lastValue = value;
-
 			if(DataEvent != null)
 				DataEvent(this, value);
+
+			currentSample++;
 		}
 
 		AudioLib.TF.Highpass1 hp;
-		AudioLib.TF.Lowpass1 lp;
+		Buffer Buffer;
 
 		// ------- Control parameters -------
 
@@ -132,7 +123,6 @@ namespace SerialAudio
 			{
 				_config = value;
 				hp.SetParam(0, _config.HighpassFrequency);
-				lp.SetParam(0, _config.LowpassFrequency);
 			}
 		}
 	}
