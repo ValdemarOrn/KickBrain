@@ -66,52 +66,70 @@ namespace SerialAudio
 				Channels.Add(new WaveChannel(this, i++));
 		}
 
-		public void StartReceive()
+		public void Start()
 		{
+			Stopping = false;
 			CurrentChannel = -9999;
+			port.ReadTimeout = 10;
 			var t = new Thread(new ThreadStart(Receive));
 			t.Start();
-			
-			//port.DataReceived += new SerialDataReceivedEventHandler(Receive);
-			
 		}
 
+		public void Stop()
+		{
+			Stopping = true;
+			lock (Lock)
+			{
+				port.Close();
+				return;
+			}
+		}
+
+		public bool Stopping;
+		object Lock = new object();
+
 		// data rate
-		DateTime Start;
+		DateTime StartTime;
 		int PerSecond;
 
 		int CurrentChannel;
 
-		public void Receive()
+		protected void Receive()
 		{
-			while (true)
+			lock (Lock)
 			{
-				byte[] buf = new byte[ChannelCount + 1];
-				int count = port.Read(buf, 0, ChannelCount + 1);
-
-				// Data rate
-				PerSecond += count;
-				if ((DateTime.Now - Start).TotalMilliseconds >= 1000)
+				while (!Stopping)
 				{
-					Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
-					PerSecond = 0;
-					Start = DateTime.Now;
-				}
+					byte[] buf = new byte[ChannelCount + 1];
+					int count = port.Read(buf, 0, ChannelCount + 1);
 
-				foreach (int recv in buf)
-				{
-					if (recv == 0)
-					{
-						CurrentChannel = 0;
-					}
-					else if (CurrentChannel < 0)
-					{
+					if (count != ChannelCount + 1)
 						continue;
-					}
-					else if (CurrentChannel < Channels.Count)
+
+					// Data rate
+					PerSecond += count;
+					if ((DateTime.Now - StartTime).TotalMilliseconds >= 1000)
 					{
-						Channels[CurrentChannel].AddData(recv);
-						CurrentChannel++;
+						Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
+						PerSecond = 0;
+						StartTime = DateTime.Now;
+					}
+
+					foreach (int recv in buf)
+					{
+						if (recv == 0)
+						{
+							CurrentChannel = 0;
+						}
+						else if (CurrentChannel < 0)
+						{
+							continue;
+						}
+						else if (CurrentChannel < Channels.Count)
+						{
+							Channels[CurrentChannel].AddData(recv);
+							CurrentChannel++;
+						}
 					}
 				}
 			}

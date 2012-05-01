@@ -66,12 +66,12 @@ namespace SerialAudio
 				return;
 			}
 
-			Ctrl.SetZoom(rate);
+			Ctrl.SetRefresh(rate);
 		}
 
-		private void buttonAddPort_Click(object sender, EventArgs e)
+		private void buttonConfigure_Click(object sender, EventArgs e)
 		{
-			Ctrl.AddInput();
+			Ctrl.Configure();
 		}
 
 		public void button1_Click(object sender, EventArgs e)
@@ -81,8 +81,7 @@ namespace SerialAudio
 
 		public void WaveTabs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var channel = ((WaveView)(WaveTabs.SelectedTab.Controls[0])).Channel;
-			Ctrl.SetActiveChannel(channel);
+			Ctrl.SetActiveChannel();
 		}
 
 		private void checkBoxEnabled_CheckedChanged(object sender, EventArgs e)

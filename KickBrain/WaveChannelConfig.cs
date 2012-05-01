@@ -9,10 +9,14 @@ namespace SerialAudio
 	{
 		public bool Enabled;
 
-		public double HighpassFrequency;
+		public bool ContinuousControlMode;
 
+		// CC Config
+		public int CCAverage;
+		public double CCHisteresis;
+
+		// Trigger Config
 		public double DecayRate;
-
 		public double Gain;
 		public double NoiseFloor;
 
@@ -22,12 +26,8 @@ namespace SerialAudio
 		public double TriggerScale;
 		public int TriggerRetrigger;
 
-		public bool DecayEnabled;
-		public bool HighpassEnabled;
-
 		public WaveChannelConfig()
 		{
-			HighpassFrequency = 0.05;
 			DecayRate = 0.997;
 			Gain = 1.0;
 			NoiseFloor = 0.02;
@@ -37,9 +37,6 @@ namespace SerialAudio
 			TriggerLength = 10;
 			TriggerScale = 1.25;
 			TriggerRetrigger = 25;
-
-			HighpassEnabled = true;
-			DecayEnabled = true;
 
 			Enabled = true;
 		}

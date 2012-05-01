@@ -24,27 +24,31 @@ namespace SerialAudio
 
 		private KickBrain()
 		{
-			Inputs = new List<SerialInput>();
 			ui = new UI();
 		}
 
-		public List<SerialInput> Inputs;
+		public SerialInput Input;
+		public MidiOutput Output;
 
 		public UI ui;
 
-		public void AddInput()
+		public void Configure()
 		{
-			var input = AddPort.Show();
-			if (input == null)
+			if (Input != null)
+				Input.Stop();
+
+			if (Output != null)
+				Output.Close();
+
+			var dialog = AddPortDialog.Show();
+			if (dialog.SerialInput == null || dialog.MidiOutput == null)
 				return;
 
-			foreach (WaveChannel channel in input.Channels)
-				ui.Ctrl.AddWiew(channel);
+			Input = dialog.SerialInput;
+			Input.Start();
 
-			input.StartReceive();
-
-			// initialize processing values
-			ui.WaveTabs_SelectedIndexChanged(null, null);
+			Output = dialog.MidiOutput;
+			
 		}
 	}
 }

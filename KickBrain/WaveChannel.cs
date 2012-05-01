@@ -6,32 +6,77 @@ using System.Xml.Serialization;
 
 namespace SerialAudio
 {
-	[Serializable]
 	public class WaveChannel
 	{
-		//public List<double> Data;
-		[XmlIgnore]
 		public SerialInput Input;
 
 		public int Channel;
 
 		/// Event that triggers when new data is available on the channel
 		public event Action<WaveChannel, double> DataEvent;
+
 		// Event that triggers when a trigger should be fired
 		public event Action<WaveChannel, double> TriggerEvent;
+
+		// used for CC mode
+		AudioLib.TF.MovingAverage movingAverage;
+
+		Buffer Buffer;
+
+		// ------- Control parameters -------
+
+		WaveChannelConfig _config;
+		public WaveChannelConfig Config
+		{
+			get { return _config; }
+			set
+			{
+				_config = value;
+				movingAverage.Samples = _config.CCAverage;
+			}
+		}
 
 		public WaveChannel(SerialInput input, int channel)
 		{
 			Input = input;
 			Channel = channel;
 			//Data = new List<double>();
-			hp = new AudioLib.TF.Highpass1(2);
-			Buffer = new Buffer(1000);
+			movingAverage = new AudioLib.TF.MovingAverage(4);
+			Buffer = new Buffer(10000);
 
 			Config = new WaveChannelConfig();
 		}
 
 		DateTime LastTriggered;
+
+		
+
+		public void AddData(int data)
+		{
+			double value = data / 256.0;
+
+			if(Config.ContinuousControlMode)
+				value = ProcessCC(value);
+			else
+				value = ProcessTrigger(value);
+			
+			if(DataEvent != null)
+				DataEvent(this, value);
+
+			currentSample++;
+		}
+
+		private double ProcessCC(double value)
+		{
+			value = movingAverage.process(value);
+
+			double lastSample = Buffer.GetSample(0);
+			if (Math.Abs(lastSample - value) < Config.CCHisteresis)
+				value = lastSample;
+			Buffer.Add(value);
+
+			return value;
+		}
 
 		/// Boolean state that tells if a trigger is currently on. Used to
 		/// turn off triggers after the go below the noise floor
@@ -46,30 +91,18 @@ namespace SerialAudio
 		/// we can measure the peak of the signal.
 		long triggerAtSample;
 
-		public void AddData(int data)
+		private double ProcessTrigger(double value)
 		{
-			double value = data / 256.0;
-				
-			if(Config.HighpassEnabled)
-				value = hp.process(value);
-
-			//var power = Math.Abs(value); // used for trigger power
-
-			value = Math.Abs(value); // Rectify
-
 			value = value * Config.Gain;
 
 			// noise floor
 			if (value < Config.NoiseFloor)
 				value = 0;
 
-			// SlewRate prevents the signal from decreasing by more than a specified amount between each sample
-			if (Config.DecayEnabled)
-			{
-				double lastValue = Buffer.GetSample(0);
-				if (value < (lastValue * Config.DecayRate))
-					value = lastValue * Config.DecayRate;
-			}
+			// prevents the signal from decreasing by more than a specified amount between each sample
+			double lastValue = Buffer.GetSample(0);
+			if (value < (lastValue * Config.DecayRate))
+				value = lastValue * Config.DecayRate;
 
 			Buffer.Add(value);
 			int x = Buffer.GetIndex(Config.TriggerAttack);
@@ -93,37 +126,18 @@ namespace SerialAudio
 			if (triggerAtSample == currentSample)
 			{
 				double power = Buffer.GetMax(Config.TriggerLength + Config.TriggerAttack);
-				TriggerEvent(this, power);
+				if (Config.Enabled && TriggerEvent != null)
+					TriggerEvent(this, power);
 			}
 
 			// turn off
 			if (value < Config.NoiseFloor && triggerIsOn)
 			{
 				triggerIsOn = false;
-				if (Config.Enabled)
+				if (Config.Enabled && TriggerEvent != null)
 					TriggerEvent(this, 0.0);
 			}
-
-			if(DataEvent != null)
-				DataEvent(this, value);
-
-			currentSample++;
-		}
-
-		AudioLib.TF.Highpass1 hp;
-		Buffer Buffer;
-
-		// ------- Control parameters -------
-
-		WaveChannelConfig _config;
-		public WaveChannelConfig Config
-		{
-			get { return _config; }
-			set
-			{
-				_config = value;
-				hp.SetParam(0, _config.HighpassFrequency);
-			}
+			return value;
 		}
 	}
 }

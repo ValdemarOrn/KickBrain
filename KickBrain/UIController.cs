@@ -46,7 +46,7 @@ namespace SerialAudio
 				channel.TriggerEvent += this.Trigger;
 				channel.TriggerEvent += view.Trigger;
 
-				var page = new TabPage("Port: " + channel.Input.Name + " Channel " + channel.Channel);
+				var page = new TabPage("Ch " + channel.Channel);
 				ui.WaveTabs.TabPages.Add(page);
 				page.Controls.Add(view);
 				ui.Views.Add(view);
@@ -100,8 +100,6 @@ namespace SerialAudio
 
 			try
 			{
-				var hp = Convert.ToDouble(ui.textBoxHighpass.Text);
-				config.HighpassFrequency = (hp < 1.0) ? hp : 1.0;
 				config.DecayRate = Convert.ToSingle(ui.textBoxSlewRate.Text);
 
 				config.Gain = Convert.ToDouble(ui.textBoxGain.Text);
@@ -113,10 +111,11 @@ namespace SerialAudio
 				config.TriggerScale = Convert.ToDouble(ui.textBoxTriggerScale.Text);
 				config.TriggerRetrigger = Convert.ToInt32(ui.textBoxTriggerBlock.Text);
 
-				config.HighpassEnabled = ui.checkBoxHighpass.Checked;
-				config.DecayEnabled = ui.checkBoxSlewRate.Checked;
+				config.CCHisteresis = Convert.ToDouble(ui.textBoxCCHisteresis.Text);
+				config.CCAverage = Convert.ToInt32(ui.textBoxCCAverage.Text);
 
 				config.Enabled = ui.checkBoxEnabled.Checked;
+				config.ContinuousControlMode = ui.checkBoxContinousControl.Checked;
 			}
 			catch (Exception ex)
 			{
@@ -128,7 +127,12 @@ namespace SerialAudio
 			LoadChannelConfig(CurrentChannel.Config);
 		}
 
-		public void SetActiveChannel(WaveChannel channel)
+		public void SetActiveChannel()
+		{
+			SetActiveChannel(ui.WaveTabs.SelectedIndex);
+		}
+
+		public void SetActiveChannel(int channel)
 		{
 			CurrentChannel = ((WaveView)(ui.WaveTabs.SelectedTab.Controls[0])).Channel;
 			LoadChannelConfig(CurrentChannel.Config);
@@ -138,7 +142,6 @@ namespace SerialAudio
 		{
 			ui.checkBoxEnabled.Checked = config.Enabled;
 
-			ui.textBoxHighpass.Text = Math.Round(config.HighpassFrequency, 4).ToString();
 			ui.textBoxSlewRate.Text = Math.Round(config.DecayRate, 4).ToString();
 
 			ui.textBoxGain.Text = Math.Round(config.Gain, 4).ToString();
@@ -150,8 +153,10 @@ namespace SerialAudio
 			ui.textBoxTriggerScale.Text = Math.Round(config.TriggerScale, 4).ToString();
 			ui.textBoxTriggerBlock.Text = config.TriggerRetrigger.ToString();
 
-			ui.checkBoxHighpass.Checked = config.HighpassEnabled;
-			ui.checkBoxSlewRate.Checked = config.DecayEnabled;
+			ui.textBoxCCHisteresis.Text = config.CCHisteresis.ToString();
+			ui.textBoxCCAverage.Text = config.CCAverage.ToString();
+
+			ui.checkBoxContinousControl.Checked = config.ContinuousControlMode;
 		}
 
 		public void SetChannelEnabled(bool enabled)
@@ -159,9 +164,17 @@ namespace SerialAudio
 			CurrentChannel.Config.Enabled = enabled;
 		}
 
-		public void AddInput()
+		public void Configure()
 		{
-			KickBrain.KB.AddInput();
+			ui.WaveTabs.TabPages.Clear();
+
+			KickBrain.KB.Configure();
+
+			foreach (WaveChannel channel in KickBrain.KB.Input.Channels)
+				ui.Ctrl.AddWiew(channel);
+
+			// initialize processing values
+			ui.Ctrl.SetActiveChannel(0);
 		}
 	}
 }
