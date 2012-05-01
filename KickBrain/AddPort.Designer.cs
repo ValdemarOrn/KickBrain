@@ -1,4 +1,4 @@
-﻿namespace SerialAudio
+﻿namespace KickBrain
 {
 	partial class AddPortDialog
 	{

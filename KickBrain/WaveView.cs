@@ -5,10 +5,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace SerialAudio
+namespace KickBrain
 {
 
-	public class WaveView : Panel
+	public class WaveView : UserControl
 	{
 		public double ZoomX;
 		public WaveChannel Channel;

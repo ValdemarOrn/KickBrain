@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using AudioLib;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public class MidiOutput
 	{

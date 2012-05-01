@@ -5,7 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Threading;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public class SerialInput
 	{
@@ -110,7 +110,9 @@ namespace SerialAudio
 					PerSecond += count;
 					if ((DateTime.Now - StartTime).TotalMilliseconds >= 1000)
 					{
-						Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
+						KickBrain.KB.ui.Ctrl.SetSamplerate((int)(((double)PerSecond) / (ChannelCount + 1)));
+						KickBrain.KB.ui.Ctrl.SetByterate(PerSecond);
+						//Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
 						PerSecond = 0;
 						StartTime = DateTime.Now;
 					}

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using AudioLib;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public partial class AddPortDialog : Form
 	{

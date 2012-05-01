@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public class WaveChannelConfig
 	{
@@ -65,21 +65,83 @@ namespace SerialAudio
 		[DescriptionAttribute("Sets the minimum time in milliseconds between triggers. Values that are too low can cause unwanted retriggering")]
 		public int TriggerRetrigger { get; set; }
 
+		[CategoryAttribute("Trigger Control")]
+		[DescriptionAttribute("Set the number of velocity curve control points")]
+		public int VelocityPoints
+		{
+			get
+			{
+				return Velocity.NumberOfPoints;
+			}
+			set
+			{
+				Velocity.NumberOfPoints = value;
+			}
+		}
+
+		[BrowsableAttribute(false)]
+		public AudioLib.VelocityMap Velocity { get; set; }
+
+		int _midiChannel;
+
+		[CategoryAttribute("Midi Output")]
+		[DescriptionAttribute("Sets which MIDI channel the data is transmitted on")]
+		public int MIDIChannel
+		{
+			get
+			{
+				return _midiChannel;
+			}
+			set
+			{
+				if (value < 0)
+					value = 0;
+				if (value > 15)
+					value = 15;
+				_midiChannel = value;
+			}
+		}
+
+		int _midiControl;
+
+		[CategoryAttribute("Midi Output")]
+		[DescriptionAttribute("Sets which note or Continous Controller number the data is transmitted on")]
+		public int MIDIControl
+		{
+			get
+			{
+				return _midiControl;
+			}
+			set
+			{
+				if (value < 0)
+					value = 0;
+				if (value > 127)
+					value = 127;
+				_midiControl = value;
+			}
+		}
+
 
 		public WaveChannelConfig()
 		{
-			DecayRate = 0.997;
-			Gain = 1.0;
-			NoiseFloor = 0.02;
+			Velocity = new AudioLib.VelocityMap(3);
 
-			TriggerThreshold = 0.02;
-			TriggerAttack = 4;
-			TriggerLength = 10;
-			TriggerScale = 1.25;
+			DecayRate = 0.97;
+			Gain = 1.0;
+			NoiseFloor = 0.01;
+
+			TriggerThreshold = 0.05;
+			TriggerAttack = 2;
+			TriggerLength = 4;
+			TriggerScale = 1.5;
 			TriggerRetrigger = 25;
 
 			Enabled = true;
 			ContinuousControl = false;
+
+			MIDIChannel = 1;
+			MIDIControl = 60;
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Windows.Forms;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	class Program
 	{

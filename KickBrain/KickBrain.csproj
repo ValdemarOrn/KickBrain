@@ -8,8 +8,8 @@
     <ProjectGuid>{F9EFBB55-169E-429C-8337-92A10E83E965}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SerialAudio</RootNamespace>
-    <AssemblyName>SerialAudio</AssemblyName>
+    <RootNamespace>KickBrain</RootNamespace>
+    <AssemblyName>KickBrain</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -63,7 +63,7 @@
     <Compile Include="WaveChannel.cs" />
     <Compile Include="WaveChannelConfig.cs" />
     <Compile Include="WaveView.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI.cs">
       <SubType>Form</SubType>

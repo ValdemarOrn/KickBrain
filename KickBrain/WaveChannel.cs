@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public class WaveChannel
 	{
@@ -25,15 +25,11 @@ namespace SerialAudio
 
 		// ------- Control parameters -------
 
-		WaveChannelConfig _config;
-		public WaveChannelConfig Config
+		public WaveChannelConfig Config { get; set; }
+
+		public void ConfigUpdated()
 		{
-			get { return _config; }
-			set
-			{
-				_config = value;
-				movingAverage.Samples = _config.CCAverage;
-			}
+			movingAverage.Samples = Config.CCAverage;
 		}
 
 		public WaveChannel(SerialInput input, int channel)

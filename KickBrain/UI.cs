@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public partial class UI : Form
 	{
@@ -74,19 +74,15 @@ namespace SerialAudio
 			Ctrl.Configure();
 		}
 
-		public void button1_Click(object sender, EventArgs e)
-		{
-			Ctrl.SetConfig();
-		}
-
 		public void WaveTabs_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Ctrl.SetActiveChannel();
 		}
 
-		private void checkBoxEnabled_CheckedChanged(object sender, EventArgs e)
+		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
-			Ctrl.SetChannelEnabled(checkBoxEnabled.Checked);
+			Ctrl.PropertyChanged();
+			
 		}
 	}
 }

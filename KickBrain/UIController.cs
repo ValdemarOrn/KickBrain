@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SerialAudio
+namespace KickBrain
 {
 	public class UIController
 	{
@@ -73,13 +73,19 @@ namespace SerialAudio
 			if (velocity == 0.0)
 				return;
 
+			ui.velocityMapControl1.SetTrigger(velocity);
+
+			velocity = CurrentChannel.Config.Velocity.Map(velocity);
+
 			double barValue = velocity * ui.progressBarVelocity.Maximum;
 			if (barValue > ui.progressBarVelocity.Maximum)
 				barValue = ui.progressBarVelocity.Maximum;
 			ui.progressBarVelocity.Value = (int)(barValue);
 
-			ui.labelVelocity.Text = Math.Round(velocity, 3).ToString();
-			ui.labelCount.Text = (Convert.ToInt32(ui.labelCount.Text) + 1).ToString();
+			ui.textBoxVelocity.Text = Math.Round(velocity, 3).ToString();
+			int hits = 0;
+			Int32.TryParse(ui.textBoxHits.Text, out hits);
+			ui.textBoxHits.Text = (hits + 1).ToString();
 		}
 
 		public void SetZoom(double zoom)
@@ -94,39 +100,6 @@ namespace SerialAudio
 				wave.RefreshRate = rate;
 		}
 
-		public void SetConfig()
-		{
-			var config = new WaveChannelConfig();
-
-			try
-			{
-				config.DecayRate = Convert.ToSingle(ui.textBoxSlewRate.Text);
-
-				config.Gain = Convert.ToDouble(ui.textBoxGain.Text);
-				config.NoiseFloor = Convert.ToDouble(ui.textBoxNoiseFloor.Text);
-
-				config.TriggerAttack = Convert.ToInt32(ui.textBoxTriggerAttack.Text);
-				config.TriggerLength = Convert.ToInt32(ui.textBoxTriggerLength.Text);
-				config.TriggerThreshold = Convert.ToDouble(ui.textBoxTriggerThreshold.Text);
-				config.TriggerScale = Convert.ToDouble(ui.textBoxTriggerScale.Text);
-				config.TriggerRetrigger = Convert.ToInt32(ui.textBoxTriggerBlock.Text);
-
-				config.CCHisteresis = Convert.ToDouble(ui.textBoxCCHisteresis.Text);
-				config.CCAverage = Convert.ToInt32(ui.textBoxCCAverage.Text);
-
-				config.Enabled = ui.checkBoxEnabled.Checked;
-				config.ContinuousControl = ui.checkBoxContinousControl.Checked;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Error in input values. \n" + ex.Message);
-			}
-
-			CurrentChannel.Config = config;
-
-			LoadChannelConfig(CurrentChannel.Config);
-		}
-
 		public void SetActiveChannel()
 		{
 			SetActiveChannel(ui.WaveTabs.SelectedIndex);
@@ -134,31 +107,17 @@ namespace SerialAudio
 
 		public void SetActiveChannel(int channel)
 		{
+			if (channel < 0 || channel >= KickBrain.KB.Input.ChannelCount)
+				return;
+
 			CurrentChannel = ((WaveView)(ui.WaveTabs.SelectedTab.Controls[0])).Channel;
-			LoadChannelConfig(CurrentChannel.Config);
-		}
 
-		public void LoadChannelConfig(WaveChannelConfig config)
-		{
-			ui.propertyGrid1.SelectedObject = config;
+			ui.propertyGrid1.SelectedObject = CurrentChannel.Config;
+			ui.velocityMapControl1.Map = CurrentChannel.Config.Velocity;
+			ui.textBoxHits.Text = "0";
+			ui.textBoxVelocity.Text = "";
 
-			ui.checkBoxEnabled.Checked = config.Enabled;
-
-			ui.textBoxSlewRate.Text = Math.Round(config.DecayRate, 4).ToString();
-
-			ui.textBoxGain.Text = Math.Round(config.Gain, 4).ToString();
-			ui.textBoxNoiseFloor.Text = Math.Round(config.NoiseFloor, 4).ToString();
-
-			ui.textBoxTriggerAttack.Text = config.TriggerAttack.ToString();
-			ui.textBoxTriggerLength.Text = config.TriggerLength.ToString();
-			ui.textBoxTriggerThreshold.Text = config.TriggerThreshold.ToString();
-			ui.textBoxTriggerScale.Text = Math.Round(config.TriggerScale, 4).ToString();
-			ui.textBoxTriggerBlock.Text = config.TriggerRetrigger.ToString();
-
-			ui.textBoxCCHisteresis.Text = config.CCHisteresis.ToString();
-			ui.textBoxCCAverage.Text = config.CCAverage.ToString();
-
-			ui.checkBoxContinousControl.Checked = config.ContinuousControl;
+			ui.velocityMapControl1.Invalidate();
 		}
 
 		public void SetChannelEnabled(bool enabled)
@@ -172,11 +131,46 @@ namespace SerialAudio
 
 			KickBrain.KB.Configure();
 
+			// remove current tabs
+			ui.WaveTabs.TabPages.Clear();
+
 			foreach (WaveChannel channel in KickBrain.KB.Input.Channels)
 				ui.Ctrl.AddWiew(channel);
 
 			// initialize processing values
 			ui.Ctrl.SetActiveChannel(0);
+		}
+
+		public void SetByterate(int bytesPerSec)
+		{
+			// Invoke from main thread
+			Action<int> SetRateDele = SetByterate;
+			if (ui.InvokeRequired)
+			{
+				ui.Invoke(SetRateDele, new object[] { bytesPerSec });
+				return;
+			}
+
+			ui.textBoxByteRate.Text = bytesPerSec.ToString();
+		}
+
+		public void SetSamplerate(int samplerate)
+		{
+			// Invoke from main thread
+			Action<int> SetRateDele = SetSamplerate;
+			if (ui.InvokeRequired)
+			{
+				ui.Invoke(SetRateDele, new object[] { samplerate });
+				return;
+			}
+
+			ui.textBoxSamplerate.Text = samplerate.ToString();
+		}
+
+		internal void PropertyChanged()
+		{
+			CurrentChannel.ConfigUpdated();
+			ui.velocityMapControl1.Invalidate();
 		}
 	}
 }
