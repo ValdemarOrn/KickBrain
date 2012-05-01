@@ -55,7 +55,7 @@ namespace SerialAudio
 		{
 			double value = data / 256.0;
 
-			if(Config.ContinuousControlMode)
+			if(Config.ContinuousControl)
 				value = ProcessCC(value);
 			else
 				value = ProcessTrigger(value);

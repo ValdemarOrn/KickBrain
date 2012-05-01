@@ -115,7 +115,7 @@ namespace SerialAudio
 				config.CCAverage = Convert.ToInt32(ui.textBoxCCAverage.Text);
 
 				config.Enabled = ui.checkBoxEnabled.Checked;
-				config.ContinuousControlMode = ui.checkBoxContinousControl.Checked;
+				config.ContinuousControl = ui.checkBoxContinousControl.Checked;
 			}
 			catch (Exception ex)
 			{
@@ -140,6 +140,8 @@ namespace SerialAudio
 
 		public void LoadChannelConfig(WaveChannelConfig config)
 		{
+			ui.propertyGrid1.SelectedObject = config;
+
 			ui.checkBoxEnabled.Checked = config.Enabled;
 
 			ui.textBoxSlewRate.Text = Math.Round(config.DecayRate, 4).ToString();
@@ -156,7 +158,7 @@ namespace SerialAudio
 			ui.textBoxCCHisteresis.Text = config.CCHisteresis.ToString();
 			ui.textBoxCCAverage.Text = config.CCAverage.ToString();
 
-			ui.checkBoxContinousControl.Checked = config.ContinuousControlMode;
+			ui.checkBoxContinousControl.Checked = config.ContinuousControl;
 		}
 
 		public void SetChannelEnabled(bool enabled)

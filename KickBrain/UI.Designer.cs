@@ -73,6 +73,7 @@
 			this.progressBarVelocity = new System.Windows.Forms.ProgressBar();
 			this.labelVelocity = new System.Windows.Forms.Label();
 			this.labelCount = new System.Windows.Forms.Label();
+			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -503,11 +504,20 @@
 			this.labelCount.Text = "0";
 			this.labelCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// propertyGrid1
+			// 
+			this.propertyGrid1.Location = new System.Drawing.Point(236, 314);
+			this.propertyGrid1.Name = "propertyGrid1";
+			this.propertyGrid1.Size = new System.Drawing.Size(214, 220);
+			this.propertyGrid1.TabIndex = 12;
+			this.propertyGrid1.ToolbarVisible = false;
+			// 
 			// UI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(936, 551);
+			this.Controls.Add(this.propertyGrid1);
 			this.Controls.Add(this.labelCount);
 			this.Controls.Add(this.labelVelocity);
 			this.Controls.Add(this.progressBarVelocity);
@@ -575,5 +585,6 @@
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.Label label15;
+		internal System.Windows.Forms.PropertyGrid propertyGrid1;
 	}
 }
