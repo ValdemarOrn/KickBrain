@@ -36,18 +36,17 @@ namespace KickBrain
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			try
-			{
-				SerialInput = new SerialInput(comboBox1.Text, Convert.ToInt32(textBox2.Text), Convert.ToInt32(textBox3.Text), Convert.ToInt32(textBox1.Text));
-			}
-			catch (Exception ex)
-			{
-				SerialInput.Stop();
-				MessageBox.Show("Unable to open Serial Port " + comboBox1.Text + "\n" + ex.Message);
-				return;
-			}
+			this.Close();
+		}
 
-			try
+		public string COMPort
+		{
+			get { return comboBox1.SelectedItem.ToString(); }
+		}
+
+		public int MidiDeviceID
+		{
+			get
 			{
 				// find the device ID
 				int deviceId = -1;
@@ -60,35 +59,23 @@ namespace KickBrain
 						break;
 					}
 				}
-
-				if (deviceId < 0) throw new Exception("Unable to open Midi Interface with name " + comboBox2.SelectedText);
-
-				MidiOutput = new MidiOutput(deviceId);
+				return deviceId;
 			}
-			catch (Exception ex)
-			{
-				try
-				{
-					SerialInput.Stop();
-				}
-				catch (Exception exx)
-				{
+		}
 
-				}
+		public int NumberOfChannels
+		{
+			get { return Convert.ToInt32(textBox1.Text); }
+		}
 
-				try
-				{
-					MidiOutput.Close();
-				}
-				catch (Exception exx)
-				{
+		public int SampleRate
+		{
+			get { return Convert.ToInt32(textBox3.Text); }
+		}
 
-				}
-				MessageBox.Show("Unable to open Midi Port " + comboBox2.Text + "\n" + ex.Message);
-				return;
-			}
-
-			this.Close();
+		public int BaudRate
+		{
+			get { return Convert.ToInt32(textBox2.Text); }
 		}
 
 		public static AddPortDialog Show()

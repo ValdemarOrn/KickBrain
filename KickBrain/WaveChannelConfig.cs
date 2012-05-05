@@ -131,13 +131,13 @@ namespace KickBrain
 			Gain = 1.0;
 			NoiseFloor = 0.01;
 
-			TriggerThreshold = 0.05;
+			TriggerThreshold = 0.02;
 			TriggerAttack = 2;
 			TriggerLength = 4;
 			TriggerScale = 1.5;
 			TriggerRetrigger = 25;
 
-			Enabled = true;
+			Enabled = false;
 			ContinuousControl = false;
 
 			MIDIChannel = 1;

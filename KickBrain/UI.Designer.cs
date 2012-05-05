@@ -33,6 +33,7 @@
 			this.buttonRefresh = new System.Windows.Forms.Button();
 			this.textBoxRefresh = new System.Windows.Forms.TextBox();
 			this.WaveTabs = new System.Windows.Forms.TabControl();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.buttonAddPort = new System.Windows.Forms.Button();
 			this.progressBarVelocity = new System.Windows.Forms.ProgressBar();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
@@ -45,12 +46,12 @@
 			this.textBoxByteRate = new System.Windows.Forms.TextBox();
 			this.textBoxSamplerate = new System.Windows.Forms.TextBox();
 			this.velocityMapControl1 = new AudioLib.UI.VelocityMapControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.WaveTabs.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textBoxZoomX
 			// 
+			this.textBoxZoomX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBoxZoomX.Location = new System.Drawing.Point(12, 307);
 			this.textBoxZoomX.Name = "textBoxZoomX";
 			this.textBoxZoomX.Size = new System.Drawing.Size(65, 20);
@@ -59,6 +60,7 @@
 			// 
 			// buttonZoomX
 			// 
+			this.buttonZoomX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonZoomX.Location = new System.Drawing.Point(93, 305);
 			this.buttonZoomX.Name = "buttonZoomX";
 			this.buttonZoomX.Size = new System.Drawing.Size(105, 23);
@@ -69,6 +71,7 @@
 			// 
 			// buttonRefresh
 			// 
+			this.buttonRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonRefresh.Location = new System.Drawing.Point(93, 349);
 			this.buttonRefresh.Name = "buttonRefresh";
 			this.buttonRefresh.Size = new System.Drawing.Size(105, 23);
@@ -79,6 +82,7 @@
 			// 
 			// textBoxRefresh
 			// 
+			this.textBoxRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBoxRefresh.Location = new System.Drawing.Point(12, 351);
 			this.textBoxRefresh.Name = "textBoxRefresh";
 			this.textBoxRefresh.Size = new System.Drawing.Size(65, 20);
@@ -87,7 +91,8 @@
 			// 
 			// WaveTabs
 			// 
-			this.WaveTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.WaveTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.WaveTabs.Controls.Add(this.tabPage1);
 			this.WaveTabs.Location = new System.Drawing.Point(12, 12);
@@ -98,8 +103,19 @@
 			this.WaveTabs.TabIndex = 6;
 			this.WaveTabs.SelectedIndexChanged += new System.EventHandler(this.WaveTabs_SelectedIndexChanged);
 			// 
+			// tabPage1
+			// 
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage1.Size = new System.Drawing.Size(695, 232);
+			this.tabPage1.TabIndex = 0;
+			this.tabPage1.Text = "NoChannels";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
 			// buttonAddPort
 			// 
+			this.buttonAddPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonAddPort.Location = new System.Drawing.Point(93, 393);
 			this.buttonAddPort.Name = "buttonAddPort";
 			this.buttonAddPort.Size = new System.Drawing.Size(105, 23);
@@ -110,6 +126,7 @@
 			// 
 			// progressBarVelocity
 			// 
+			this.progressBarVelocity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.progressBarVelocity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.progressBarVelocity.Location = new System.Drawing.Point(93, 436);
 			this.progressBarVelocity.Maximum = 10000;
@@ -120,6 +137,8 @@
 			// 
 			// propertyGrid1
 			// 
+			this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.propertyGrid1.Location = new System.Drawing.Point(721, 32);
 			this.propertyGrid1.Name = "propertyGrid1";
 			this.propertyGrid1.Size = new System.Drawing.Size(243, 427);
@@ -129,6 +148,7 @@
 			// 
 			// label1
 			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(328, 291);
 			this.label1.Name = "label1";
@@ -138,6 +158,7 @@
 			// 
 			// label2
 			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(328, 335);
 			this.label2.Name = "label2";
@@ -147,6 +168,7 @@
 			// 
 			// label3
 			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label3.AutoSize = true;
 			this.label3.Location = new System.Drawing.Point(328, 379);
 			this.label3.Name = "label3";
@@ -156,6 +178,7 @@
 			// 
 			// label4
 			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(328, 423);
 			this.label4.Name = "label4";
@@ -165,6 +188,7 @@
 			// 
 			// textBoxVelocity
 			// 
+			this.textBoxVelocity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxVelocity.Location = new System.Drawing.Point(328, 307);
 			this.textBoxVelocity.Name = "textBoxVelocity";
 			this.textBoxVelocity.Size = new System.Drawing.Size(100, 20);
@@ -172,6 +196,7 @@
 			// 
 			// textBoxHits
 			// 
+			this.textBoxHits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxHits.Location = new System.Drawing.Point(328, 351);
 			this.textBoxHits.Name = "textBoxHits";
 			this.textBoxHits.Size = new System.Drawing.Size(100, 20);
@@ -179,6 +204,7 @@
 			// 
 			// textBoxByteRate
 			// 
+			this.textBoxByteRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxByteRate.Location = new System.Drawing.Point(328, 395);
 			this.textBoxByteRate.Name = "textBoxByteRate";
 			this.textBoxByteRate.Size = new System.Drawing.Size(100, 20);
@@ -186,6 +212,7 @@
 			// 
 			// textBoxSamplerate
 			// 
+			this.textBoxSamplerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxSamplerate.Location = new System.Drawing.Point(328, 439);
 			this.textBoxSamplerate.Name = "textBoxSamplerate";
 			this.textBoxSamplerate.Size = new System.Drawing.Size(100, 20);
@@ -193,21 +220,12 @@
 			// 
 			// velocityMapControl1
 			// 
+			this.velocityMapControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.velocityMapControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.velocityMapControl1.Location = new System.Drawing.Point(446, 276);
 			this.velocityMapControl1.Name = "velocityMapControl1";
 			this.velocityMapControl1.Size = new System.Drawing.Size(267, 183);
 			this.velocityMapControl1.TabIndex = 21;
-			// 
-			// tabPage1
-			// 
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(695, 232);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "NoChannels";
-			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
 			// UI
 			// 
@@ -231,7 +249,7 @@
 			this.Controls.Add(this.textBoxRefresh);
 			this.Controls.Add(this.buttonZoomX);
 			this.Controls.Add(this.textBoxZoomX);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MinimumSize = new System.Drawing.Size(992, 525);
 			this.Name = "UI";
 			this.Text = "KickBrain";
 			this.WaveTabs.ResumeLayout(false);

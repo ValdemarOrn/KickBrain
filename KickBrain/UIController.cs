@@ -34,8 +34,7 @@ namespace KickBrain
 				view.Left = 0;
 				view.Height = ui.WaveTabs.Height - 30;
 				view.Width = ui.WaveTabs.ClientSize.Width - 8;
-				view.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-					| System.Windows.Forms.AnchorStyles.Right))); // Resize waveView with the window
+				view.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right); // Resize waveView with the window
 				view.ZoomX = Convert.ToDouble(ui.textBoxZoomX.Text);
 				view.RefreshRate = Convert.ToDouble(ui.textBoxRefresh.Text);
 
@@ -86,6 +85,8 @@ namespace KickBrain
 			int hits = 0;
 			Int32.TryParse(ui.textBoxHits.Text, out hits);
 			ui.textBoxHits.Text = (hits + 1).ToString();
+
+			Console.WriteLine("UI TRigger");
 		}
 
 		public void SetZoom(double zoom)
@@ -127,8 +128,6 @@ namespace KickBrain
 
 		public void Configure()
 		{
-			ui.WaveTabs.TabPages.Clear();
-
 			KickBrain.KB.Configure();
 
 			// remove current tabs

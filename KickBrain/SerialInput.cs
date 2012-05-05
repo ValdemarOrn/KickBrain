@@ -28,7 +28,9 @@ namespace KickBrain
 
 		SerialPort port;
 
+		[Newtonsoft.Json.JsonIgnore]
 		public List<WaveChannel> Channels;
+
 		public string Name { get; private set; }
 		public int ChannelCount { get; private set; }
 		public int SampleRate { get; private set; }
@@ -63,7 +65,9 @@ namespace KickBrain
 			// Create the Channels
 			int i = 0;
 			while (Channels.Count < ChannelCount)
+			{
 				Channels.Add(new WaveChannel(this, i++));
+			}
 		}
 
 		public void Start()
@@ -85,7 +89,7 @@ namespace KickBrain
 			}
 		}
 
-		public bool Stopping;
+		bool Stopping;
 		object Lock = new object();
 
 		// data rate
@@ -103,9 +107,6 @@ namespace KickBrain
 					byte[] buf = new byte[ChannelCount + 1];
 					int count = port.Read(buf, 0, ChannelCount + 1);
 
-					if (count != ChannelCount + 1)
-						continue;
-
 					// Data rate
 					PerSecond += count;
 					if ((DateTime.Now - StartTime).TotalMilliseconds >= 1000)
@@ -117,8 +118,19 @@ namespace KickBrain
 						StartTime = DateTime.Now;
 					}
 
-					foreach (int recv in buf)
+					bool foundZero = false;
+					for (int i = 0; i < count; i++ )
 					{
+						int recv = buf[i];
+
+						if (recv == 0 && foundZero)
+						{
+							int k = 25;
+						}
+
+						if (recv == 0)
+							foundZero = true;
+
 						if (recv == 0)
 						{
 							CurrentChannel = 0;

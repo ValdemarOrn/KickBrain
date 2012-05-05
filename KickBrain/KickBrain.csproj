@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -54,11 +57,13 @@
       <DependentUpon>AddPort.cs</DependentUpon>
     </Compile>
     <Compile Include="Buffer.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="KickBrain.cs" />
     <Compile Include="MidiOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialInput.cs" />
+    <Compile Include="Serializer.cs" />
     <Compile Include="UIController.cs" />
     <Compile Include="WaveChannel.cs" />
     <Compile Include="WaveChannelConfig.cs" />
@@ -85,6 +90,9 @@
       <Project>{4905489D-6F81-4129-8780-744CED5B3269}</Project>
       <Name>AudioLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -31,9 +31,6 @@ void setup() {
   
   Serial.begin(230000);
   reference = analogRead(5);
-  
-  pinMode(12, OUTPUT); 
-  pinMode(13, OUTPUT); 
 }
 
 void TrySendSerial()
@@ -56,30 +53,13 @@ void TrySendSerial()
     i = -1;
 }
 
-
 void loop() {
   
   reference = (reference * 7 + analogRead(5)) >> 3; // (7*ref + 1*read) / 8
   
   for(int k=0; k < ChannelCount; k++)
-  {  
-    if(k == 0)
-    {
-      digitalWrite(12, LOW);
-      digitalWrite(13, LOW);
-    }
-    else if (k == 1)
-    {
-      digitalWrite(12, HIGH);
-      digitalWrite(13, HIGH);
-    }
-    
-    int value = 255;
-    if(k == 0 || k == 1)
-      value = analogRead(0);
-    if(k == 2)
-      value = analogRead(5);
-      
+  {
+    int value = analogRead(k % 6);
     value = (value-reference);
     if(value < 0) value = -value;
     value = value >> 2;
