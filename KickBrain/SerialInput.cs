@@ -29,7 +29,7 @@ namespace KickBrain
 		SerialPort port;
 
 		[Newtonsoft.Json.JsonIgnore]
-		public List<WaveChannel> Channels;
+		public List<IInput> Channels;
 
 		public string Name { get; private set; }
 		public int ChannelCount { get; private set; }
@@ -39,7 +39,7 @@ namespace KickBrain
 		{
 			port = new SerialPort();
 
-			Channels = new List<WaveChannel>();
+			Channels = new List<IInput>();
 			Name = portName;
 			ChannelCount = channelCount;
 			SampleRate = sampleRate;
@@ -66,7 +66,7 @@ namespace KickBrain
 			int i = 0;
 			while (Channels.Count < ChannelCount)
 			{
-				Channels.Add(new WaveChannel(this, i++));
+				Channels.Add(new InputChannel(this, i++));
 			}
 		}
 

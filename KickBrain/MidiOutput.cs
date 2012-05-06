@@ -52,20 +52,20 @@ namespace KickBrain
 			this.Stream = stream;
 		}
 
-		public void TriggerEvent(WaveChannel sender, double value)
+		public void TriggerEvent(InputChannel sender, double value)
 		{
-			value = sender.Config.Velocity.Map(value);
+			value = ((InputChannelConfig)sender.Config).Velocity.Map(value);
 
-			if (sender.Config.ContinuousControl)
+			if (((InputChannelConfig)sender.Config).ContinuousControl)
 			{
-				CC(sender.Config.MIDIChannel, sender.Config.MIDIControl, (int)Math.Round(value * 127));
+				CC(((InputChannelConfig)sender.Config).MIDIChannel, ((InputChannelConfig)sender.Config).MIDIControl, (int)Math.Round(value * 127));
 			}
 			else
 			{
 				if(value == 0.0)
-					NoteOff(sender.Config.MIDIChannel, sender.Config.MIDIControl);
+					NoteOff(((InputChannelConfig)sender.Config).MIDIChannel, ((InputChannelConfig)sender.Config).MIDIControl);
 				else
-					NoteOn(sender.Config.MIDIChannel, sender.Config.MIDIControl, (int)Math.Round(value * 127));
+					NoteOn(((InputChannelConfig)sender.Config).MIDIChannel, ((InputChannelConfig)sender.Config).MIDIControl, (int)Math.Round(value * 127));
 			}
 
 			Console.WriteLine("Midi trigger complete");

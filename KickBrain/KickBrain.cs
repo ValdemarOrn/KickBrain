@@ -6,11 +6,15 @@ using System.Windows.Forms;
 
 namespace KickBrain
 {
+	/// <summary>
+	/// Singleton class that glues the thing together.
+	/// </summary>
 	public class KickBrain
 	{
+		#region singleton
+		
 		static KickBrain Instance;
 		static object LockObject = new object();
-
 		public static KickBrain KB
 		{
 			get
@@ -25,22 +29,25 @@ namespace KickBrain
 			}
 		}
 
+		#endregion
 		// ---------------------------------
+
+		public SourceManager Sources;
+
+		public SerialInput Input;
+		public MidiOutput Output;
+		public UI ui;
+		public Config Config;
 
 		private KickBrain()
 		{
+			Sources = new SourceManager();
+
 			ui = new UI();
 			Config = new Config(@"KickBrain.json");
 			Config.Load();
 			Init();
 		}
-
-		public SerialInput Input;
-		public MidiOutput Output;
-
-		public UI ui;
-
-		public Config Config;
 
 		public void Init()
 		{
@@ -109,6 +116,12 @@ namespace KickBrain
 
 		private void OpenSerialInput(string COMPort, int BaudRate, int NumberOfChannels, int SampleRate)
 		{
+			if (COMPort == null || COMPort == "")
+			{
+				ShowError("Illegal COM Port name: " + COMPort);
+				return;
+			}
+
 			SerialInput SerialInput = null;
 			try
 			{
@@ -132,15 +145,16 @@ namespace KickBrain
 			Config.Set("Input.SampleRate", SampleRate);
 		}
 
+		// hard connections between inputChannel triggers and midioutput
+		// To be replaced by the flexible routing system
 		private void ConnectEvents()
 		{
-			if (Output == null)
+			if (Output == null || Input == null)
 				return;
 
 			// connect the trigger events of the inputs to the output
-			foreach (var inp in Input.Channels)
-				inp.TriggerEvent += Output.TriggerEvent;
+//			foreach (var inp in Input.Channels)
+//				inp.TriggerEvent += Output.TriggerEvent;
 		}
-
 	}
 }

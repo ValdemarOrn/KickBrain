@@ -11,7 +11,7 @@ namespace KickBrain
 	public class WaveView : UserControl
 	{
 		public double ZoomX;
-		public WaveChannel Channel;
+		public InputChannel Channel;
 
 		double _refreshRate;
 		public double RefreshRate
@@ -128,8 +128,10 @@ namespace KickBrain
 		List<int> TriggerPos;
 		List<int> TriggerOffPos;
 
-		public void Trigger(WaveChannel sender, double power)
+		public void Trigger(/*InputChannel sender, double power*/)
 		{
+			var power = Channel.GetPower();
+
 			int delay = 0;// Channel.Config.TriggerLength;
 			if(power > 0.0)
 				TriggerPos.Add(ScanPos - delay);
@@ -137,7 +139,7 @@ namespace KickBrain
 				TriggerOffPos.Add(ScanPos - delay);
 		}
 
-		public void AddData(WaveChannel sender, double data)
+		public void AddData(/*InputChannel sender, double data*/)
 		{
 			lock (Values)
 			{
@@ -156,7 +158,8 @@ namespace KickBrain
 
 				if (ScanPos < Values.Count) // because width might be zero
 				{
-					Values[ScanPos] = data;
+					Values[ScanPos] = Channel.GetValue();
+					//Values[ScanPos] = data;
 
 					if (ScanPos == 0)
 					{

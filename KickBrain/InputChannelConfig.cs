@@ -6,9 +6,13 @@ using System.ComponentModel;
 
 namespace KickBrain
 {
-	public class WaveChannelConfig
+	public class InputChannelConfig
 	{
 		// Basic Settings
+
+		[CategoryAttribute("Basic Settings")]
+		[DescriptionAttribute("Enable or disable MIDI output from this Channel.")]
+		public string Name { get; set; }
 
 		[CategoryAttribute("Basic Settings")]
 		[DescriptionAttribute("Enable or disable MIDI output from this Channel.")]
@@ -65,20 +69,6 @@ namespace KickBrain
 		[DescriptionAttribute("Sets the minimum time in milliseconds between triggers. Values that are too low can cause unwanted retriggering")]
 		public int TriggerRetrigger { get; set; }
 
-		[CategoryAttribute("Trigger Control")]
-		[DescriptionAttribute("Set the number of velocity curve control points")]
-		public int VelocityPoints
-		{
-			get
-			{
-				return Velocity.NumberOfPoints;
-			}
-			set
-			{
-				Velocity.NumberOfPoints = value;
-			}
-		}
-
 		[BrowsableAttribute(false)]
 		public AudioLib.VelocityMap Velocity { get; set; }
 
@@ -123,9 +113,9 @@ namespace KickBrain
 		}
 
 
-		public WaveChannelConfig()
+		public InputChannelConfig()
 		{
-			Velocity = new AudioLib.VelocityMap(3);
+			Velocity = new AudioLib.VelocityMap(6);
 
 			DecayRate = 0.97;
 			Gain = 1.0;

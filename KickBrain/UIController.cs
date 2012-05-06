@@ -9,19 +9,19 @@ namespace KickBrain
 	public class UIController
 	{
 		public UI ui;
-		public WaveChannel CurrentChannel;
+		public InputChannel CurrentChannel;
 
 		public UIController(UI form)
 		{
 			this.ui = form;
 		}
 
-		public void AddWiew(WaveChannel channel)
+		public void AddWiew(InputChannel channel)
 		{
 			try
 			{
 				// Invoke from main thread
-				Action<WaveChannel> AddDele = AddWiew;
+				Action<InputChannel> AddDele = AddWiew;
 				if (ui.InvokeRequired)
 				{
 					ui.Invoke(AddDele, new object[] { channel });
@@ -42,8 +42,8 @@ namespace KickBrain
 				channel.DataEvent += view.AddData;
 
 				// Subscribe to the trigger event
-				channel.TriggerEvent += this.Trigger;
-				channel.TriggerEvent += view.Trigger;
+				channel.Trigger += this.Trigger;
+				channel.Trigger += view.Trigger;
 
 				var page = new TabPage("Ch " + channel.Channel);
 				ui.WaveTabs.TabPages.Add(page);
@@ -56,16 +56,18 @@ namespace KickBrain
 			}
 		}
 
-		public void Trigger(WaveChannel sender, double velocity)
+		public void Trigger(/*InputChannel sender, double velocity*/)
 		{
-			if (sender != this.CurrentChannel)
-				return;
+			var sender = CurrentChannel;
+			var velocity = CurrentChannel.GetPower();
+			//if (sender != this.CurrentChannel)
+			//	return;
 
 			// Invoke from main thread
-			Action<WaveChannel, double> TriggerDele = Trigger;
+			Action TriggerDele = Trigger;
 			if (ui.InvokeRequired)
 			{
-				ui.Invoke(TriggerDele, new object[] { sender, velocity });
+				ui.Invoke(TriggerDele, null);
 				return;
 			}
 
@@ -74,7 +76,7 @@ namespace KickBrain
 
 			ui.velocityMapControl1.SetTrigger(velocity);
 
-			velocity = CurrentChannel.Config.Velocity.Map(velocity);
+			velocity = ((InputChannelConfig)CurrentChannel.Config).Velocity.Map(velocity);
 
 			double barValue = velocity * ui.progressBarVelocity.Maximum;
 			if (barValue > ui.progressBarVelocity.Maximum)
@@ -114,7 +116,7 @@ namespace KickBrain
 			CurrentChannel = ((WaveView)(ui.WaveTabs.SelectedTab.Controls[0])).Channel;
 
 			ui.propertyGrid1.SelectedObject = CurrentChannel.Config;
-			ui.velocityMapControl1.Map = CurrentChannel.Config.Velocity;
+			ui.velocityMapControl1.Map = ((InputChannelConfig)CurrentChannel.Config).Velocity;
 			ui.textBoxHits.Text = "0";
 			ui.textBoxVelocity.Text = "";
 
@@ -123,7 +125,7 @@ namespace KickBrain
 
 		public void SetChannelEnabled(bool enabled)
 		{
-			CurrentChannel.Config.Enabled = enabled;
+			((InputChannelConfig)CurrentChannel.Config).Enabled = enabled;
 		}
 
 		public void Configure()
@@ -133,7 +135,7 @@ namespace KickBrain
 			// remove current tabs
 			ui.WaveTabs.TabPages.Clear();
 
-			foreach (WaveChannel channel in KickBrain.KB.Input.Channels)
+			foreach (InputChannel channel in KickBrain.KB.Input.Channels)
 				ui.Ctrl.AddWiew(channel);
 
 			// initialize processing values
