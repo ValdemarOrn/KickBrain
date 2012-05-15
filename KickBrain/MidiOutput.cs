@@ -85,7 +85,7 @@ namespace KickBrain
 
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
 			if (err != PortMidi.PmError.pmNoError)
-				KickBrain.KB.ShowError("Error sending noteOn: " + err.ToString());
+				Brain.KB.ShowError("Error sending noteOn: " + err.ToString());
 		}
 
 		void NoteOff(int channel, int note)
@@ -95,7 +95,7 @@ namespace KickBrain
 
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
 			if (err != PortMidi.PmError.pmNoError)
-				KickBrain.KB.ShowError("Error sending noteOff: " + err.ToString());
+				Brain.KB.ShowError("Error sending noteOff: " + err.ToString());
 		}
 
 		void CC(int channel, int CC, int value)
@@ -105,7 +105,7 @@ namespace KickBrain
 
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
 			if (err != PortMidi.PmError.pmNoError)
-				KickBrain.KB.ShowError("Error sending CC: " + err.ToString());
+				Brain.KB.ShowError("Error sending CC: " + err.ToString());
 		}
 	}
 }

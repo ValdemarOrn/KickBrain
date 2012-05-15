@@ -111,8 +111,8 @@ namespace KickBrain
 					PerSecond += count;
 					if ((DateTime.Now - StartTime).TotalMilliseconds >= 1000)
 					{
-						KickBrain.KB.ui.Ctrl.SetSamplerate((int)(((double)PerSecond) / (ChannelCount + 1)));
-						KickBrain.KB.ui.Ctrl.SetByterate(PerSecond);
+						Brain.KB.ui.InputView.Ctrl.SetSamplerate((int)(((double)PerSecond) / (ChannelCount + 1)));
+						Brain.KB.ui.InputView.Ctrl.SetByterate(PerSecond);
 						//Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
 						PerSecond = 0;
 						StartTime = DateTime.Now;

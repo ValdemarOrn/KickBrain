@@ -5,10 +5,11 @@ using System.Text;
 
 namespace KickBrain
 {
-	public interface ITrigger
+	public interface IEventChannel
 	{
+		string GetName();
 		// Event that triggers when a trigger should be fired
-		event Action Trigger;
+		List<Event> Triggers { get; }
 
 	}
 }

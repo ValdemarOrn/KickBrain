@@ -5,10 +5,11 @@ using System.Text;
 
 namespace KickBrain
 {
-	public interface IChannel
+	// A single channel generates multiple signals
+	public interface ISignalChannel
 	{
 		string GetName();
-		Dictionary<string, Func<double>> Values { get; }
+		List<Signal> Signals { get; }
 		
 	}
 }

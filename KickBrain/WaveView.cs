@@ -128,7 +128,7 @@ namespace KickBrain
 		List<int> TriggerPos;
 		List<int> TriggerOffPos;
 
-		public void Trigger(/*InputChannel sender, double power*/)
+		public void Trigger(object sender)
 		{
 			var power = Channel.GetPower();
 
@@ -139,7 +139,7 @@ namespace KickBrain
 				TriggerOffPos.Add(ScanPos - delay);
 		}
 
-		public void AddData(/*InputChannel sender, double data*/)
+		public void AddData(object sender)
 		{
 			lock (Values)
 			{

@@ -6,83 +6,53 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Globalization;
+using KickBrain.Views;
 
 namespace KickBrain
 {
 	public partial class UI : Form
 	{
-		public List<WaveView> Views;
-		public UIController Ctrl;
-
-		Timer TriggerRefreshTimer;
+		public InputView InputView;
+		public SignalView SignalView;
 
 		public UI()
 		{
-			System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-			System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-
 			InitializeComponent();
+			InputView = new InputView();
+			SignalView = new SignalView();
 
-			Ctrl = new UIController(this);
-			Views = new List<WaveView>();
+			Controls.Add(InputView);
+			Controls.Add(SignalView);
 
-			TriggerRefreshTimer = new Timer();
-			TriggerRefreshTimer.Tick += delegate(object sender, EventArgs e) 
-				{ progressBarVelocity.Value = (int)(0.9 * progressBarVelocity.Value); };
+			InputView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+			SignalView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
-			TriggerRefreshTimer.Interval = 1000 / 30;
-			TriggerRefreshTimer.Start();
+			InputView.Top = 60;
+			InputView.Left = 15;
+			InputView.Width = ClientSize.Width - 2*15;
+			InputView.Height = ClientSize.Height - 60 - 15;
+			InputView.Visible = true;
+			InputView.Hide();
+
+			SignalView.Top = 60;
+			SignalView.Left = 15;
+			SignalView.Width = ClientSize.Width - 2 * 15;
+			SignalView.Height = ClientSize.Height - 60 - 15;
+			SignalView.Visible = true;
+			SignalView.Hide();
 		}
 
-		private void buttonZoomX_Click(object sender, EventArgs e)
+		private void ChangePage(object sender, EventArgs e)
 		{
-			double zoom = 1.0;
+			this.InputView.Hide();
+			this.SignalView.Hide();
 
-			try
+			if (sender == LabelInputs)
+				InputView.Show();
+			else if (sender == labelSignals)
 			{
-				zoom = Convert.ToDouble(textBoxZoomX.Text);
+				SignalView.Show();
 			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Unable to read zoom value: " + textBoxZoomX.Text);
-				return;
-			}
-
-			Ctrl.SetZoom(zoom);
-		}
-
-		private void buttonRefresh_Click(object sender, EventArgs e)
-		{
-			double rate = 30.0;
-
-			try
-			{
-				rate = Convert.ToDouble(textBoxRefresh.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Unable to read refresh rate value: " + textBoxRefresh.Text);
-				return;
-			}
-
-			Ctrl.SetRefresh(rate);
-		}
-
-		private void buttonConfigure_Click(object sender, EventArgs e)
-		{
-			Ctrl.Configure();
-		}
-
-		public void WaveTabs_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			Ctrl.SetActiveChannel();
-		}
-
-		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
-		{
-			Ctrl.PropertyChanged();
-			
 		}
 	}
 }

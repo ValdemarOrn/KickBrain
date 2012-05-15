@@ -11,32 +11,44 @@ namespace KickBrain
 	/// </summary>
 	public class SourceManager
 	{
-		// All IChannels
-		List<IChannel> Signals;
+		// All ISignalChannels
+		List<ISignalChannel> Channels;
 
-		// All ITriggers
-		List<ITrigger> Triggers;
+		// All ITriggerChannels
+		List<IEventChannel> Triggers;
 
 		public SourceManager()
 		{
-			Signals = new List<IChannel>();
-			Triggers = new List<ITrigger>();
+			Channels = new List<ISignalChannel>();
+			Triggers = new List<IEventChannel>();
 		}
 
-		public void AddChannel(IChannel channel)
+		public List<ISignalChannel> GetChannels()
 		{
-			Signals.Add(channel);
+			// returns a shallow copy
+			return Channels.Select(x => x).ToList();
 		}
 
-		public void AddTrigger(ITrigger trigger)
+		public void AddChannel(ISignalChannel channel)
+		{
+			Channels.Add(channel);
+		}
+
+		public List<IEventChannel> GetTriggers()
+		{
+			// returns a shallow copy
+			return Triggers.Select(x => x).ToList();
+		}
+
+		public void AddTrigger(IEventChannel trigger)
 		{
 			Triggers.Add(trigger);
 		}
 
-		public void SetChannelIndex(IChannel channel, int newIndex)
+		public void SetChannelIndex(ISignalChannel channel, int newIndex)
 		{
-			if (!Signals.Contains(channel))
-				KickBrain.KB.ShowError("This channel is not registered in the Channel Manager!");
+			if (!Channels.Contains(channel))
+				Brain.KB.ShowError("This channel is not registered in the Channel Manager!");
 		}
 	}
 }

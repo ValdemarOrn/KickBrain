@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using KickBrain.Views;
 
-namespace KickBrain
+namespace KickBrain.Controllers
 {
-	public class UIController
+	public class InputController
 	{
-		public UI ui;
+		public InputView ui;
 		public InputChannel CurrentChannel;
 
-		public UIController(UI form)
+		public InputController(InputView form)
 		{
 			this.ui = form;
 		}
@@ -38,12 +39,14 @@ namespace KickBrain
 				view.ZoomX = Convert.ToDouble(ui.textBoxZoomX.Text);
 				view.RefreshRate = Convert.ToDouble(ui.textBoxRefresh.Text);
 
-				// subscribe to the channel's data event
-				channel.DataEvent += view.AddData;
+				// subscribe to the channel's data trigger
+				var dataEvent = channel.Triggers.First(x => x.Name == InputChannel.TRIGGER_DATA);
+				dataEvent.Add(view.AddData);
 
-				// Subscribe to the trigger event
-				channel.Trigger += this.Trigger;
-				channel.Trigger += view.Trigger;
+				// Subscribe to the trigger trigger
+				var triggerEvent = channel.Triggers.First(x => x.Name == InputChannel.TRIGGER_TRIGGER);
+				triggerEvent.Add(this.Trigger);
+				triggerEvent.Add(view.Trigger);
 
 				var page = new TabPage("Ch " + channel.Channel);
 				ui.WaveTabs.TabPages.Add(page);
@@ -56,15 +59,15 @@ namespace KickBrain
 			}
 		}
 
-		public void Trigger(/*InputChannel sender, double velocity*/)
+		public void Trigger(object sender_)
 		{
-			var sender = CurrentChannel;
+			var sender = (InputChannel)sender_;
 			var velocity = CurrentChannel.GetPower();
 			//if (sender != this.CurrentChannel)
 			//	return;
 
 			// Invoke from main thread
-			Action TriggerDele = Trigger;
+			Action<IEventChannel> TriggerDele = Trigger;
 			if (ui.InvokeRequired)
 			{
 				ui.Invoke(TriggerDele, null);
@@ -110,7 +113,7 @@ namespace KickBrain
 
 		public void SetActiveChannel(int channel)
 		{
-			if (channel < 0 || channel >= KickBrain.KB.Input.ChannelCount)
+			if (channel < 0 || channel >= Brain.KB.Input.ChannelCount)
 				return;
 
 			CurrentChannel = ((WaveView)(ui.WaveTabs.SelectedTab.Controls[0])).Channel;
@@ -130,12 +133,15 @@ namespace KickBrain
 
 		public void Configure()
 		{
-			KickBrain.KB.Configure();
+			bool connected = Brain.KB.Configure();
+
+			if (!connected)
+				return;
 
 			// remove current tabs
 			ui.WaveTabs.TabPages.Clear();
 
-			foreach (InputChannel channel in KickBrain.KB.Input.Channels)
+			foreach (InputChannel channel in Brain.KB.Input.Channels)
 				ui.Ctrl.AddWiew(channel);
 
 			// initialize processing values
@@ -172,6 +178,7 @@ namespace KickBrain
 		{
 			CurrentChannel.ConfigUpdated();
 			ui.velocityMapControl1.Invalidate();
+			ui.WaveTabs.SelectedTab.Text = CurrentChannel.GetName();
 		}
 	}
 }

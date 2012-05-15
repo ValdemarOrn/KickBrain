@@ -50,17 +50,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddPort.cs">
+    <Compile Include="Controllers\SignalController.cs" />
+    <Compile Include="Signal.cs" />
+    <Compile Include="SignalMode.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddPort.Designer.cs">
+    <Compile Include="UI.Designer.cs">
+      <DependentUpon>UI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddPort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\AddPort.Designer.cs">
       <DependentUpon>AddPort.cs</DependentUpon>
     </Compile>
     <Compile Include="Buffer.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="IChannel.cs" />
+    <Compile Include="ISignalChannel.cs" />
     <Compile Include="IInput.cs" />
-    <Compile Include="ITrigger.cs" />
+    <Compile Include="IEventChannel.cs" />
     <Compile Include="KickBrain.cs" />
     <Compile Include="MidiOutput.cs" />
     <Compile Include="Program.cs" />
@@ -69,25 +79,38 @@
     <Compile Include="Serializer.cs" />
     <Compile Include="SignalChannel.cs" />
     <Compile Include="SourceManager.cs" />
-    <Compile Include="UIController.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="Controllers\InputController.cs" />
     <Compile Include="InputChannel.cs" />
     <Compile Include="InputChannelConfig.cs" />
+    <Compile Include="Views\InputView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\InputView.Designer.cs">
+      <DependentUpon>InputView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignalView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\SignalView.Designer.cs">
+      <DependentUpon>SignalView.cs</DependentUpon>
+    </Compile>
     <Compile Include="WaveView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI.Designer.cs">
-      <DependentUpon>UI.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddPort.resx">
-      <DependentUpon>AddPort.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AddPort.resx">
+      <DependentUpon>AddPort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InputView.resx">
+      <DependentUpon>InputView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SignalView.resx">
+      <DependentUpon>SignalView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

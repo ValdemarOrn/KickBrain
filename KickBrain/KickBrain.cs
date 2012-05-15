@@ -9,20 +9,23 @@ namespace KickBrain
 	/// <summary>
 	/// Singleton class that glues the thing together.
 	/// </summary>
-	public class KickBrain
+	public class Brain
 	{
 		#region singleton
 		
-		static KickBrain Instance;
+		static Brain Instance;
 		static object LockObject = new object();
-		public static KickBrain KB
+		public static Brain KB
 		{
 			get
 			{
 				lock (LockObject)
 				{
 					if (Instance == null)
-						Instance = new KickBrain();
+					{
+						Instance = new Brain();
+						Instance.Init();
+					}
 
 					return Instance;
 				}
@@ -39,18 +42,19 @@ namespace KickBrain
 		public UI ui;
 		public Config Config;
 
-		private KickBrain()
+		private Brain()
+		{
+			
+		}
+
+		public void Init()
 		{
 			Sources = new SourceManager();
 
 			ui = new UI();
 			Config = new Config(@"KickBrain.json");
 			Config.Load();
-			Init();
-		}
 
-		public void Init()
-		{
 			/*var ComPort = Config.Get<string>("Input.COMPort");
 			var baud = (int)Config.Get<double>("Input.BaudRate");
 			var numChannels = Config.Get<int>("Input.NumberOfChannels");
@@ -75,7 +79,7 @@ namespace KickBrain
 			MessageBox.Show("An error has occured: \n" + message);
 		}
 
-		public void Configure()
+		public bool Configure()
 		{
 			if (Input != null)
 				Input.Stop();
@@ -85,12 +89,17 @@ namespace KickBrain
 
 			var dialog = AddPortDialog.Show();
 
-			OpenSerialInput(dialog.COMPort, dialog.BaudRate, dialog.NumberOfChannels, dialog.SampleRate);
-			OpenMidiOutput(dialog.MidiDeviceID);
+			if (dialog.Connected)
+			{
+				OpenSerialInput(dialog.COMPort, dialog.BaudRate, dialog.NumberOfChannels, dialog.SampleRate);
+				OpenMidiOutput(dialog.MidiDeviceID);
 
-			Config.Save();
+				Config.Save();
 
-			ConnectEvents();
+				ConnectEvents();
+			}
+
+			return dialog.Connected;
 		}
 
 		private void OpenMidiOutput(int DeviceID)

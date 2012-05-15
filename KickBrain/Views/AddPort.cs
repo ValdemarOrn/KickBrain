@@ -15,6 +15,7 @@ namespace KickBrain
 	{
 		public SerialInput SerialInput;
 		public MidiOutput MidiOutput;
+		public bool Connected;
 
 		public AddPortDialog()
 		{
@@ -36,6 +37,7 @@ namespace KickBrain
 
 		private void button1_Click(object sender, EventArgs e)
 		{
+			Connected = true;
 			this.Close();
 		}
 

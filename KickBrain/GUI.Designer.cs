@@ -1,4 +1,5 @@
-﻿namespace KickBrain
+﻿using KickBrain.Views;
+namespace KickBrain
 {
 	partial class UI
 	{
@@ -31,6 +32,8 @@
 			this.LabelInputs = new System.Windows.Forms.Label();
 			this.labelSignals = new System.Windows.Forms.Label();
 			this.labelOutputs = new System.Windows.Forms.Label();
+			this.InputView = new KickBrain.Views.InputView();
+			this.SignalView = new KickBrain.Views.SignalView();
 			this.SuspendLayout();
 			// 
 			// LabelInputs
@@ -77,6 +80,8 @@
 			this.Controls.Add(this.labelOutputs);
 			this.Controls.Add(this.labelSignals);
 			this.Controls.Add(this.LabelInputs);
+			this.Controls.Add(this.SignalView);
+			this.Controls.Add(this.InputView);
 			this.MinimumSize = new System.Drawing.Size(992, 525);
 			this.Name = "UI";
 			this.Text = "KickBrain";
@@ -87,8 +92,14 @@
 
 		#endregion
 
+		public InputView InputView;
 		private System.Windows.Forms.Label LabelInputs;
 		private System.Windows.Forms.Label labelSignals;
 		private System.Windows.Forms.Label labelOutputs;
+		private SignalView SignalView;
+
+
+
+
 	}
 }

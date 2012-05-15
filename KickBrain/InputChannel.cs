@@ -8,18 +8,24 @@ namespace KickBrain
 {
 	public class InputChannel : IInput
 	{
+		public const string TRIGGER_TRIGGER = "TriggerEvent";
+		public const string TRIGGER_DATA = "DataEvent";
+		public const string VALUE_POWER = "Power";
+		public const string VALUE_VALUE = "Value";
+
 		public SerialInput Input;
+
+		/// Event that triggers when new data is available on the channel
+		Event DataEvent;
+		Event TriggerEvent;
 
 		public int Channel;
 
-		/// Event that triggers when new data is available on the channel
-		public event Action DataEvent;
-
 		// IChannel
-		public Dictionary<string, Func<double>> Values { get; private set; }
+		public List<Signal> Signals { get; private set; }
 
 		// ITrigger - Event that triggers when a trigger should be fired
-		public event Action Trigger;
+		public List<Event> Triggers { get; set; }
 
 		// used for CC mode
 		AudioLib.TF.MovingAverage movingAverage;
@@ -52,12 +58,21 @@ namespace KickBrain
 			Config = new InputChannelConfig();
 			this.InputConfig.Name = "Ch " + channel;
 
-			Values = new Dictionary<string, Func<double>>();
-			Values.Add("Power", GetPower);
-			Values.Add("Value", GetValue);
+			// Set up IChannel - GetValue
+			Signals = new List<Signal>();
+			Signals.Add(new Signal(this, VALUE_POWER, GetPower));
+			Signals.Add(new Signal(this, VALUE_VALUE, GetValue));
 
-			KickBrain.KB.Sources.AddChannel(this);
-			KickBrain.KB.Sources.AddTrigger(this);
+			// Set up ITrigger
+			TriggerEvent = new Event(this, TRIGGER_TRIGGER);
+			DataEvent = new Event(this, TRIGGER_DATA);
+
+			Triggers = new List<Event>();
+			Triggers.Add(TriggerEvent);
+			Triggers.Add(DataEvent);
+
+			Brain.KB.Sources.AddChannel(this);
+			Brain.KB.Sources.AddTrigger(this);
 		}
 
 		DateTime LastTriggered;
@@ -79,7 +94,7 @@ namespace KickBrain
 				value = ProcessTrigger(value);
 			
 			if(DataEvent != null)
-				DataEvent();
+				DataEvent.Invoke(this);
 
 			currentSample++;
 		}
@@ -153,17 +168,21 @@ namespace KickBrain
 			// execute the trigger event once TriggerLength has passed
 			if (triggerAtSample == currentSample)
 			{
-				if (InputConfig.Enabled && Trigger != null)
-					Trigger();
+				if (InputConfig.Enabled && TriggerEvent != null)
+					TriggerEvent.Invoke(this);
 			}
 
 			// turn off
 			if (value < InputConfig.NoiseFloor && triggerIsOn)
 			{
+				string name = InputConfig.Name;
+
 				outputPower = 0.0;
 				triggerIsOn = false;
-				if (InputConfig.Enabled && Trigger != null)
-					Trigger();
+				if (InputConfig.Enabled && TriggerEvent != null)
+				{ 
+					TriggerEvent.Invoke(this); 
+				}
 			}
 			return value;
 		}

@@ -13,7 +13,7 @@ namespace KickBrain
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(KickBrain.KB.ui);
+			Application.Run(Brain.KB.ui);
 		}
 	}
 }
