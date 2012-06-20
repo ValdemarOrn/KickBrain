@@ -8,8 +8,9 @@ namespace KickBrain
 {
 	public class InputChannel : IInput
 	{
-		public const string TRIGGER_TRIGGER = "TriggerEvent";
-		public const string TRIGGER_DATA = "DataEvent";
+		public const string TRIGGER_ON = "On Event";
+		public const string TRIGGER_OFF = "Off Event";
+		public const string TRIGGER_DATA = "Data Event";
 		public const string VALUE_POWER = "Power";
 		public const string VALUE_VALUE = "Value";
 
@@ -17,7 +18,8 @@ namespace KickBrain
 
 		/// Event that triggers when new data is available on the channel
 		Event DataEvent;
-		Event TriggerEvent;
+		Event TriggerOnEvent;
+		Event TriggerOffEvent;
 
 		public int Channel;
 
@@ -25,7 +27,7 @@ namespace KickBrain
 		public List<Signal> Signals { get; private set; }
 
 		// ITrigger - Event that triggers when a trigger should be fired
-		public List<Event> Triggers { get; set; }
+		public List<Event> Events { get; set; }
 
 		// used for CC mode
 		AudioLib.TF.MovingAverage movingAverage;
@@ -64,15 +66,17 @@ namespace KickBrain
 			Signals.Add(new Signal(this, VALUE_VALUE, GetValue));
 
 			// Set up ITrigger
-			TriggerEvent = new Event(this, TRIGGER_TRIGGER);
+			TriggerOnEvent = new Event(this, TRIGGER_ON);
+			TriggerOffEvent = new Event(this, TRIGGER_OFF);
 			DataEvent = new Event(this, TRIGGER_DATA);
 
-			Triggers = new List<Event>();
-			Triggers.Add(TriggerEvent);
-			Triggers.Add(DataEvent);
+			Events = new List<Event>();
+			Events.Add(TriggerOnEvent);
+			Events.Add(TriggerOffEvent);
+			Events.Add(DataEvent);
 
-			Brain.KB.Sources.AddChannel(this);
-			Brain.KB.Sources.AddTrigger(this);
+			Brain.KB.Sources.AddSignalChannel(this);
+			Brain.KB.Sources.AddTriggerChannel(this);
 		}
 
 		DateTime LastTriggered;
@@ -168,8 +172,8 @@ namespace KickBrain
 			// execute the trigger event once TriggerLength has passed
 			if (triggerAtSample == currentSample)
 			{
-				if (InputConfig.Enabled && TriggerEvent != null)
-					TriggerEvent.Invoke(this);
+				if (InputConfig.Enabled)
+					TriggerOnEvent.Invoke(this);
 			}
 
 			// turn off
@@ -179,17 +183,17 @@ namespace KickBrain
 
 				outputPower = 0.0;
 				triggerIsOn = false;
-				if (InputConfig.Enabled && TriggerEvent != null)
+				if (InputConfig.Enabled)
 				{ 
-					TriggerEvent.Invoke(this); 
+					TriggerOffEvent.Invoke(this); 
 				}
 			}
 			return value;
 		}
 
-		public string GetName()
+		public string ChannelName
 		{
-			return InputConfig.Name;
+			get { return InputConfig.Name; }
 		}
 
 		public double GetValue()

@@ -13,17 +13,27 @@ namespace KickBrain.Views
 	public partial class SignalView : UserControl
 	{
 		public SignalController Ctrl;
+		public Timer TriggerTimer;
 
 		public SignalView()
 		{
 			InitializeComponent();
 			Ctrl = new SignalController(this);
 			//Ctrl.LoadAllSignals();
+
+			TriggerTimer = new Timer();
+			TriggerTimer.Interval = 100;
+			TriggerTimer.Tick += new EventHandler(delegate(object sender, EventArgs e){checkBoxTriggerOn.Checked = false;});
 		}
 
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
 			Ctrl.AddSignal();
+		}
+
+		private void buttonRemove_Click(object sender, EventArgs e)
+		{
+
 		}
 
 		private void listBoxSignals_SelectedIndexChanged(object sender, EventArgs e)
@@ -32,13 +42,19 @@ namespace KickBrain.Views
 				return;
 
 			//Ctrl.SaveSignal();
-			Ctrl.LoadSignal(listBoxSignals.SelectedIndex);
+			Ctrl.LoadChannel(listBoxSignals.SelectedIndex);
 		}
 
 		private void SignalView_VisibleChanged(object sender, EventArgs e)
 		{
-			Ctrl.LoadAllSources();
-			Ctrl.LoadSignal(Ctrl.SelectedIndex);
+			if (!Visible)
+				return;
+
+			Ctrl.LoadSignalChannels();
+			Ctrl.LoadSignals();
+			Ctrl.LoadEvents();
+			Ctrl.LoadModes();
+			Ctrl.LoadChannel(Ctrl.SelectedIndex);
 			listBoxSignals.SelectedIndex = Ctrl.SelectedIndex;
 			
 		}
@@ -46,12 +62,12 @@ namespace KickBrain.Views
 		private void buttonSave_Click(object sender, EventArgs e)
 		{
 			Ctrl.SaveSignal();
-			Ctrl.LoadAllSources();
+			Ctrl.LoadSignalChannels();
 		}
 
 		private void comboBoxTrigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Ctrl.ConnectTrigger();
+			Ctrl.ConnectEvent();
 		}
 	}
 }

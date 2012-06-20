@@ -50,10 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\OutputController.cs" />
     <Compile Include="Controllers\SignalController.cs" />
+    <Compile Include="OutputDestination.cs" />
+    <Compile Include="OutputPort.cs" />
     <Compile Include="Signal.cs" />
     <Compile Include="SignalMode.cs" />
-    <Compile Include="Trigger.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,10 +82,15 @@
     <Compile Include="Serializer.cs" />
     <Compile Include="SignalChannel.cs" />
     <Compile Include="SourceManager.cs" />
-    <Compile Include="Event.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="InputChannel.cs" />
     <Compile Include="InputChannelConfig.cs" />
+    <Compile Include="Views\OutputView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\OutputView.Designer.cs">
+      <DependentUpon>OutputView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\InputView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -105,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\AddPort.resx">
       <DependentUpon>AddPort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\OutputView.resx">
+      <DependentUpon>OutputView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InputView.resx">
       <DependentUpon>InputView.cs</DependentUpon>

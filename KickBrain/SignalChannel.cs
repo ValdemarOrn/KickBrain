@@ -21,6 +21,8 @@ namespace KickBrain
 		public double Max;
 		public VelocityMap VelocityMap;
 
+		public double Output { get; private set; }
+
 		public SignalChannel(string name)
 		{
 			Name = name;
@@ -34,9 +36,9 @@ namespace KickBrain
 			VelocityMap = new VelocityMap(4);
 		}
 
-		public string GetName()
+		public string ChannelName
 		{
-			return Name;
+			get { return Name; }
 		}
 
 		public double GetValue()
@@ -44,8 +46,46 @@ namespace KickBrain
 			return 42;
 		}
 
-		public void Calculate(object sender)
+		public void Process(object sender)
 		{
+			var input = (IInput)sender;
+			double sig = input.Signals[0].SignalDelegate();
+			Console.WriteLine("Signal triggered on channel " + ChannelName + ": " + sig);
+
+			var a = InputA.SignalDelegate();
+			var b = InputB.SignalDelegate();
+
+			if (Mode == SignalMode.Add)
+			{
+				Output = a + b;
+			}
+			else if (Mode == SignalMode.Difference)
+			{
+				Output = Math.Abs(a - b);
+			}
+			else if (Mode == SignalMode.Divide)
+			{
+				if (b == 0.0)
+					Output = Double.MaxValue;
+				else
+					Output = a / b;
+			}
+			else if (Mode == SignalMode.Maximum)
+			{
+				Output = (a > b) ? a : b;
+			}
+			else if (Mode == SignalMode.Minimum)
+			{
+				Output = (a < b) ? a : b;
+			}
+			else if (Mode == SignalMode.Multiply)
+			{
+				Output = a * b;
+			}
+			else if (Mode == SignalMode.Subtract)
+			{
+				Output = a - b;
+			}
 
 		}
 

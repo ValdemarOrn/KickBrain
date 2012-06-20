@@ -83,7 +83,14 @@ namespace KickBrain
 			int status = MidiMessageType.NoteOn | channel;
 			var message = PortMidi.Pm_Message(status, note, velocity);
 
+			DateTime start = DateTime.Now;
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
+			if ((DateTime.Now - start).TotalMilliseconds > 200)
+			{
+				this.Close();
+				this.Start();
+			}
+
 			if (err != PortMidi.PmError.pmNoError)
 				Brain.KB.ShowError("Error sending noteOn: " + err.ToString());
 		}
@@ -93,7 +100,14 @@ namespace KickBrain
 			int status = MidiMessageType.NoteOff | channel;
 			var message = PortMidi.Pm_Message(status, note, 0);
 
+			DateTime start = DateTime.Now;
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
+			if ((DateTime.Now - start).TotalMilliseconds > 200)
+			{
+				this.Close();
+				this.Start();
+			}
+
 			if (err != PortMidi.PmError.pmNoError)
 				Brain.KB.ShowError("Error sending noteOff: " + err.ToString());
 		}

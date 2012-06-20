@@ -7,9 +7,8 @@ namespace KickBrain
 {
 	public interface IEventChannel
 	{
-		string GetName();
-		// Event that triggers when a trigger should be fired
-		List<Event> Triggers { get; }
+		string ChannelName { get; }
+		List<Event> Events { get; }
 
 	}
 }

@@ -10,117 +10,205 @@ namespace KickBrain.Controllers
 	{
 		public SignalView ui;
 
-		Signal CurrentSignal;
-		List<Signal> Signals;
-		List<Event> Triggers;
+		SignalChannel CurrentChannel;
+		List<SignalChannel> Channels;
+
+		
 
 		public SignalController(SignalView form)
 		{
 			this.ui = form;
-			Signals = new List<Signal>();
-			Triggers = new List<Event>();
+			Channels = new List<SignalChannel>();
 		}
 
 		public int SelectedIndex
 		{
-			get { return Signals.IndexOf(CurrentSignal); }
+			get { return Channels.IndexOf(CurrentChannel); }
 		}
 
-		public void LoadAllSources()
+		public void LoadSignalChannels()
 		{
-			// Signals
-			var channels = Brain.KB.Sources.GetChannels();
+			// Channels
+			var channels = Brain.KB.Sources.GetSignalChannels();
+			
 			ui.listBoxSignals.Items.Clear();
-			ui.comboBoxA.Items.Clear();
-			ui.comboBoxB.Items.Clear();
-			Signals.Clear();
+			Channels.Clear();
 
 			foreach (var channel in channels)
 			{
-				foreach (var signal in channel.Signals)
+				// check if this is a signal channel
+				if (channel.GetType() == typeof(SignalChannel))
 				{
-					Signals.Add(signal);
-					ui.listBoxSignals.Items.Add(channel.GetName() + " - " + signal.Name);
-					ui.comboBoxA.Items.Add(channel.GetName() + " - " + signal.Name);
-					ui.comboBoxB.Items.Add(channel.GetName() + " - " + signal.Name);
+					// add to channels list
+					Channels.Add((SignalChannel)channel);
+					// show in the list on the left side
+					ui.listBoxSignals.Items.Add(channel.ChannelName);
 				}
 			}
 
-			ui.listBoxSignals.SelectedIndex = SelectedIndex;
-
-			// Triggers
-			var triggerChannels = Brain.KB.Sources.GetTriggers();
-			ui.comboBoxTrigger.Items.Clear();
-			foreach (var channel in triggerChannels)
+			// reload selected index
+			try
 			{
-				foreach (var trigger in channel.Triggers)
-				{
-					Triggers.Add(trigger);
-					ui.comboBoxTrigger.Items.Add(channel.GetName() + " - " + trigger.Name);
-				}
+				ui.listBoxSignals.SelectedIndex = SelectedIndex;
 			}
+			catch (Exception e)
+			{
+				ui.listBoxSignals.SelectedIndex = 0;
+				CurrentChannel = Channels[0];
+			}
+		}
 
-			// Modes
+		List<Signal> signals;
+
+		public void LoadSignals()
+		{
+			if (signals != null)
+				signals.Clear();
+			signals = Brain.KB.Sources.GetAllSignals();
+
+			ui.comboBoxA.Items.Clear();
+			ui.comboBoxB.Items.Clear();
+
+			// loop through all the signals, of allt types of channels
+			foreach (var signal in signals)
+			{
+				ui.comboBoxA.Items.Add(signal.Owner.ChannelName + " - " + signal.Name);
+				ui.comboBoxB.Items.Add(signal.Owner.ChannelName + " - " + signal.Name);
+			}
+		}
+
+		List<Event> events;
+
+		public void LoadEvents()
+		{
+			if (events != null)
+				events.Clear();
+			events = Brain.KB.Sources.GetAllEvents();
+
+			ui.comboBoxEvent.Items.Clear();
+			foreach (var trigger in events)
+			{
+				ui.comboBoxEvent.Items.Add(trigger.Owner.ChannelName + " - " + trigger.Name);
+			}
+		}
+
+		public void LoadModes()
+		{
 			ui.comboBoxMode.Items.Clear();
 			foreach (var mode in SignalMode.Modes)
 				ui.comboBoxMode.Items.Add(mode.ToString());
 
 			if (SelectedIndex != -1)
-				LoadSignal(SelectedIndex);
+				LoadChannel(SelectedIndex);
 		}
 
 		public void AddSignal()
 		{
 			var ch = new SignalChannel("New Channel");
-			Brain.KB.Sources.AddChannel(ch);
-			LoadAllSources();
-			ui.listBoxSignals.SelectedIndex = Signals.Count - 1;
+			Brain.KB.Sources.AddSignalChannel(ch);
+			LoadSignalChannels();
+			ui.listBoxSignals.SelectedIndex = Channels.Count - 1;
+			LoadSignals();
 		}
 
-		public void LoadSignal(int i)
+		public void LoadChannel(int i)
 		{
+			// detach trigger for view from currentChannel trigger, if it's not null
+			if (CurrentChannel != null)
+			{
+				var c = (SignalChannel)CurrentChannel;
+				if (c.Trigger != null)
+					c.Trigger.Remove(this.Trigger);
+			}
+
 			if (i < 0 || i >= ui.listBoxSignals.Items.Count)
 				return;
 
-			if (Signals[i].Owner.GetType() != typeof(SignalChannel))
+			if (Channels[i].GetType() != typeof(SignalChannel))
 			{
-				CurrentSignal = null;
+				CurrentChannel = null;
 				return;
 			}
 
-			CurrentSignal = Signals[i];
+			CurrentChannel = Channels[i];
 
-			var ch = (SignalChannel)CurrentSignal.Owner;
+			var ch = CurrentChannel;
 
 			ui.textBoxSignalName.Text = ch.Name;
 			ui.comboBoxMode.Text = ch.Mode.ToString();
-			ui.comboBoxA.SelectedIndex = (ch.InputA != null) ? Signals.IndexOf(ch.InputA) : -1;
-			ui.comboBoxB.SelectedIndex = (ch.InputB != null) ? Signals.IndexOf(ch.InputB) : -1;
-			ui.comboBoxTrigger.SelectedIndex = (ch.Trigger != null) ? Triggers.IndexOf(ch.Trigger) : -1;
+			ui.comboBoxA.SelectedIndex = (ch.InputA != null) ? signals.IndexOf(ch.InputA) : -1;
+			ui.comboBoxB.SelectedIndex = (ch.InputB != null) ? signals.IndexOf(ch.InputB) : -1;
+			ui.comboBoxEvent.SelectedIndex = (ch.Trigger != null) ? events.IndexOf(ch.Trigger) : -1;
 			ui.velocityMapControl1.Map = ch.VelocityMap;
+
+			// Attach the trigger that updates the view
+			if (ch.Trigger != null)
+				ch.Trigger.Add(this.Trigger, null);
 		}
 
 		public void SaveSignal()
 		{
-			if (CurrentSignal == null || CurrentSignal.Owner.GetType() != typeof(SignalChannel))
+			if (CurrentChannel == null || CurrentChannel.GetType() != typeof(SignalChannel))
 				return;
 
-			var ch = (SignalChannel)CurrentSignal.Owner;
+			var ch = CurrentChannel;
 
 			ch.Name = ui.textBoxSignalName.Text;
 			ch.Mode = SignalMode.Modes.First(x => x.ToString() == ui.comboBoxMode.Text);
-			ch.InputA = (ui.comboBoxA.SelectedIndex == -1) ? null : Signals[ui.comboBoxA.SelectedIndex];
-			ch.InputB = (ui.comboBoxB.SelectedIndex == -1) ? null : Signals[ui.comboBoxB.SelectedIndex];
-			ch.Trigger = (ui.comboBoxTrigger.SelectedIndex == -1) ? null : Triggers[ui.comboBoxTrigger.SelectedIndex];
+			ch.InputA = (ui.comboBoxA.SelectedIndex == -1) ? null : signals[ui.comboBoxA.SelectedIndex];
+			ch.InputB = (ui.comboBoxB.SelectedIndex == -1) ? null : signals[ui.comboBoxB.SelectedIndex];
+			ch.Trigger = (ui.comboBoxEvent.SelectedIndex == -1) ? null : events[ui.comboBoxEvent.SelectedIndex];
 		}
 
-		internal void ConnectTrigger()
+		internal void ConnectEvent()
 		{
-			var ch = (SignalChannel)CurrentSignal.Owner;
+			var ch = CurrentChannel;
 			if (ch.Trigger != null)
-				ch.Trigger.Remove(ch.Calculate);
+			{
+				ch.Trigger.Remove(ch.Process);
+				ch.Trigger.Remove(this.Trigger);
+			}
 
-			//ch.Trigger.
+			ch.Trigger = (ui.comboBoxEvent.SelectedIndex == -1) ? null : events[ui.comboBoxEvent.SelectedIndex];
+
+			if (ch.Trigger != null)
+			{
+				ch.Trigger.Add(ch.Process, ch);
+				ch.Trigger.Add(this.Trigger, null);
+			}
+		}
+
+		public void Trigger(object sender)
+		{
+			try
+			{
+				double valA = 0.0;
+				if (CurrentChannel.InputA != null)
+					valA = CurrentChannel.InputA.SignalDelegate();
+
+				double valB = 0.0;
+				if (CurrentChannel.InputB != null)
+					valB = CurrentChannel.InputB.SignalDelegate();
+
+				// Invoke from main thread
+				Action<object> TriggerDele = Trigger;
+				if (ui.InvokeRequired)
+				{
+					ui.Invoke(TriggerDele, new object[] { sender });
+					return;
+				}
+
+				ui.labelSigAOutput.Text = String.Format("{0:0.00}", valA);
+				ui.labelSigBOutput.Text = String.Format("{0:0.00}", valB);
+				ui.checkBoxTriggerOn.Checked = true;
+				ui.velocityMapControl1.SetTrigger(CurrentChannel.Output);
+				ui.textBoxOutput.Text = String.Format("{0:0.00}", CurrentChannel.Output);
+				ui.TriggerTimer.Stop();
+				ui.TriggerTimer.Start();
+			}
+			catch (Exception e)
+			{ }
+
 		}
 	}
 }

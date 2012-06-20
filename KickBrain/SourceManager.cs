@@ -12,43 +12,96 @@ namespace KickBrain
 	public class SourceManager
 	{
 		// All ISignalChannels
-		List<ISignalChannel> Channels;
+		List<ISignalChannel> SignalChannels;
 
 		// All ITriggerChannels
-		List<IEventChannel> Triggers;
+		List<IEventChannel> EventChannels;
 
 		public SourceManager()
 		{
-			Channels = new List<ISignalChannel>();
-			Triggers = new List<IEventChannel>();
+			SignalChannels = new List<ISignalChannel>();
+			EventChannels = new List<IEventChannel>();
 		}
 
-		public List<ISignalChannel> GetChannels()
+
+		// ------------ Channels ------------
+
+		public void AddSignalChannel(ISignalChannel channel)
+		{
+			SignalChannels.Add(channel);
+		}
+
+		public List<ISignalChannel> GetSignalChannels()
 		{
 			// returns a shallow copy
-			return Channels.Select(x => x).ToList();
+			return SignalChannels.Select(x => x).ToList();
 		}
 
-		public void AddChannel(ISignalChannel channel)
+		/// <summary>
+		/// Get all signals of all channels
+		/// </summary>
+		/// <returns></returns>
+		public List<Signal> GetAllSignals()
 		{
-			Channels.Add(channel);
+			var output = new List<Signal>();
+			foreach(var channel in SignalChannels)
+			{
+				foreach(var signal in channel.Signals)
+				{
+					output.Add(signal);
+				}
+			}
+
+			return output;
 		}
 
-		public List<IEventChannel> GetTriggers()
+		public void SetSignalChannelIndex(ISignalChannel channel, int newIndex)
 		{
-			// returns a shallow copy
-			return Triggers.Select(x => x).ToList();
-		}
-
-		public void AddTrigger(IEventChannel trigger)
-		{
-			Triggers.Add(trigger);
-		}
-
-		public void SetChannelIndex(ISignalChannel channel, int newIndex)
-		{
-			if (!Channels.Contains(channel))
+			if (!SignalChannels.Contains(channel))
 				Brain.KB.ShowError("This channel is not registered in the Channel Manager!");
 		}
+
+		public int GetSignalChannelIndex(ISignalChannel channel)
+		{
+			if (channel == null)
+				return 99999;
+			if (!SignalChannels.Contains(channel))
+				return 99999;
+			else
+				return SignalChannels.IndexOf(channel);
+		}
+
+		// ------------ Triggers ------------
+
+		public void AddTriggerChannel(IEventChannel trigger)
+		{
+			EventChannels.Add(trigger);
+		}
+
+		public List<IEventChannel> GetTriggerChannels()
+		{
+			// returns a shallow copy
+			return EventChannels.Select(x => x).ToList();
+		}
+
+		/// <summary>
+		/// Get all signals of all channels
+		/// </summary>
+		/// <returns></returns>
+		public List<Event> GetAllEvents()
+		{
+			var output = new List<Event>();
+			foreach (var channel in EventChannels)
+			{
+				foreach (var signal in channel.Events)
+				{
+					output.Add(signal);
+				}
+			}
+
+			return output;
+		}
+
+		
 	}
 }

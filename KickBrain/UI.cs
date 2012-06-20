@@ -14,18 +14,22 @@ namespace KickBrain
 	{
 		public InputView InputView;
 		public SignalView SignalView;
+		public OutputView OutputView;
 
 		public UI()
 		{
 			InitializeComponent();
 			InputView = new InputView();
 			SignalView = new SignalView();
+			OutputView = new OutputView();
 
 			Controls.Add(InputView);
 			Controls.Add(SignalView);
+			Controls.Add(OutputView);
 
 			InputView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 			SignalView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+			OutputView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
 			InputView.Top = 60;
 			InputView.Left = 15;
@@ -40,6 +44,13 @@ namespace KickBrain
 			SignalView.Height = ClientSize.Height - 60 - 15;
 			SignalView.Visible = true;
 			SignalView.Hide();
+
+			OutputView.Top = 60;
+			OutputView.Left = 15;
+			OutputView.Width = ClientSize.Width - 2 * 15;
+			OutputView.Height = ClientSize.Height - 60 - 15;
+			OutputView.Visible = true;
+			OutputView.Hide();
 		}
 
 		private void ChangePage(object sender, EventArgs e)
@@ -52,6 +63,10 @@ namespace KickBrain
 			else if (sender == labelSignals)
 			{
 				SignalView.Show();
+			}
+			else if (sender == labelOutputs)
+			{
+				OutputView.Show();
 			}
 		}
 	}

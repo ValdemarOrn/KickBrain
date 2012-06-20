@@ -1,0 +1,10 @@
+main
+	UART1_Init
+	ADC_Init
+	ADC_Get_Sample
+		Delay_22us
+	loop
+		Mul_16x16_U
+		ADC_Get_Sample
+			Delay_22us
+		TrySendSerial

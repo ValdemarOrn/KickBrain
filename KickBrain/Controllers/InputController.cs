@@ -40,13 +40,13 @@ namespace KickBrain.Controllers
 				view.RefreshRate = Convert.ToDouble(ui.textBoxRefresh.Text);
 
 				// subscribe to the channel's data trigger
-				var dataEvent = channel.Triggers.First(x => x.Name == InputChannel.TRIGGER_DATA);
-				dataEvent.Add(view.AddData);
+				var dataEvent = channel.Events.First(x => x.Name == InputChannel.TRIGGER_DATA);
+				dataEvent.Add(view.AddData, null);
 
 				// Subscribe to the trigger trigger
-				var triggerEvent = channel.Triggers.First(x => x.Name == InputChannel.TRIGGER_TRIGGER);
-				triggerEvent.Add(this.Trigger);
-				triggerEvent.Add(view.Trigger);
+				var triggerEvent = channel.Events.First(x => x.Name == InputChannel.TRIGGER_ON);
+				triggerEvent.Add(this.Trigger, null);
+				triggerEvent.Add(view.Trigger, null);
 
 				var page = new TabPage("Ch " + channel.Channel);
 				ui.WaveTabs.TabPages.Add(page);
@@ -67,10 +67,10 @@ namespace KickBrain.Controllers
 			//	return;
 
 			// Invoke from main thread
-			Action<IEventChannel> TriggerDele = Trigger;
+			Action<object> TriggerDele = Trigger;
 			if (ui.InvokeRequired)
 			{
-				ui.Invoke(TriggerDele, null);
+				ui.Invoke(TriggerDele, new object[] { sender_ });
 				return;
 			}
 
@@ -90,8 +90,6 @@ namespace KickBrain.Controllers
 			int hits = 0;
 			Int32.TryParse(ui.textBoxHits.Text, out hits);
 			ui.textBoxHits.Text = (hits + 1).ToString();
-
-			Console.WriteLine("UI TRigger");
 		}
 
 		public void SetZoom(double zoom)
@@ -178,7 +176,7 @@ namespace KickBrain.Controllers
 		{
 			CurrentChannel.ConfigUpdated();
 			ui.velocityMapControl1.Invalidate();
-			ui.WaveTabs.SelectedTab.Text = CurrentChannel.GetName();
+			ui.WaveTabs.SelectedTab.Text = CurrentChannel.ChannelName;
 		}
 	}
 }

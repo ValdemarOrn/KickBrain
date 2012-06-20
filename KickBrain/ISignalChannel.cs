@@ -8,7 +8,7 @@ namespace KickBrain
 	// A single channel generates multiple signals
 	public interface ISignalChannel
 	{
-		string GetName();
+		string ChannelName { get; }
 		List<Signal> Signals { get; }
 		
 	}

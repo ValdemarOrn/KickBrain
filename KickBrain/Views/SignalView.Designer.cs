@@ -35,7 +35,7 @@
 			this.comboBoxMode = new System.Windows.Forms.ComboBox();
 			this.comboBoxA = new System.Windows.Forms.ComboBox();
 			this.comboBoxB = new System.Windows.Forms.ComboBox();
-			this.comboBoxTrigger = new System.Windows.Forms.ComboBox();
+			this.comboBoxEvent = new System.Windows.Forms.ComboBox();
 			this.textBoxOutput = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -46,6 +46,8 @@
 			this.checkBoxTriggerOn = new System.Windows.Forms.CheckBox();
 			this.velocityMapControl1 = new AudioLib.UI.VelocityMapControl();
 			this.buttonSave = new System.Windows.Forms.Button();
+			this.labelSigAOutput = new System.Windows.Forms.Label();
+			this.labelSigBOutput = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// listBoxSignals
@@ -61,6 +63,7 @@
 			// 
 			// buttonAdd
 			// 
+			this.buttonAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonAdd.Location = new System.Drawing.Point(3, 443);
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Size = new System.Drawing.Size(75, 23);
@@ -71,12 +74,14 @@
 			// 
 			// buttonRemove
 			// 
+			this.buttonRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonRemove.Location = new System.Drawing.Point(89, 442);
 			this.buttonRemove.Name = "buttonRemove";
 			this.buttonRemove.Size = new System.Drawing.Size(75, 23);
 			this.buttonRemove.TabIndex = 3;
 			this.buttonRemove.Text = "Remove";
 			this.buttonRemove.UseVisualStyleBackColor = true;
+			this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
 			// 
 			// textBoxSignalName
 			// 
@@ -112,15 +117,15 @@
 			this.comboBoxB.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxB.TabIndex = 7;
 			// 
-			// comboBoxTrigger
+			// comboBoxEvent
 			// 
-			this.comboBoxTrigger.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxTrigger.FormattingEnabled = true;
-			this.comboBoxTrigger.Location = new System.Drawing.Point(307, 142);
-			this.comboBoxTrigger.Name = "comboBoxTrigger";
-			this.comboBoxTrigger.Size = new System.Drawing.Size(121, 21);
-			this.comboBoxTrigger.TabIndex = 8;
-			this.comboBoxTrigger.SelectedIndexChanged += new System.EventHandler(this.comboBoxTrigger_SelectedIndexChanged);
+			this.comboBoxEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxEvent.FormattingEnabled = true;
+			this.comboBoxEvent.Location = new System.Drawing.Point(307, 142);
+			this.comboBoxEvent.Name = "comboBoxEvent";
+			this.comboBoxEvent.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxEvent.TabIndex = 8;
+			this.comboBoxEvent.SelectedIndexChanged += new System.EventHandler(this.comboBoxTrigger_SelectedIndexChanged);
 			// 
 			// textBoxOutput
 			// 
@@ -210,10 +215,30 @@
 			this.buttonSave.UseVisualStyleBackColor = true;
 			this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
 			// 
+			// labelSigAOutput
+			// 
+			this.labelSigAOutput.AutoSize = true;
+			this.labelSigAOutput.Location = new System.Drawing.Point(434, 91);
+			this.labelSigAOutput.Name = "labelSigAOutput";
+			this.labelSigAOutput.Size = new System.Drawing.Size(13, 13);
+			this.labelSigAOutput.TabIndex = 19;
+			this.labelSigAOutput.Text = "0";
+			// 
+			// labelSigBOutput
+			// 
+			this.labelSigBOutput.AutoSize = true;
+			this.labelSigBOutput.Location = new System.Drawing.Point(434, 118);
+			this.labelSigBOutput.Name = "labelSigBOutput";
+			this.labelSigBOutput.Size = new System.Drawing.Size(13, 13);
+			this.labelSigBOutput.TabIndex = 20;
+			this.labelSigBOutput.Text = "0";
+			// 
 			// SignalView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.labelSigBOutput);
+			this.Controls.Add(this.labelSigAOutput);
 			this.Controls.Add(this.buttonSave);
 			this.Controls.Add(this.velocityMapControl1);
 			this.Controls.Add(this.checkBoxTriggerOn);
@@ -224,7 +249,7 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textBoxOutput);
-			this.Controls.Add(this.comboBoxTrigger);
+			this.Controls.Add(this.comboBoxEvent);
 			this.Controls.Add(this.comboBoxB);
 			this.Controls.Add(this.comboBoxA);
 			this.Controls.Add(this.comboBoxMode);
@@ -255,11 +280,13 @@
 		internal System.Windows.Forms.ComboBox comboBoxMode;
 		internal System.Windows.Forms.ComboBox comboBoxA;
 		internal System.Windows.Forms.ComboBox comboBoxB;
-		internal System.Windows.Forms.ComboBox comboBoxTrigger;
+		internal System.Windows.Forms.ComboBox comboBoxEvent;
 		internal System.Windows.Forms.TextBox textBoxOutput;
 		internal System.Windows.Forms.CheckBox checkBoxTriggerOn;
 		internal AudioLib.UI.VelocityMapControl velocityMapControl1;
 		private System.Windows.Forms.Button buttonSave;
+		internal System.Windows.Forms.Label labelSigAOutput;
+		internal System.Windows.Forms.Label labelSigBOutput;
 
 	}
 }
