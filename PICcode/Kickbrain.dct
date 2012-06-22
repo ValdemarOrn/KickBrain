@@ -58,6 +58,7 @@ adcs1
 adcs1_bit
 adcs2
 adcs2_bit
+adcsample
 add_32x32_fp
 adden
 adden_bit

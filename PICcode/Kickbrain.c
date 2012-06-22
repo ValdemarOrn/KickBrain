@@ -10,6 +10,26 @@ int reference;
 
 void loop();
 void serialEvent();
+void TrySendSerial();
+
+unsigned ADCsample(unsigned short channel)
+{
+	unsigned output;
+	
+	channel = (channel & 0x0F) << 2;
+	ADCON0 = ADCON0 & 0b11000011;
+	ADCON0 = ADCON0 | channel;
+	ADCON0.F1 = 1;
+	
+	// wait for conversion
+	while(ADCON0.F1 == 1)
+	{TrySendSerial();}
+	
+	output = (ADRESH & 0b00000011);
+	output = output * 256;
+	output = output + ADRESL;
+	return output;
+}
 
 void main()
 {
@@ -39,7 +59,7 @@ void main()
 	
 	ADCON0.F0 = 1;          // enable AD converter
 	ADCON1 = 0b00000000;    // AD/digital; all analog
-	ADCON2 = 0b00110101;	// 16 TAD, FOsc/16
+	ADCON2 = 0b10110101;	// 16 TAD, FOsc/16
 	
 	T0CON = 0b00000000;     // timer0 off
 
@@ -49,7 +69,7 @@ void main()
 	TXSTA = 0b00100100;
 
 	// Set up AD
-	ADC_Init();
+	//ADC_Init();
 	
 	for(k = 0; k < CHANNEL_COUNT; k++)
 		Data[k] = 0;
@@ -57,7 +77,7 @@ void main()
 	i = -1;
 
 	
-	reference = ADC_Get_Sample(REFERENCE_CHANNEL);
+	reference = ADCsample(REFERENCE_CHANNEL);
 
 	// Blink the LED to indicate life
 	PORTD.F0 = 1;
@@ -116,13 +136,13 @@ void loop()
 //		serialEvent();
 	
 	// gets the reference voltage. This ADC pin must be connected to the bias voltage
-	reference = (reference * 7 + ADC_Get_Sample(REFERENCE_CHANNEL)) >> 3; // (7*ref + 1*read) / 8
+	reference = (reference * 7 + ADCsample(REFERENCE_CHANNEL)) >> 3; // (7*ref + 1*read) / 8
   
 	for(k=0; k < CHANNEL_COUNT; k++)
 	{
 		if(k == 9 && HIHAT_ENABLED) // read the hihat value, if this is a hihat model
 		{
-			value = ADC_Get_Sample(k);
+			value = ADCsample(k);
 			value = value >> 2;
 			
 			// Zeroes are interpreted as frame-markers, prevent values from containing zeros
@@ -140,13 +160,13 @@ void loop()
 		}
 		else // Read normal AD triggers
 		{
-			value = ADC_Get_Sample(k);
+			value = ADCsample(k);
 			value = (value-reference);
 			
 			if(value < 0)
 				value = 0;
 				
-			value = value >> 1; // limit between 0..255
+			//value = value >> 1; // divide by two
 			
 			if(value > 255)  // because reference is not exactly 512, 
 				value = 255; // there can be a slight offset. Make sure numbers don't overflow

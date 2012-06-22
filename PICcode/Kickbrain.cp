@@ -11,6 +11,26 @@ int reference;
 
 void loop();
 void serialEvent();
+void TrySendSerial();
+
+unsigned ADCsample(unsigned short channel)
+{
+ unsigned output;
+
+ channel = (channel & 0x0F) << 2;
+ ADCON0 = ADCON0 & 0b11000011;
+ ADCON0 = ADCON0 | channel;
+ ADCON0.F1 = 1;
+
+
+ while(ADCON0.F1 == 1)
+ {TrySendSerial();}
+
+ output = (ADRESH & 0b00000011);
+ output = output * 256;
+ output = output + ADRESL;
+ return output;
+}
 
 void main()
 {
@@ -40,7 +60,7 @@ void main()
 
  ADCON0.F0 = 1;
  ADCON1 = 0b00000000;
- ADCON2 = 0b00110101;
+ ADCON2 = 0b10110101;
 
  T0CON = 0b00000000;
 
@@ -50,7 +70,7 @@ void main()
  TXSTA = 0b00100100;
 
 
- ADC_Init();
+
 
  for(k = 0; k <  11 ; k++)
  Data[k] = 0;
@@ -58,7 +78,7 @@ void main()
  i = -1;
 
 
- reference = ADC_Get_Sample( 10 );
+ reference = ADCsample( 10 );
 
 
  PORTD.F0 = 1;
@@ -117,13 +137,13 @@ void loop()
 
 
 
- reference = (reference * 7 + ADC_Get_Sample( 10 )) >> 3;
+ reference = (reference * 7 + ADCsample( 10 )) >> 3;
 
  for(k=0; k <  11 ; k++)
  {
  if(k == 9 &&  1 )
  {
- value = ADC_Get_Sample(k);
+ value = ADCsample(k);
  value = value >> 2;
 
 
@@ -141,13 +161,13 @@ void loop()
  }
  else
  {
- value = ADC_Get_Sample(k);
+ value = ADCsample(k);
  value = (value-reference);
 
  if(value < 0)
  value = 0;
 
- value = value >> 1;
+
 
  if(value > 255)
  value = 255;
