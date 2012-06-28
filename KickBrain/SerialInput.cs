@@ -28,21 +28,21 @@ namespace KickBrain
 
 		SerialPort port;
 
-		[Newtonsoft.Json.JsonIgnore]
-		public List<IInput> Channels;
+		public string Name { get; protected set; }
+		public int ChannelCount { get; protected set; }
 
-		public string Name { get; private set; }
-		public int ChannelCount { get; private set; }
-		public int SampleRate { get; private set; }
+		public SerialInput()
+		{ 
 
-		public SerialInput(string portName, int baud, int sampleRate, int channelCount)
+		}
+
+		public virtual void Connect(string portName, int baud, int channelCount)
 		{
 			port = new SerialPort();
 
-			Channels = new List<IInput>();
+
 			Name = portName;
 			ChannelCount = channelCount;
-			SampleRate = sampleRate;
 
 			port.PortName = portName;
 
@@ -53,28 +53,12 @@ namespace KickBrain
 			port.Handshake = Handshake.None;
 
 			port.Open();
-
-			// set the channel number on the Arduino
-			sampleRate = (int)(sampleRate / 50.0);
-			if (sampleRate > 100)
-				sampleRate = 100;
-			sampleRate += 128; // set the top bit to true
-
-			port.Write(new byte[] { (byte)channelCount, (byte)sampleRate }, 0, 2);
-
-			// Create the Channels
-			int i = 0;
-			while (Channels.Count < ChannelCount)
-			{
-				Channels.Add(new InputChannel(this, i++));
-			}
 		}
 
 		public void Start()
 		{
 			Stopping = false;
 			CurrentChannel = -9999;
-			port.ReadTimeout = 10;
 			var t = new Thread(new ThreadStart(Receive));
 			t.Start();
 		}
@@ -98,10 +82,12 @@ namespace KickBrain
 
 		int CurrentChannel;
 
-		protected void Receive()
+		protected virtual void Receive()
 		{
 			lock (Lock)
 			{
+				port.ReadTimeout = 10;
+
 				while (!Stopping)
 				{
 					byte[] buf = new byte[ChannelCount + 1];
@@ -139,9 +125,9 @@ namespace KickBrain
 						{
 							continue;
 						}
-						else if (CurrentChannel < Channels.Count)
+						else if (CurrentChannel < Brain.KB.InputChannels.Count)
 						{
-							Channels[CurrentChannel].AddData(recv);
+							Brain.KB.InputChannels[CurrentChannel].AddData(recv);
 							CurrentChannel++;
 						}
 					}

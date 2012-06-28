@@ -57,6 +57,7 @@ namespace KickBrain
 		{
 			this.InputView.Hide();
 			this.SignalView.Hide();
+			this.OutputView.Hide();
 
 			if (sender == LabelInputs)
 				InputView.Show();

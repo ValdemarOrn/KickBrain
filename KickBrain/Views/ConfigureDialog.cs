@@ -11,13 +11,13 @@ using AudioLib;
 
 namespace KickBrain
 {
-	public partial class AddPortDialog : Form
+	public partial class ConfigureDialog : Form
 	{
 		public SerialInput SerialInput;
 		public MidiOutput MidiOutput;
 		public bool Connected;
 
-		public AddPortDialog()
+		public ConfigureDialog()
 		{
 			InitializeComponent();
 			var ports = SerialPort.GetPortNames();
@@ -70,19 +70,14 @@ namespace KickBrain
 			get { return Convert.ToInt32(textBox1.Text); }
 		}
 
-		public int SampleRate
-		{
-			get { return Convert.ToInt32(textBox3.Text); }
-		}
-
 		public int BaudRate
 		{
 			get { return Convert.ToInt32(textBox2.Text); }
 		}
 
-		public static AddPortDialog Show()
+		public static ConfigureDialog Show()
 		{
-			var dialog = new AddPortDialog();
+			var dialog = new ConfigureDialog();
 			dialog.ShowDialog();
 			return dialog;
 		}

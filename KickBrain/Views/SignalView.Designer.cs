@@ -44,7 +44,7 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkBoxTriggerOn = new System.Windows.Forms.CheckBox();
-			this.velocityMapControl1 = new AudioLib.UI.VelocityMapControl();
+			this.velocityMapControl = new AudioLib.UI.VelocityMapControl();
 			this.buttonSave = new System.Windows.Forms.Button();
 			this.labelSigAOutput = new System.Windows.Forms.Label();
 			this.labelSigBOutput = new System.Windows.Forms.Label();
@@ -197,13 +197,14 @@
 			this.checkBoxTriggerOn.TabIndex = 16;
 			this.checkBoxTriggerOn.UseVisualStyleBackColor = true;
 			// 
-			// velocityMapControl1
+			// velocityMapControl
 			// 
-			this.velocityMapControl1.Location = new System.Drawing.Point(307, 235);
-			this.velocityMapControl1.Map = null;
-			this.velocityMapControl1.Name = "velocityMapControl1";
-			this.velocityMapControl1.Size = new System.Drawing.Size(241, 150);
-			this.velocityMapControl1.TabIndex = 17;
+			this.velocityMapControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.velocityMapControl.Location = new System.Drawing.Point(307, 235);
+			this.velocityMapControl.Map = null;
+			this.velocityMapControl.Name = "velocityMapControl";
+			this.velocityMapControl.Size = new System.Drawing.Size(241, 150);
+			this.velocityMapControl.TabIndex = 17;
 			// 
 			// buttonSave
 			// 
@@ -240,7 +241,7 @@
 			this.Controls.Add(this.labelSigBOutput);
 			this.Controls.Add(this.labelSigAOutput);
 			this.Controls.Add(this.buttonSave);
-			this.Controls.Add(this.velocityMapControl1);
+			this.Controls.Add(this.velocityMapControl);
 			this.Controls.Add(this.checkBoxTriggerOn);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label5);
@@ -283,7 +284,7 @@
 		internal System.Windows.Forms.ComboBox comboBoxEvent;
 		internal System.Windows.Forms.TextBox textBoxOutput;
 		internal System.Windows.Forms.CheckBox checkBoxTriggerOn;
-		internal AudioLib.UI.VelocityMapControl velocityMapControl1;
+		internal AudioLib.UI.VelocityMapControl velocityMapControl;
 		private System.Windows.Forms.Button buttonSave;
 		internal System.Windows.Forms.Label labelSigAOutput;
 		internal System.Windows.Forms.Label labelSigBOutput;

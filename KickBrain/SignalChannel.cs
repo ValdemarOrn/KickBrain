@@ -21,7 +21,7 @@ namespace KickBrain
 		public double Max;
 		public VelocityMap VelocityMap;
 
-		public double Output { get; private set; }
+		double Output;
 
 		public SignalChannel(string name)
 		{
@@ -43,7 +43,7 @@ namespace KickBrain
 
 		public double GetValue()
 		{
-			return 42;
+			return Output;
 		}
 
 		public void Process(object sender)

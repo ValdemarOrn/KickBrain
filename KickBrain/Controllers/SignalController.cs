@@ -113,13 +113,8 @@ namespace KickBrain.Controllers
 
 		public void LoadChannel(int i)
 		{
-			// detach trigger for view from currentChannel trigger, if it's not null
-			if (CurrentChannel != null)
-			{
-				var c = (SignalChannel)CurrentChannel;
-				if (c.Trigger != null)
-					c.Trigger.Remove(this.Trigger);
-			}
+			// detach from ALL events
+			Brain.KB.Sources.DetachAllEvents(this.Trigger);
 
 			if (i < 0 || i >= ui.listBoxSignals.Items.Count)
 				return;
@@ -139,7 +134,7 @@ namespace KickBrain.Controllers
 			ui.comboBoxA.SelectedIndex = (ch.InputA != null) ? signals.IndexOf(ch.InputA) : -1;
 			ui.comboBoxB.SelectedIndex = (ch.InputB != null) ? signals.IndexOf(ch.InputB) : -1;
 			ui.comboBoxEvent.SelectedIndex = (ch.Trigger != null) ? events.IndexOf(ch.Trigger) : -1;
-			ui.velocityMapControl1.Map = ch.VelocityMap;
+			ui.velocityMapControl.Map = ch.VelocityMap;
 
 			// Attach the trigger that updates the view
 			if (ch.Trigger != null)
@@ -201,8 +196,8 @@ namespace KickBrain.Controllers
 				ui.labelSigAOutput.Text = String.Format("{0:0.00}", valA);
 				ui.labelSigBOutput.Text = String.Format("{0:0.00}", valB);
 				ui.checkBoxTriggerOn.Checked = true;
-				ui.velocityMapControl1.SetTrigger(CurrentChannel.Output);
-				ui.textBoxOutput.Text = String.Format("{0:0.00}", CurrentChannel.Output);
+				ui.velocityMapControl.SetTrigger(CurrentChannel.Signals[0].SignalDelegate());
+				ui.textBoxOutput.Text = String.Format("{0:0.00}", CurrentChannel.Signals[0].SignalDelegate());
 				ui.TriggerTimer.Stop();
 				ui.TriggerTimer.Start();
 			}

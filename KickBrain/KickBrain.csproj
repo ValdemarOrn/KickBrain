@@ -54,6 +54,7 @@
     <Compile Include="Controllers\SignalController.cs" />
     <Compile Include="OutputDestination.cs" />
     <Compile Include="OutputPort.cs" />
+    <Compile Include="SerialInputMock.cs" />
     <Compile Include="Signal.cs" />
     <Compile Include="SignalMode.cs" />
     <Compile Include="Event.cs" />
@@ -63,11 +64,11 @@
     <Compile Include="UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\AddPort.cs">
+    <Compile Include="Views\ConfigureDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\AddPort.Designer.cs">
-      <DependentUpon>AddPort.cs</DependentUpon>
+    <Compile Include="Views\ConfigureDialog.Designer.cs">
+      <DependentUpon>ConfigureDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Buffer.cs" />
     <Compile Include="Config.cs" />
@@ -111,8 +112,8 @@
     <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\AddPort.resx">
-      <DependentUpon>AddPort.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ConfigureDialog.resx">
+      <DependentUpon>ConfigureDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\OutputView.resx">
       <DependentUpon>OutputView.cs</DependentUpon>

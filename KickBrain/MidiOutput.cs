@@ -51,25 +51,6 @@ namespace KickBrain
 				throw new Exception("Unable to open MIDI Output with ID " + DeviceID + " - " + error.ToString());
 			this.Stream = stream;
 		}
-
-		public void TriggerEvent(InputChannel sender, double value)
-		{
-			value = ((InputChannelConfig)sender.Config).Velocity.Map(value);
-
-			if (((InputChannelConfig)sender.Config).ContinuousControl)
-			{
-				CC(((InputChannelConfig)sender.Config).MIDIChannel, ((InputChannelConfig)sender.Config).MIDIControl, (int)Math.Round(value * 127));
-			}
-			else
-			{
-				if(value == 0.0)
-					NoteOff(((InputChannelConfig)sender.Config).MIDIChannel, ((InputChannelConfig)sender.Config).MIDIControl);
-				else
-					NoteOn(((InputChannelConfig)sender.Config).MIDIChannel, ((InputChannelConfig)sender.Config).MIDIControl, (int)Math.Round(value * 127));
-			}
-
-			Console.WriteLine("Midi trigger complete");
-		}
 		
 		public void Close()
 		{
@@ -78,7 +59,7 @@ namespace KickBrain
 				PortMidi.Pt_Stop();
 		}
 
-		void NoteOn(int channel, int note, int velocity)
+		public void NoteOn(int channel, int note, int velocity)
 		{
 			int status = MidiMessageType.NoteOn | channel;
 			var message = PortMidi.Pm_Message(status, note, velocity);
@@ -95,7 +76,7 @@ namespace KickBrain
 				Brain.KB.ShowError("Error sending noteOn: " + err.ToString());
 		}
 
-		void NoteOff(int channel, int note)
+		public void NoteOff(int channel, int note)
 		{
 			int status = MidiMessageType.NoteOff | channel;
 			var message = PortMidi.Pm_Message(status, note, 0);
@@ -112,7 +93,7 @@ namespace KickBrain
 				Brain.KB.ShowError("Error sending noteOff: " + err.ToString());
 		}
 
-		void CC(int channel, int CC, int value)
+		public void CC(int channel, int CC, int value)
 		{
 			int status = MidiMessageType.ControlChange | channel;
 			var message = PortMidi.Pm_Message(status, CC, value);

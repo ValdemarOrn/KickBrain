@@ -19,7 +19,6 @@ namespace KickBrain.Views
 		{
 			InitializeComponent();
 			Ctrl = new SignalController(this);
-			//Ctrl.LoadAllSignals();
 
 			TriggerTimer = new Timer();
 			TriggerTimer.Interval = 100;
@@ -48,7 +47,10 @@ namespace KickBrain.Views
 		private void SignalView_VisibleChanged(object sender, EventArgs e)
 		{
 			if (!Visible)
+			{
+				Brain.KB.Sources.DetachAllEvents(Ctrl.Trigger);
 				return;
+			}
 
 			Ctrl.LoadSignalChannels();
 			Ctrl.LoadSignals();

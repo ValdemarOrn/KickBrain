@@ -14,8 +14,6 @@ namespace KickBrain
 		public const string VALUE_POWER = "Power";
 		public const string VALUE_VALUE = "Value";
 
-		public SerialInput Input;
-
 		/// Event that triggers when new data is available on the channel
 		Event DataEvent;
 		Event TriggerOnEvent;
@@ -49,9 +47,8 @@ namespace KickBrain
 			movingAverage.Samples = InputConfig.CCAverage;
 		}
 
-		public InputChannel(SerialInput input, int channel)
+		public InputChannel(int channel)
 		{
-			Input = input;
 			Channel = channel;
 			//Data = new List<double>();
 			movingAverage = new AudioLib.TF.MovingAverage(4);

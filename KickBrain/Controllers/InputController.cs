@@ -139,7 +139,8 @@ namespace KickBrain.Controllers
 			// remove current tabs
 			ui.WaveTabs.TabPages.Clear();
 
-			foreach (InputChannel channel in Brain.KB.Input.Channels)
+			// Bind the channels to the views
+			foreach (InputChannel channel in Brain.KB.InputChannels)
 				ui.Ctrl.AddWiew(channel);
 
 			// initialize processing values

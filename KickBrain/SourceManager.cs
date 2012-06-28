@@ -17,10 +17,14 @@ namespace KickBrain
 		// All ITriggerChannels
 		List<IEventChannel> EventChannels;
 
+		// All OutputPorts
+		List<OutputPort> OutputPorts;
+
 		public SourceManager()
 		{
 			SignalChannels = new List<ISignalChannel>();
 			EventChannels = new List<IEventChannel>();
+			OutputPorts = new List<OutputPort>();
 		}
 
 
@@ -28,6 +32,9 @@ namespace KickBrain
 
 		public void AddSignalChannel(ISignalChannel channel)
 		{
+			if (SignalChannels.Contains(channel))
+				return;
+
 			SignalChannels.Add(channel);
 		}
 
@@ -75,6 +82,9 @@ namespace KickBrain
 
 		public void AddTriggerChannel(IEventChannel trigger)
 		{
+			if (EventChannels.Contains(trigger))
+				return;
+
 			EventChannels.Add(trigger);
 		}
 
@@ -102,6 +112,31 @@ namespace KickBrain
 			return output;
 		}
 
+		/// <summary>
+		/// Detaches the specified delegate from any and all events registered with this source manager
+		/// </summary>
+		/// <param name="dele"></param>
+		public void DetachAllEvents(Action<object> dele)
+		{
+			GetAllEvents().ForEach(x => x.Remove(dele));
+		}
+
+
+		// ------------------- Output Ports ------------------
+
+		public void AddOutputPort(OutputPort port)
+		{
+			if (OutputPorts.Contains(port))
+				return;
+
+			OutputPorts.Add(port);
+		}
+
+		public List<OutputPort> GetOutputPorts()
+		{
+			// returns a shallow copy
+			return OutputPorts.Select(x => x).ToList();
+		}
 		
 	}
 }

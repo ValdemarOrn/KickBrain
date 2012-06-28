@@ -37,6 +37,8 @@ namespace KickBrain
 
 		public SourceManager Sources;
 
+		public List<IInput> InputChannels;
+
 		public SerialInput Input;
 		public MidiOutput Output;
 		public UI ui;
@@ -87,11 +89,20 @@ namespace KickBrain
 			if (Output != null)
 				Output.Close();
 
-			var dialog = AddPortDialog.Show();
+			var dialog = ConfigureDialog.Show();
 
 			if (dialog.Connected)
 			{
-				OpenSerialInput(dialog.COMPort, dialog.BaudRate, dialog.NumberOfChannels, dialog.SampleRate);
+				// Create the Channels
+				InputChannels = new List<IInput>();
+				int i = 0;
+				while (InputChannels.Count < dialog.NumberOfChannels)
+					InputChannels.Add(new InputChannel(i++));
+
+				// Open the serial interface
+				OpenSerialInput(dialog.COMPort, dialog.BaudRate, dialog.NumberOfChannels);
+
+				// open the midi device
 				OpenMidiOutput(dialog.MidiDeviceID);
 
 				Config.Save();
@@ -123,7 +134,7 @@ namespace KickBrain
 			}
 		}
 
-		private void OpenSerialInput(string COMPort, int BaudRate, int NumberOfChannels, int SampleRate)
+		private void OpenSerialInput(string COMPort, int BaudRate, int NumberOfChannels)
 		{
 			if (COMPort == null || COMPort == "")
 			{
@@ -134,7 +145,8 @@ namespace KickBrain
 			SerialInput SerialInput = null;
 			try
 			{
-				SerialInput = new SerialInput(COMPort, BaudRate, SampleRate, NumberOfChannels);
+				SerialInput = new SerialInputMock();
+				SerialInput.Connect(COMPort, BaudRate, NumberOfChannels);
 			}
 			catch (Exception ex)
 			{
@@ -151,7 +163,6 @@ namespace KickBrain
 			Config.Set("Input.COMPort", COMPort);
 			Config.Set("Input.BaudRate", BaudRate);
 			Config.Set("Input.NumberOfChannels", NumberOfChannels);
-			Config.Set("Input.SampleRate", SampleRate);
 		}
 
 		// hard connections between inputChannel triggers and midioutput
