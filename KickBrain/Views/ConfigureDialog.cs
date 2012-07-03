@@ -30,9 +30,6 @@ namespace KickBrain
 				if (info.output > 0)
 					comboBox2.Items.Add(info.name);
 			}
-
-			comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
-			comboBox2.SelectedIndex = comboBox2.Items.Count - 1;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -75,9 +72,23 @@ namespace KickBrain
 			get { return Convert.ToInt32(textBox2.Text); }
 		}
 
-		public static ConfigureDialog Show()
+		public static ConfigureDialog Show(int channelCount, int baudrate, string COMname = null, int midiDeviceID = -1)
 		{
 			var dialog = new ConfigureDialog();
+
+			dialog.textBox1.Text = channelCount.ToString();
+			dialog.textBox2.Text = baudrate.ToString();
+
+			if (COMname != null && dialog.comboBox1.Items.Contains(COMname))
+				dialog.comboBox1.SelectedItem = COMname;
+
+			if (midiDeviceID != -1)
+			{
+				var name = AudioLib.PortMidi.Pm_GetDeviceInfo(midiDeviceID).name;
+				if (dialog.comboBox2.Items.Contains(name))
+					dialog.comboBox2.SelectedItem = name;
+			}
+
 			dialog.ShowDialog();
 			return dialog;
 		}

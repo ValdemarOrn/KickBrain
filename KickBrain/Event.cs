@@ -76,13 +76,18 @@ namespace KickBrain
 
 			// We use the orderByDelegate to order all the actions.
 			// we use the SignalChannelObjects to find which object corresponds to which delegate
+			// Todo: Fix this, it's a bottleneck!
 			List<Action<object>> orderedList = Actions.OrderBy(x => OrderByDelegate(SignalChannelObjects[x])).ToList();
 
 			foreach (var del in orderedList)
 			{
 				del(sender);
 			}
-			
+		}
+
+		public string ToXML()
+		{
+			return String.Format("<Event><Name>{0}</Name><Owner>{1}</Owner></Event>", Name, Owner.ChannelName);
 		}
 	}
 }

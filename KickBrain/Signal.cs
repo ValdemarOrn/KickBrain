@@ -10,7 +10,9 @@ namespace KickBrain
 	public class Signal
 	{
 		public ISignalChannel Owner { get; set; }
+		
 		public string Name { get; set; }
+
 		public Func<double> SignalDelegate { get; set; }
 
 		public Signal(ISignalChannel owner, string name, Func<double> dele)
@@ -18,6 +20,11 @@ namespace KickBrain
 			Owner = owner;
 			Name = name;
 			SignalDelegate = dele;
+		}
+
+		public string ToXML()
+		{
+			return String.Format("<Signal><Name>{0}</Name><Owner>{1}</Owner></Signal>", Name, Owner.ChannelName);
 		}
 	}
 }

@@ -39,6 +39,7 @@ namespace KickBrain
 		public string ChannelName
 		{
 			get { return Name; }
+			set { Name = value; }
 		}
 
 		public double GetValue()

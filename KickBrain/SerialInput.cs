@@ -30,6 +30,7 @@ namespace KickBrain
 
 		public string Name { get; protected set; }
 		public int ChannelCount { get; protected set; }
+		public int Baudrate { get; protected set; }
 
 		public SerialInput()
 		{ 
@@ -43,6 +44,7 @@ namespace KickBrain
 
 			Name = portName;
 			ChannelCount = channelCount;
+			Baudrate = baud;
 
 			port.PortName = portName;
 
@@ -68,17 +70,19 @@ namespace KickBrain
 			Stopping = true;
 			lock (Lock)
 			{
-				port.Close();
+				if(port != null)
+					port.Close();
+
 				return;
 			}
 		}
 
-		bool Stopping;
+		protected bool Stopping;
 		object Lock = new object();
 
 		// data rate
-		DateTime StartTime;
-		int PerSecond;
+		protected DateTime StartTime;
+		protected int PerSecond;
 
 		int CurrentChannel;
 
@@ -125,9 +129,9 @@ namespace KickBrain
 						{
 							continue;
 						}
-						else if (CurrentChannel < Brain.KB.InputChannels.Count)
+						else if (CurrentChannel < Brain.KB.Sources.InputChannels.Count)
 						{
-							Brain.KB.InputChannels[CurrentChannel].AddData(recv);
+							Brain.KB.Sources.InputChannels[CurrentChannel].AddData(recv);
 							CurrentChannel++;
 						}
 					}

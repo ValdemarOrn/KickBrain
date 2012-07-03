@@ -54,7 +54,7 @@ namespace KickBrain
 			movingAverage = new AudioLib.TF.MovingAverage(4);
 			Buffer = new Buffer(10000);
 
-			Config = new InputChannelConfig();
+			Config = new InputChannelConfig(this);
 			this.InputConfig.Name = "Ch " + channel;
 
 			// Set up IChannel - GetValue
@@ -90,9 +90,9 @@ namespace KickBrain
 			double value = data / 256.0;
 
 			if (InputConfig.ContinuousControl)
-				value = ProcessCC(value);
+				ProcessCC(value);
 			else
-				value = ProcessTrigger(value);
+				ProcessTrigger(value);
 			
 			if(DataEvent != null)
 				DataEvent.Invoke(this);
@@ -100,7 +100,7 @@ namespace KickBrain
 			currentSample++;
 		}
 
-		private double ProcessCC(double value)
+		private void ProcessCC(double value)
 		{
 			value = movingAverage.process(value);
 
@@ -110,11 +110,8 @@ namespace KickBrain
 			Buffer.Add(value);
 
 			// assign the value to the power. In CC mode power = processed signal
-			outputPower = value;
-			outputValue = value;
-
-
-			return value;
+			outputPower = InputConfig.Velocity.Map(value);
+			outputValue = InputConfig.Velocity.Map(value);
 		}
 
 		/// Boolean state that tells if a trigger is currently on. Used to
@@ -130,7 +127,7 @@ namespace KickBrain
 		/// we can measure the peak of the signal.
 		long triggerAtSample;
 
-		private double ProcessTrigger(double value)
+		private void ProcessTrigger(double value)
 		{
 			value = value * InputConfig.Gain;
 
@@ -149,8 +146,8 @@ namespace KickBrain
 
 			// ------------------- Get channel power (max peak value) ------------
 
-			outputPower = Buffer.GetMax(InputConfig.TriggerLength + InputConfig.TriggerAttack);
-			outputValue = value;
+			outputPower = InputConfig.Velocity.Map(Buffer.GetMax(InputConfig.TriggerLength + InputConfig.TriggerAttack));
+			outputValue = InputConfig.Velocity.Map(value);
 
 			// -------------------Trigger sensor---------------------------
 
@@ -185,13 +182,9 @@ namespace KickBrain
 					TriggerOffEvent.Invoke(this); 
 				}
 			}
-			return value;
 		}
 
-		public string ChannelName
-		{
-			get { return InputConfig.Name; }
-		}
+		public string ChannelName { get; set; }
 
 		public double GetValue()
 		{
@@ -201,6 +194,26 @@ namespace KickBrain
 		public double GetPower()
 		{
 			return outputPower;
+		}
+
+		public string ToXML()
+		{
+			string serialText = Serializer.SerializeToXML(Config);
+			var doc = new System.Xml.XmlDocument();
+			doc.LoadXml(serialText);
+			serialText = doc.SelectSingleNode("InputChannelConfig").OuterXml;
+			return "<Input Index=\"" + Channel + "\">" + serialText + "</Input>";
+		}
+
+		public void LoadXML(string xml)
+		{
+			var doc = new System.Xml.XmlDocument();
+			doc.LoadXml(xml);
+			var configText = doc.SelectSingleNode("Input/InputChannelConfig").OuterXml;
+			var cfg = (InputChannelConfig)Serializer.DeserializeToXML(configText, typeof(InputChannelConfig));
+			cfg.SetOwner(this);
+			Channel = Convert.ToInt32(doc.ChildNodes[0].Attributes["Index"].Value);
+			ChannelName = doc.SelectSingleNode("Input/InputChannelConfig/Name").InnerText;
 		}
 	}
 }

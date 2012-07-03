@@ -6,13 +6,20 @@ using System.ComponentModel;
 
 namespace KickBrain
 {
+	[Serializable]
 	public class InputChannelConfig
 	{
 		// Basic Settings
 
+		InputChannel Owner;
+
 		[CategoryAttribute("Basic Settings")]
 		[DescriptionAttribute("Enable or disable MIDI output from this Channel.")]
-		public string Name { get; set; }
+		public string Name
+		{ 
+			get { return (Owner != null) ? Owner.ChannelName : null; } 
+			set { if(Owner != null) Brain.KB.Sources.SetChannelName(Owner, value); } 
+		}
 
 		[CategoryAttribute("Basic Settings")]
 		[DescriptionAttribute("Enable or disable MIDI output from this Channel.")]
@@ -72,47 +79,6 @@ namespace KickBrain
 		[BrowsableAttribute(false)]
 		public AudioLib.VelocityMap Velocity { get; set; }
 
-		int _midiChannel;
-
-		[CategoryAttribute("Midi Output")]
-		[DescriptionAttribute("Sets which MIDI channel the data is transmitted on")]
-		public int MIDIChannel
-		{
-			get
-			{
-				return _midiChannel;
-			}
-			set
-			{
-				if (value < 0)
-					value = 0;
-				if (value > 15)
-					value = 15;
-				_midiChannel = value;
-			}
-		}
-
-		int _midiControl;
-
-		[CategoryAttribute("Midi Output")]
-		[DescriptionAttribute("Sets which note or Continous Controller number the data is transmitted on")]
-		public int MIDIControl
-		{
-			get
-			{
-				return _midiControl;
-			}
-			set
-			{
-				if (value < 0)
-					value = 0;
-				if (value > 127)
-					value = 127;
-				_midiControl = value;
-			}
-		}
-
-
 		public InputChannelConfig()
 		{
 			Velocity = new AudioLib.VelocityMap(6);
@@ -129,9 +95,16 @@ namespace KickBrain
 
 			Enabled = false;
 			ContinuousControl = false;
+		}
 
-			MIDIChannel = 1;
-			MIDIControl = 60;
+		public InputChannelConfig(InputChannel owner) : this()
+		{
+			Owner = owner;
+		}
+
+		public void SetOwner(InputChannel owner)
+		{
+			this.Owner = owner;
 		}
 	}
 }

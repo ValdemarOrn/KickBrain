@@ -11,6 +11,9 @@ namespace KickBrain
 	/// </summary>
 	public class SourceManager
 	{
+		// All IInputs
+		public List<IInput> InputChannels;
+
 		// All ISignalChannels
 		List<ISignalChannel> SignalChannels;
 
@@ -22,13 +25,31 @@ namespace KickBrain
 
 		public SourceManager()
 		{
+			InputChannels = new List<IInput>();
 			SignalChannels = new List<ISignalChannel>();
 			EventChannels = new List<IEventChannel>();
 			OutputPorts = new List<OutputPort>();
 		}
 
 
-		// ------------ Channels ------------
+		// ------------ Input Channels ------------
+
+		public void AddInputChannel(IInput input)
+		{
+			if (InputChannels.Contains(input))
+				return;
+
+			InputChannels.Add(input);
+		}
+
+		public void RemoveInputChannel(int index)
+		{
+			if(InputChannels.Count > index)
+				InputChannels.RemoveAt(index);
+		}
+
+
+		// ------------ Signal Channels ------------
 
 		public void AddSignalChannel(ISignalChannel channel)
 		{
@@ -42,6 +63,25 @@ namespace KickBrain
 		{
 			// returns a shallow copy
 			return SignalChannels.Select(x => x).ToList();
+		}
+
+		public bool SetChannelName(ISignalChannel channel, string name)
+		{
+			if (channel.ChannelName == name)
+				return true;
+
+			var channels = Brain.KB.Sources.GetSignalChannels();
+			bool contains = channels.Any(x => x.ChannelName == name);
+			if (contains)
+			{
+				Brain.KB.ShowError("There is already a channel with the name " + name + ".\nNames must be unique, please select another one.");
+				return false;
+			}
+			else
+			{
+				channel.ChannelName = name;
+				return true;
+			}
 		}
 
 		/// <summary>

@@ -70,11 +70,6 @@ namespace KickBrain.Views
 			Ctrl.SetRefresh(rate);
 		}
 
-		private void buttonConfigure_Click(object sender, EventArgs e)
-		{
-			Ctrl.Configure();
-		}
-
 		public void WaveTabs_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Ctrl.SetActiveChannel();

@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="Controllers\OutputController.cs" />
     <Compile Include="Controllers\SignalController.cs" />
-    <Compile Include="OutputDestination.cs" />
     <Compile Include="OutputPort.cs" />
     <Compile Include="SerialInputMock.cs" />
     <Compile Include="Signal.cs" />
@@ -71,7 +70,6 @@
       <DependentUpon>ConfigureDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Buffer.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="ISignalChannel.cs" />
     <Compile Include="IInput.cs" />
     <Compile Include="IEventChannel.cs" />

@@ -85,5 +85,24 @@ namespace KickBrain
 			T value = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(arrBytes), Settings);
 			return value;
 		}
+
+		public static string SerializeToXML(object data)
+		{
+			XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+			ns.Add("", "");
+
+			XmlSerializer serializer = new XmlSerializer(data.GetType());
+			StringWriter sw = new StringWriter();
+			serializer.Serialize(sw, data, ns);
+			return sw.ToString();
+		}
+
+		public static object DeserializeToXML(string root, Type outType)
+		{
+			XmlSerializer serializer = new XmlSerializer(outType);
+			StringReader sr = new StringReader(root);
+			var rootDir = serializer.Deserialize(sr);
+			return rootDir;
+		}
 	}
 }

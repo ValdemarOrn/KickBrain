@@ -6,6 +6,7 @@ using AudioLib;
 
 namespace KickBrain
 {
+	[Serializable]
 	public class Crosstalk
 	{
 		public Signal Signal;
@@ -15,13 +16,19 @@ namespace KickBrain
 		{
 			Factor = 0.5;
 		}
+
+		public string ToXML()
+		{
+			return String.Format("<Crosstalk><Factor>{0:0.000}</Factor>{1}</Crosstalk>", Factor, Signal.ToXML());
+		}
 	}
 
+	[Serializable]
 	public class OutputPort
 	{
 		public Signal Signal;
 
-		public Event _event;
+		Event _event;
 		public Event Event
 		{
 			get { return _event; }
@@ -91,6 +98,37 @@ namespace KickBrain
 				return true;
 			else
 				return false;
+		}
+
+		public string ToXML()
+		{
+			string output = "<Output>";
+			output += Signal.ToXML();
+			output += Event.ToXML();
+			output += "<Name>" + Name + "</Name>";
+			output += "<MidiChannel>" + MidiChannel + "</MidiChannel>";
+			output += "<CCNumber>" + CCNumber + "</CCNumber>";
+			output += "<IsNote>" + IsNote + "</IsNote>";
+			output += "<FilterEnabled>" + FilterEnabled + "</FilterEnabled>";
+			output += "<FilterMin>" + FilterMin + "</FilterMin>";
+			output += "<FilterMax>" + FilterMax + "</FilterMax>";
+			output += "<Filter>" + Filter.ToXML() + "</Filter>";
+
+			output += "<CrosstalkSignals>";
+			foreach (var xtalk in CrosstalkSignals)
+			{
+				output += xtalk.ToXML();
+			}
+			output += "</CrosstalkSignals>";
+
+			var veloXml = Serializer.SerializeToXML(VelocityMap);
+			var doc = new System.Xml.XmlDocument();
+			doc.LoadXml(veloXml);
+			veloXml = doc.ChildNodes[1].OuterXml;
+			output += veloXml;
+
+			output += "</Output>";
+			return output;
 		}
 	}
 }

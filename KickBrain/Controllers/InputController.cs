@@ -129,18 +129,13 @@ namespace KickBrain.Controllers
 			((InputChannelConfig)CurrentChannel.Config).Enabled = enabled;
 		}
 
-		public void Configure()
+		public void UpdateControls()
 		{
-			bool connected = Brain.KB.Configure();
-
-			if (!connected)
-				return;
-
 			// remove current tabs
 			ui.WaveTabs.TabPages.Clear();
 
 			// Bind the channels to the views
-			foreach (InputChannel channel in Brain.KB.InputChannels)
+			foreach (InputChannel channel in Brain.KB.Sources.InputChannels)
 				ui.Ctrl.AddWiew(channel);
 
 			// initialize processing values

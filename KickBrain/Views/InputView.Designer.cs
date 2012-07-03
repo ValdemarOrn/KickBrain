@@ -38,7 +38,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.progressBarVelocity = new System.Windows.Forms.ProgressBar();
-			this.buttonAddPort = new System.Windows.Forms.Button();
 			this.WaveTabs = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.buttonRefresh = new System.Windows.Forms.Button();
@@ -143,17 +142,6 @@
 			this.progressBarVelocity.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.progressBarVelocity.TabIndex = 28;
 			// 
-			// buttonAddPort
-			// 
-			this.buttonAddPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.buttonAddPort.Location = new System.Drawing.Point(89, 444);
-			this.buttonAddPort.Name = "buttonAddPort";
-			this.buttonAddPort.Size = new System.Drawing.Size(105, 23);
-			this.buttonAddPort.TabIndex = 27;
-			this.buttonAddPort.Text = "Configure";
-			this.buttonAddPort.UseVisualStyleBackColor = true;
-			this.buttonAddPort.Click += new System.EventHandler(this.buttonConfigure_Click);
-			// 
 			// WaveTabs
 			// 
 			this.WaveTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -222,11 +210,12 @@
 			this.velocityMapControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.velocityMapControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.velocityMapControl1.Location = new System.Drawing.Point(410, 327);
+			this.velocityMapControl1.Map = null;
 			this.velocityMapControl1.Name = "velocityMapControl1";
 			this.velocityMapControl1.Size = new System.Drawing.Size(285, 183);
 			this.velocityMapControl1.TabIndex = 38;
 			// 
-			// UIinput
+			// InputView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -241,13 +230,12 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.propertyGrid1);
 			this.Controls.Add(this.progressBarVelocity);
-			this.Controls.Add(this.buttonAddPort);
 			this.Controls.Add(this.WaveTabs);
 			this.Controls.Add(this.buttonRefresh);
 			this.Controls.Add(this.textBoxRefresh);
 			this.Controls.Add(this.buttonZoomX);
 			this.Controls.Add(this.textBoxZoomX);
-			this.Name = "UIinput";
+			this.Name = "InputView";
 			this.Size = new System.Drawing.Size(953, 513);
 			this.WaveTabs.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -268,7 +256,6 @@
 		private System.Windows.Forms.Label label1;
 		internal System.Windows.Forms.PropertyGrid propertyGrid1;
 		internal System.Windows.Forms.ProgressBar progressBarVelocity;
-		private System.Windows.Forms.Button buttonAddPort;
 		internal System.Windows.Forms.TabControl WaveTabs;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.Button buttonRefresh;

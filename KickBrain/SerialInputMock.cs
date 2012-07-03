@@ -10,17 +10,32 @@ namespace KickBrain
 	{
 		public override void Connect(string portName, int baud, int channelCount)
 		{
+			Name = portName;
+			Baudrate = baud;
 			ChannelCount = channelCount;
 		}
+
 
 		DateTime lastTrig;
 		Random r = new Random();
 		protected override void Receive()
 		{
-			while (true)
+			while (!Stopping)
 			{
 				Thread.Sleep(1);
 				byte[] buf = new byte[8 + 1];
+
+
+				// Data rate
+				PerSecond += buf.Length;
+				if ((DateTime.Now - StartTime).TotalMilliseconds >= 1000)
+				{
+					Brain.KB.ui.InputView.Ctrl.SetSamplerate((int)(((double)PerSecond) / (ChannelCount + 1)));
+					Brain.KB.ui.InputView.Ctrl.SetByterate(PerSecond);
+					//Console.WriteLine("Bytes per sec: " + PerSecond + ", Samplerate: " + (PerSecond / (ChannelCount + 1)));
+					PerSecond = 0;
+					StartTime = DateTime.Now;
+				}
 
 				for (int i = 0; i < buf.Length; i++)
 				{
@@ -33,9 +48,9 @@ namespace KickBrain
 					buf[0] = 240;
 				}
 
-				for (int i = 0; i < Brain.KB.InputChannels.Count && i < buf.Length; i++)
+				for (int i = 0; i < Brain.KB.Sources.InputChannels.Count && i < buf.Length; i++)
 				{
-					Brain.KB.InputChannels[i].AddData(buf[i]);
+					Brain.KB.Sources.InputChannels[i].AddData(buf[i]);
 				}
 			}
 		}

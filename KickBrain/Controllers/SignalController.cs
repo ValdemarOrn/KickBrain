@@ -148,7 +148,8 @@ namespace KickBrain.Controllers
 
 			var ch = CurrentChannel;
 
-			ch.Name = ui.textBoxSignalName.Text;
+			Brain.KB.Sources.SetChannelName(ch, ui.textBoxSignalName.Text);
+			//ch.Name = ui.textBoxSignalName.Text;
 			ch.Mode = SignalMode.Modes.First(x => x.ToString() == ui.comboBoxMode.Text);
 			ch.InputA = (ui.comboBoxA.SelectedIndex == -1) ? null : signals[ui.comboBoxA.SelectedIndex];
 			ch.InputB = (ui.comboBoxB.SelectedIndex == -1) ? null : signals[ui.comboBoxB.SelectedIndex];

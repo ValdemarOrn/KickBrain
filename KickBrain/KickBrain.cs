@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace KickBrain
 {
@@ -37,12 +38,34 @@ namespace KickBrain
 
 		public SourceManager Sources;
 
-		public List<IInput> InputChannels;
-
 		public SerialInput Input;
 		public MidiOutput Output;
 		public UI ui;
-		public Config Config;
+
+		public int ChannelCount
+		{
+			get { return (Input != null) ? Input.ChannelCount : 0; }
+		}
+
+		public int Baudrate
+		{
+			get { return (Input != null) ? Input.Baudrate : 115200; }
+		}
+
+		public string COMport
+		{
+			get { return (Input != null) ? Input.Name : ""; }
+		}
+
+		public int MidiDeviceID
+		{
+			get { return (Output != null) ? Output.DeviceID : -1; }
+		}
+
+		public string MidiDeviceName
+		{
+			get { return (Output != null) ? AudioLib.PortMidi.Pm_GetDeviceInfo(Output.DeviceID).name : ""; }
+		}
 
 		private Brain()
 		{
@@ -54,26 +77,6 @@ namespace KickBrain
 			Sources = new SourceManager();
 
 			ui = new UI();
-			Config = new Config(@"KickBrain.json");
-			Config.Load();
-
-			/*var ComPort = Config.Get<string>("Input.COMPort");
-			var baud = (int)Config.Get<double>("Input.BaudRate");
-			var numChannels = Config.Get<int>("Input.NumberOfChannels");
-			var samplerate = Config.Get<int>("Input.SampleRate");
-
-			if (ComPort != null && ComPort.Length > 0 && baud > 0 && numChannels > 0 && samplerate > 0)
-			{
-				OpenSerialInput(ComPort, baud, numChannels, samplerate);
-			}
-
-			var devID = Config.Get<int?>("Output.DeviceID");
-			if (devID != null && devID >= 0)
-			{
-				OpenMidiOutput((int)devID);
-			}
-
-			ConnectEvents();*/
 		}
 
 		public void ShowError(string message)
@@ -89,25 +92,22 @@ namespace KickBrain
 			if (Output != null)
 				Output.Close();
 
-			var dialog = ConfigureDialog.Show();
+
+			var dialog = ConfigureDialog.Show(ChannelCount, Baudrate, COMport, MidiDeviceID);
 
 			if (dialog.Connected)
 			{
-				// Create the Channels
-				InputChannels = new List<IInput>();
-				int i = 0;
-				while (InputChannels.Count < dialog.NumberOfChannels)
-					InputChannels.Add(new InputChannel(i++));
+				// Create or remove channels as needed
+				while (Sources.InputChannels.Count < dialog.NumberOfChannels)
+					Sources.AddInputChannel(new InputChannel(Sources.InputChannels.Count));
+				while (Sources.InputChannels.Count > dialog.NumberOfChannels)
+					Sources.RemoveInputChannel(Sources.InputChannels.Count - 1);
 
 				// Open the serial interface
 				OpenSerialInput(dialog.COMPort, dialog.BaudRate, dialog.NumberOfChannels);
 
 				// open the midi device
 				OpenMidiOutput(dialog.MidiDeviceID);
-
-				Config.Save();
-
-				ConnectEvents();
 			}
 
 			return dialog.Connected;
@@ -125,8 +125,6 @@ namespace KickBrain
 			{
 				var MidiOutput = new MidiOutput(DeviceID);
 				Output = MidiOutput;
-
-				Config.Set("Output.DeviceID", DeviceID);
 			}
 			catch (Exception e)
 			{
@@ -159,22 +157,67 @@ namespace KickBrain
 
 			Input = SerialInput;
 			Input.Start();
-
-			Config.Set("Input.COMPort", COMPort);
-			Config.Set("Input.BaudRate", BaudRate);
-			Config.Set("Input.NumberOfChannels", NumberOfChannels);
 		}
 
-		// hard connections between inputChannel triggers and midioutput
-		// To be replaced by the flexible routing system
-		private void ConnectEvents()
-		{
-			if (Output == null || Input == null)
-				return;
 
-			// connect the trigger events of the inputs to the output
-//			foreach (var inp in Input.Channels)
-//				inp.TriggerEvent += Output.TriggerEvent;
+		internal string ToXML()
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.PreserveWhitespace = false;
+			
+			var configNode = doc.CreateNode(XmlNodeType.Element, "Configuration", "");
+			var tempNode = doc.CreateElement("temp");
+
+			var GlobalConfigNode = doc.CreateNode(XmlNodeType.Element, "GlobalConfiguration", "");
+			var inputConfigNode = doc.CreateNode(XmlNodeType.Element, "InputConfiguration", "");
+			var outputConfigNode = doc.CreateNode(XmlNodeType.Element, "OutputConfiguration", "");
+
+			configNode.AppendChild(GlobalConfigNode);
+			configNode.AppendChild(inputConfigNode);
+			configNode.AppendChild(outputConfigNode);
+			doc.AppendChild(configNode);
+
+			// Create global config
+			GlobalConfigNode.InnerXml = String.Format("<InputName>{0}</InputName><MidiDeviceID>{1}</MidiDeviceID><Channels>{2}</Channels><Baudrate>{3}</Baudrate>", 
+				COMport, MidiDeviceID, ChannelCount, Baudrate);
+
+			// Create input config
+			for (int i = 0; i < Sources.InputChannels.Count; i++)
+			{
+				
+				var ch = (InputChannel)Sources.InputChannels[i];
+				var serText = ch.ToXML();
+				tempNode.InnerXml = serText;
+				inputConfigNode.AppendChild(tempNode.ChildNodes[0]);
+			}
+
+			// Create output config
+			var ports = Sources.GetOutputPorts();
+			for (int i = 0; i < ports.Count; i++)
+			{
+				var port = ports[i];
+				var serText = port.ToXML();
+				tempNode.InnerXml = serText;
+				outputConfigNode.AppendChild(tempNode.ChildNodes[0]);
+			}
+
+			return doc.OuterXml;
+		}
+
+		internal void FromXML(string xml)
+		{
+			var doc = new XmlDocument();
+			doc.LoadXml(xml);
+			string comPort = doc.SelectSingleNode("Configuration/GlobalConfiguration/InputName").InnerText;
+
+			int midiDeviceId = -1;
+			Int32.TryParse(doc.SelectSingleNode("Configuration/GlobalConfiguration/MidiDeviceID").InnerText, out midiDeviceId);
+
+			int channelCount = 0;
+			Int32.TryParse(doc.SelectSingleNode("Configuration/GlobalConfiguration/Channels").InnerText, out channelCount);
+
+			int baudrate = 115200;
+			Int32.TryParse(doc.SelectSingleNode("Configuration/GlobalConfiguration/Baudrate").InnerText, out baudrate);
 		}
 	}
 }
