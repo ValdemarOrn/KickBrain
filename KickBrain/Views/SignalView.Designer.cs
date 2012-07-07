@@ -44,10 +44,10 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkBoxTriggerOn = new System.Windows.Forms.CheckBox();
-			this.velocityMapControl = new AudioLib.UI.VelocityMapControl();
 			this.buttonSave = new System.Windows.Forms.Button();
 			this.labelSigAOutput = new System.Windows.Forms.Label();
 			this.labelSigBOutput = new System.Windows.Forms.Label();
+			this.velocityMapControl = new AudioLib.UI.VelocityMapControl();
 			this.SuspendLayout();
 			// 
 			// listBoxSignals
@@ -85,7 +85,7 @@
 			// 
 			// textBoxSignalName
 			// 
-			this.textBoxSignalName.Location = new System.Drawing.Point(307, 35);
+			this.textBoxSignalName.Location = new System.Drawing.Point(283, 20);
 			this.textBoxSignalName.Name = "textBoxSignalName";
 			this.textBoxSignalName.Size = new System.Drawing.Size(176, 20);
 			this.textBoxSignalName.TabIndex = 4;
@@ -94,7 +94,7 @@
 			// 
 			this.comboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxMode.FormattingEnabled = true;
-			this.comboBoxMode.Location = new System.Drawing.Point(307, 61);
+			this.comboBoxMode.Location = new System.Drawing.Point(283, 46);
 			this.comboBoxMode.Name = "comboBoxMode";
 			this.comboBoxMode.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxMode.TabIndex = 5;
@@ -103,7 +103,7 @@
 			// 
 			this.comboBoxA.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxA.FormattingEnabled = true;
-			this.comboBoxA.Location = new System.Drawing.Point(307, 88);
+			this.comboBoxA.Location = new System.Drawing.Point(283, 73);
 			this.comboBoxA.Name = "comboBoxA";
 			this.comboBoxA.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxA.TabIndex = 6;
@@ -112,7 +112,7 @@
 			// 
 			this.comboBoxB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxB.FormattingEnabled = true;
-			this.comboBoxB.Location = new System.Drawing.Point(307, 115);
+			this.comboBoxB.Location = new System.Drawing.Point(283, 100);
 			this.comboBoxB.Name = "comboBoxB";
 			this.comboBoxB.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxB.TabIndex = 7;
@@ -121,7 +121,7 @@
 			// 
 			this.comboBoxEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxEvent.FormattingEnabled = true;
-			this.comboBoxEvent.Location = new System.Drawing.Point(307, 142);
+			this.comboBoxEvent.Location = new System.Drawing.Point(283, 127);
 			this.comboBoxEvent.Name = "comboBoxEvent";
 			this.comboBoxEvent.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxEvent.TabIndex = 8;
@@ -129,14 +129,15 @@
 			// 
 			// textBoxOutput
 			// 
-			this.textBoxOutput.Location = new System.Drawing.Point(307, 190);
+			this.textBoxOutput.Location = new System.Drawing.Point(283, 154);
 			this.textBoxOutput.Name = "textBoxOutput";
-			this.textBoxOutput.Size = new System.Drawing.Size(61, 20);
+			this.textBoxOutput.ReadOnly = true;
+			this.textBoxOutput.Size = new System.Drawing.Size(121, 20);
 			this.textBoxOutput.TabIndex = 9;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(212, 38);
+			this.label1.Location = new System.Drawing.Point(188, 23);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(89, 13);
 			this.label1.TabIndex = 10;
@@ -145,7 +146,7 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(212, 64);
+			this.label2.Location = new System.Drawing.Point(188, 49);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(89, 13);
 			this.label2.TabIndex = 11;
@@ -154,7 +155,7 @@
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(212, 91);
+			this.label3.Location = new System.Drawing.Point(188, 76);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(89, 13);
 			this.label3.TabIndex = 12;
@@ -163,7 +164,7 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(212, 118);
+			this.label4.Location = new System.Drawing.Point(188, 103);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(89, 13);
 			this.label4.TabIndex = 13;
@@ -172,7 +173,7 @@
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(212, 145);
+			this.label5.Location = new System.Drawing.Point(188, 130);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(89, 13);
 			this.label5.TabIndex = 14;
@@ -181,7 +182,7 @@
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(212, 193);
+			this.label6.Location = new System.Drawing.Point(188, 157);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(89, 13);
 			this.label6.TabIndex = 15;
@@ -191,24 +192,15 @@
 			// checkBoxTriggerOn
 			// 
 			this.checkBoxTriggerOn.AutoSize = true;
-			this.checkBoxTriggerOn.Location = new System.Drawing.Point(434, 144);
+			this.checkBoxTriggerOn.Location = new System.Drawing.Point(410, 129);
 			this.checkBoxTriggerOn.Name = "checkBoxTriggerOn";
 			this.checkBoxTriggerOn.Size = new System.Drawing.Size(15, 14);
 			this.checkBoxTriggerOn.TabIndex = 16;
 			this.checkBoxTriggerOn.UseVisualStyleBackColor = true;
 			// 
-			// velocityMapControl
-			// 
-			this.velocityMapControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.velocityMapControl.Location = new System.Drawing.Point(307, 235);
-			this.velocityMapControl.Map = null;
-			this.velocityMapControl.Name = "velocityMapControl";
-			this.velocityMapControl.Size = new System.Drawing.Size(241, 150);
-			this.velocityMapControl.TabIndex = 17;
-			// 
 			// buttonSave
 			// 
-			this.buttonSave.Location = new System.Drawing.Point(307, 413);
+			this.buttonSave.Location = new System.Drawing.Point(283, 336);
 			this.buttonSave.Name = "buttonSave";
 			this.buttonSave.Size = new System.Drawing.Size(75, 23);
 			this.buttonSave.TabIndex = 18;
@@ -219,7 +211,7 @@
 			// labelSigAOutput
 			// 
 			this.labelSigAOutput.AutoSize = true;
-			this.labelSigAOutput.Location = new System.Drawing.Point(434, 91);
+			this.labelSigAOutput.Location = new System.Drawing.Point(410, 76);
 			this.labelSigAOutput.Name = "labelSigAOutput";
 			this.labelSigAOutput.Size = new System.Drawing.Size(13, 13);
 			this.labelSigAOutput.TabIndex = 19;
@@ -228,11 +220,20 @@
 			// labelSigBOutput
 			// 
 			this.labelSigBOutput.AutoSize = true;
-			this.labelSigBOutput.Location = new System.Drawing.Point(434, 118);
+			this.labelSigBOutput.Location = new System.Drawing.Point(410, 103);
 			this.labelSigBOutput.Name = "labelSigBOutput";
 			this.labelSigBOutput.Size = new System.Drawing.Size(13, 13);
 			this.labelSigBOutput.TabIndex = 20;
 			this.labelSigBOutput.Text = "0";
+			// 
+			// velocityMapControl
+			// 
+			this.velocityMapControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.velocityMapControl.Location = new System.Drawing.Point(283, 180);
+			this.velocityMapControl.Map = null;
+			this.velocityMapControl.Name = "velocityMapControl";
+			this.velocityMapControl.Size = new System.Drawing.Size(241, 150);
+			this.velocityMapControl.TabIndex = 17;
 			// 
 			// SignalView
 			// 

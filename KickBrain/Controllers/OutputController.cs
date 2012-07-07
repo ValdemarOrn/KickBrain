@@ -87,11 +87,42 @@ namespace KickBrain.Controllers
 
 		internal void AddOutput()
 		{
-			var output = new OutputPort("New Output");
+			var output = new OutputPort("Output" + Brain.KB.Sources.GetOutputPorts().Count);
 			Brain.KB.Sources.AddOutputPort(output);
 			LoadOutputs();
 			ui.listBoxOutputs.SelectedIndex = OutputPorts.Count - 1;
 			LoadSignals();
+		}
+
+		internal void RemoveOutput()
+		{
+			int selIdx = ui.listBoxOutputs.SelectedIndex;
+			Brain.KB.Sources.RemoveOutputPort(CurrentPort);
+			LoadOutputs();
+			ui.listBoxOutputs.SelectedIndex = (selIdx < ui.listBoxOutputs.Items.Count) ? selIdx : (selIdx - 1);
+			
+			LoadSignals();
+
+			if (ui.listBoxOutputs.SelectedIndex == -1)
+				ClearUI();
+		}
+
+		public void ClearUI()
+		{
+			ui.comboBoxCrosstalk.SelectedIndex = -1;
+			ui.comboBoxEvent.SelectedIndex = -1;
+			ui.comboBoxFilterSignal.SelectedIndex = -1;
+			ui.comboBoxSignal.SelectedIndex = -1;
+			ui.textBoxCCNumber.Text = "";
+			ui.textBoxFilterMax.Text = "";
+			ui.textBoxFilterMin.Text = "";
+			ui.textBoxMidiChannel.Text = "";
+			ui.textBoxName.Text = "";
+			ui.checkBoxFilterEnabled.Checked = false;
+			ui.checkBoxIsNote.Checked = false;
+			ui.checkBoxTriggerOn.Checked = false;
+			ui.panelCrosstalk.Controls.Clear();
+			ui.velocityMapControl.Map = null;
 		}
 
 		public void LoadOutput(int i)
@@ -111,6 +142,7 @@ namespace KickBrain.Controllers
 			ui.comboBoxCrosstalk.SelectedIndex = -1;
 
 			ui.textBoxName.Text = port.Name;
+			ui.checkBoxEnabled.Checked = port.Enabled;
 			ui.textBoxMidiChannel.Text = port.MidiChannel.ToString();
 			ui.textBoxCCNumber.Text = port.CCNumber.ToString();
 			ui.checkBoxIsNote.Checked = port.IsNote;
@@ -118,7 +150,7 @@ namespace KickBrain.Controllers
 			ui.checkBoxFilterEnabled.Checked = port.FilterEnabled;
 			ui.textBoxFilterMin.Text = port.FilterMin.ToString();
 			ui.textBoxFilterMax.Text = port.FilterMax.ToString();
-			ui.velocityMapControl.Map = port.VelocityMap;
+			ui.velocityMapControl.Map = new AudioLib.VelocityMap(port.VelocityMap);
 
 			// Attach the trigger that updates the view
 			if (port.Event != null)
@@ -139,19 +171,36 @@ namespace KickBrain.Controllers
 			ui.comboBoxCrosstalk.SelectedIndex = -1;
 
 			port.Name = ui.textBoxName.Text;
-			port.MidiChannel = Convert.ToInt32(ui.textBoxMidiChannel.Text);
-			port.CCNumber = Convert.ToInt32(ui.textBoxCCNumber.Text);
+			port.Enabled = ui.checkBoxEnabled.Checked;
+			Int32.TryParse(ui.textBoxMidiChannel.Text, out port.MidiChannel);
+			Int32.TryParse(ui.textBoxCCNumber.Text, out port.CCNumber);
 			port.IsNote = ui.checkBoxIsNote.Checked;
 			port.Filter = (ui.comboBoxFilterSignal.SelectedIndex != -1) ? signals[ui.comboBoxFilterSignal.SelectedIndex] : null;
 			port.FilterEnabled = ui.checkBoxFilterEnabled.Checked;
-			port.FilterMin = Convert.ToDouble(ui.textBoxFilterMin.Text);
-			port.FilterMax = Convert.ToDouble(ui.textBoxFilterMax.Text);
+
+			double fMin = 0.0;
+			var parsed = Double.TryParse(ui.textBoxFilterMin.Text, out fMin);
+			if (parsed)
+				port.FilterMin = fMin;
+			else
+				port.FilterMin = null;
+
+			double fMax = 0.0;
+			parsed = Double.TryParse(ui.textBoxFilterMax.Text, out fMax);
+			if (parsed)
+				port.FilterMax = fMax;
+			else
+				port.FilterMax = null;
+
+			// save velocity map
+			port.VelocityMap = ui.velocityMapControl.Map;
 
 			// Save crosstalk
 			int i = 0;
 			foreach (var xtalk in port.CrosstalkSignals)
 			{
-				xtalk.Factor = (ui.CrosstalkFactors[i].Text != "") ? Convert.ToDouble(ui.CrosstalkFactors[i].Text) : 0.0;
+				xtalk.Factor = 0.0;
+				Double.TryParse(ui.CrosstalkFactors[i].Text, out xtalk.Factor);
 
 				xtalk.Signal = (ui.CrosstalkSignals[i].SelectedIndex != -1) ? signals[ui.CrosstalkSignals[i].SelectedIndex] : null;
 				i++;

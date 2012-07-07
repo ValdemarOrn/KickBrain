@@ -58,6 +58,7 @@
 			this.label9 = new System.Windows.Forms.Label();
 			this.checkBoxTriggerOn = new System.Windows.Forms.CheckBox();
 			this.labelFilterValue = new System.Windows.Forms.Label();
+			this.checkBoxEnabled = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// labelSignal
@@ -90,7 +91,6 @@
 			this.comboBoxSignal.Name = "comboBoxSignal";
 			this.comboBoxSignal.Size = new System.Drawing.Size(182, 21);
 			this.comboBoxSignal.TabIndex = 6;
-			this.comboBoxSignal.SelectedIndexChanged += new System.EventHandler(this.comboBoxSignal_SelectedIndexChanged);
 			// 
 			// buttonAddCrosstalk
 			// 
@@ -121,6 +121,7 @@
 			this.buttonRemove.TabIndex = 15;
 			this.buttonRemove.Text = "Remove";
 			this.buttonRemove.UseVisualStyleBackColor = true;
+			this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click_1);
 			// 
 			// buttonAdd
 			// 
@@ -285,7 +286,7 @@
 			// velocityMapControl
 			// 
 			this.velocityMapControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.velocityMapControl.Location = new System.Drawing.Point(524, 229);
+			this.velocityMapControl.Location = new System.Drawing.Point(524, 214);
 			this.velocityMapControl.Map = null;
 			this.velocityMapControl.Name = "velocityMapControl";
 			this.velocityMapControl.Size = new System.Drawing.Size(237, 135);
@@ -293,13 +294,13 @@
 			// 
 			// buttonSave
 			// 
-			this.buttonSave.Location = new System.Drawing.Point(524, 370);
+			this.buttonSave.Location = new System.Drawing.Point(524, 355);
 			this.buttonSave.Name = "buttonSave";
-			this.buttonSave.Size = new System.Drawing.Size(41, 22);
+			this.buttonSave.Size = new System.Drawing.Size(75, 23);
 			this.buttonSave.TabIndex = 38;
 			this.buttonSave.Text = "Save";
 			this.buttonSave.UseVisualStyleBackColor = true;
-			this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+			this.buttonSave.Click += new System.EventHandler(this.Save);
 			// 
 			// textBoxName
 			// 
@@ -335,10 +336,21 @@
 			this.labelFilterValue.TabIndex = 42;
 			this.labelFilterValue.Text = "0.0";
 			// 
+			// checkBoxEnabled
+			// 
+			this.checkBoxEnabled.AutoSize = true;
+			this.checkBoxEnabled.Location = new System.Drawing.Point(654, 38);
+			this.checkBoxEnabled.Name = "checkBoxEnabled";
+			this.checkBoxEnabled.Size = new System.Drawing.Size(101, 17);
+			this.checkBoxEnabled.TabIndex = 43;
+			this.checkBoxEnabled.Text = "Enable Channel";
+			this.checkBoxEnabled.UseVisualStyleBackColor = true;
+			// 
 			// OutputView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.checkBoxEnabled);
 			this.Controls.Add(this.labelFilterValue);
 			this.Controls.Add(this.checkBoxTriggerOn);
 			this.Controls.Add(this.textBoxName);
@@ -409,6 +421,7 @@
 		internal System.Windows.Forms.CheckBox checkBoxTriggerOn;
 		internal System.Windows.Forms.Panel panelCrosstalk;
 		internal System.Windows.Forms.Label labelFilterValue;
+		internal System.Windows.Forms.CheckBox checkBoxEnabled;
 
 
 	}

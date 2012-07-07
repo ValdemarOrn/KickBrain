@@ -91,11 +91,31 @@ namespace KickBrain
 			lock (Lock)
 			{
 				port.ReadTimeout = 10;
+				bool noInput = false;
 
 				while (!Stopping)
 				{
 					byte[] buf = new byte[ChannelCount + 1];
-					int count = port.Read(buf, 0, ChannelCount + 1);
+					int count = 0;
+					try
+					{
+						count = port.Read(buf, 0, ChannelCount + 1);
+						if (noInput == true)
+						{
+							noInput = false;
+							Brain.KB.SetNoInput(noInput);
+						}
+						
+					}
+					catch (Exception e)
+					{
+						if (noInput == false)
+						{
+							noInput = true;
+							Brain.KB.SetNoInput(noInput);
+						}
+						continue;
+					}
 
 					// Data rate
 					PerSecond += count;

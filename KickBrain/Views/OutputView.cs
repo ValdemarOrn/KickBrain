@@ -48,11 +48,6 @@ namespace KickBrain.Views
 
 		}
 
-		private void comboBoxSignal_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
 		private void buttonAdd_Click_1(object sender, EventArgs e)
 		{
 			Ctrl.AddOutput();
@@ -79,11 +74,10 @@ namespace KickBrain.Views
 			if (!Visible)
 				return;
 
-			//Ctrl.SaveSignal();
 			Ctrl.LoadOutput(listBoxOutputs.SelectedIndex);
 		}
 
-		private void buttonSave_Click(object sender, EventArgs e)
+		private void Save(object sender, EventArgs e)
 		{
 			Ctrl.SaveOutput();
 			Ctrl.LoadOutputs();
@@ -95,6 +89,11 @@ namespace KickBrain.Views
 				return;
 
 			Ctrl.AddCrosstalk(comboBoxCrosstalk.SelectedIndex);
+		}
+
+		private void buttonRemove_Click_1(object sender, EventArgs e)
+		{
+			Ctrl.RemoveOutput();
 		}
 	}
 }

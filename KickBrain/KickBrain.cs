@@ -84,24 +84,18 @@ namespace KickBrain
 			MessageBox.Show("An error has occured: \n" + message);
 		}
 
+		public void SetNoInput(bool noInput)
+		{
+			ui.InputView.Ctrl.setNoInput(noInput);
+		}
+
 		public bool Configure()
 		{
-			if (Input != null)
-				Input.Stop();
-
-			if (Output != null)
-				Output.Close();
-
-
 			var dialog = ConfigureDialog.Show(ChannelCount, Baudrate, COMport, MidiDeviceID);
 
 			if (dialog.Connected)
 			{
-				// Create or remove channels as needed
-				while (Sources.InputChannels.Count < dialog.NumberOfChannels)
-					Sources.AddInputChannel(new InputChannel(Sources.InputChannels.Count));
-				while (Sources.InputChannels.Count > dialog.NumberOfChannels)
-					Sources.RemoveInputChannel(Sources.InputChannels.Count - 1);
+				SetNumberOfChannels(dialog.NumberOfChannels);
 
 				// Open the serial interface
 				OpenSerialInput(dialog.COMPort, dialog.BaudRate, dialog.NumberOfChannels);
@@ -113,27 +107,22 @@ namespace KickBrain
 			return dialog.Connected;
 		}
 
-		private void OpenMidiOutput(int DeviceID)
+		public void SetNumberOfChannels(int numChannels)
 		{
-			if (DeviceID < 0)
-			{
-				ShowError("Illegal Device ID for Midi Output. ID: " + DeviceID);
-				return;
-			}
+			// Create or remove channels as needed
+			while (Sources.InputChannels.Count < numChannels)
+				Sources.AddInputChannel(new InputChannel(Sources.InputChannels.Count));
+			while (Sources.InputChannels.Count > numChannels)
+				Sources.RemoveInputChannel(Sources.InputChannels.Count - 1);
 
-			try
-			{
-				var MidiOutput = new MidiOutput(DeviceID);
-				Output = MidiOutput;
-			}
-			catch (Exception e)
-			{
-				ShowError(e.Message);
-			}
+			ui.Ctrl.LoadInputs();
 		}
-
+		
 		private void OpenSerialInput(string COMPort, int BaudRate, int NumberOfChannels)
 		{
+			if (Input != null)
+				Input.Stop();
+
 			if (COMPort == null || COMPort == "")
 			{
 				ShowError("Illegal COM Port name: " + COMPort);
@@ -159,6 +148,29 @@ namespace KickBrain
 			Input.Start();
 		}
 
+		private void OpenMidiOutput(int DeviceID)
+		{
+			if (Output != null)
+				Output.Close();
+
+			AudioLib.PortMidi.Pm_CountDevices();
+
+			if (DeviceID < 0)
+			{
+				ShowError("Illegal Device ID for Midi Output. ID: " + DeviceID);
+				return;
+			}
+
+			try
+			{
+				var MidiOutput = new MidiOutput(DeviceID);
+				Output = MidiOutput;
+			}
+			catch (Exception e)
+			{
+				ShowError(e.Message);
+			}
+		}
 
 		internal string ToXML()
 		{
@@ -213,11 +225,41 @@ namespace KickBrain
 			int midiDeviceId = -1;
 			Int32.TryParse(doc.SelectSingleNode("Configuration/GlobalConfiguration/MidiDeviceID").InnerText, out midiDeviceId);
 
-			int channelCount = 0;
+			int channelCount = 12;
 			Int32.TryParse(doc.SelectSingleNode("Configuration/GlobalConfiguration/Channels").InnerText, out channelCount);
 
 			int baudrate = 115200;
 			Int32.TryParse(doc.SelectSingleNode("Configuration/GlobalConfiguration/Baudrate").InnerText, out baudrate);
+
+			SetNumberOfChannels(channelCount);
+			OpenSerialInput(comPort, baudrate, channelCount);
+
+			OpenMidiOutput(midiDeviceId);
+
+			// Load input config
+
+			for (int i = 0; i < ChannelCount; i++)
+			{
+				var node = doc.SelectSingleNode("Configuration/InputConfiguration/Input[@Index='" + i + "']");
+				if (node == null)
+					continue;
+				((InputChannel)Sources.InputChannels[i]).LoadXML(node.OuterXml);
+			}
+
+			var ports = Sources.GetOutputPorts();
+			foreach (var port in ports)
+				Sources.RemoveOutputPort(port);
+
+			var nodes = doc.SelectNodes("Configuration/OutputConfiguration/Output");
+
+			for (int i = 0; i < nodes.Count; i++)
+			{
+				var outputPort = new OutputPort();
+				outputPort.LoadXML(nodes[i].OuterXml);
+				Sources.AddOutputPort(outputPort);
+			}
+
+
 		}
 	}
 }

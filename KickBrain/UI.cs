@@ -16,9 +16,19 @@ namespace KickBrain
 		public SignalView SignalView;
 		public OutputView OutputView;
 
+		public List<VUMeter> VUMeters;
+		public List<Label> VULabels;
+
+		public UIController Ctrl;
+
 		public UI()
 		{
 			InitializeComponent();
+
+			Ctrl = new UIController(this);
+			VUMeters = new List<VUMeter>();
+			VULabels = new List<Label>();
+
 			InputView = new InputView();
 			SignalView = new SignalView();
 			OutputView = new OutputView();
@@ -34,21 +44,21 @@ namespace KickBrain
 			InputView.Top = 80;
 			InputView.Left = 15;
 			InputView.Width = ClientSize.Width - 2*15;
-			InputView.Height = ClientSize.Height - 80 - 15;
+			InputView.Height = ClientSize.Height - 80 - 30 - panelMeters.Height;
 			InputView.Visible = true;
 			InputView.Hide();
 
 			SignalView.Top = 80;
 			SignalView.Left = 15;
 			SignalView.Width = ClientSize.Width - 2 * 15;
-			SignalView.Height = ClientSize.Height - 80 - 15;
+			SignalView.Height = ClientSize.Height - 80 - 30 - panelMeters.Height;
 			SignalView.Visible = true;
 			SignalView.Hide();
 
 			OutputView.Top = 80;
 			OutputView.Left = 15;
 			OutputView.Width = ClientSize.Width - 2 * 15;
-			OutputView.Height = ClientSize.Height - 80 - 15;
+			OutputView.Height = ClientSize.Height - 80 - 30 - panelMeters.Height;
 			OutputView.Visible = true;
 			OutputView.Hide();
 
@@ -102,7 +112,7 @@ namespace KickBrain
 			if (!connected)
 				return;
 
-			InputView.Ctrl.UpdateControls();
+			InputView.Ctrl.LoadInputs();
 		}
 
 		private void loadConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -118,6 +128,18 @@ namespace KickBrain
 
 			var xml = System.IO.File.ReadAllText(openFileDialog1.FileName);
 			Brain.KB.FromXML(xml);
+
+			InputView.Ctrl.LoadInputs();
+		}
+
+		private void backgroundModeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Ctrl.EnterBackgroundMode();
+		}
+
+		private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			Ctrl.LeaveBackgroundMode();
 		}
 	}
 }

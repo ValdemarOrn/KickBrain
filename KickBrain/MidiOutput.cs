@@ -66,8 +66,9 @@ namespace KickBrain
 
 			DateTime start = DateTime.Now;
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
-			if ((DateTime.Now - start).TotalMilliseconds > 200)
+			if ((DateTime.Now - start).TotalMilliseconds > 100)
 			{
+				Console.WriteLine("Midi timeout in noteOn");
 				this.Close();
 				this.Start();
 			}
@@ -83,8 +84,9 @@ namespace KickBrain
 
 			DateTime start = DateTime.Now;
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
-			if ((DateTime.Now - start).TotalMilliseconds > 200)
+			if ((DateTime.Now - start).TotalMilliseconds > 100)
 			{
+				Console.WriteLine("Midi timeout in noteOff");
 				this.Close();
 				this.Start();
 			}
@@ -98,7 +100,15 @@ namespace KickBrain
 			int status = MidiMessageType.ControlChange | channel;
 			var message = PortMidi.Pm_Message(status, CC, value);
 
+			DateTime start = DateTime.Now;
 			var err = PortMidi.Pm_WriteShort(Stream, TimeProc((IntPtr)0), message);
+			if ((DateTime.Now - start).TotalMilliseconds > 100)
+			{
+				Console.WriteLine("Midi timeout in CC");
+				this.Close();
+				this.Start();
+			}
+
 			if (err != PortMidi.PmError.pmNoError)
 				Brain.KB.ShowError("Error sending CC: " + err.ToString());
 		}

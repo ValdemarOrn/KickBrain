@@ -63,6 +63,7 @@
     <Compile Include="UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIController.cs" />
     <Compile Include="Views\ConfigureDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +102,9 @@
     </Compile>
     <Compile Include="Views\SignalView.Designer.cs">
       <DependentUpon>SignalView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VUMeter.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="WaveView.cs">
       <SubType>UserControl</SubType>

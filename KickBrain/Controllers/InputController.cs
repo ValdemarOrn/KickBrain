@@ -12,44 +12,36 @@ namespace KickBrain.Controllers
 		public InputView ui;
 		public InputChannel CurrentChannel;
 
+		public int SelectedIndex;
+
 		public InputController(InputView form)
 		{
 			this.ui = form;
 		}
 
-		public void AddWiew(InputChannel channel)
+		void AddWiew()
 		{
 			try
 			{
 				// Invoke from main thread
-				Action<InputChannel> AddDele = AddWiew;
+				Action AddDele = AddWiew;
 				if (ui.InvokeRequired)
 				{
-					ui.Invoke(AddDele, new object[] { channel });
+					ui.Invoke(AddDele, new object[] { });
 					return;
 				}
 
 				var view = new WaveView();
-				view.Channel = channel;
 				view.Top = 0;
 				view.Left = 0;
-				view.Height = ui.WaveTabs.Height - 30;
-				view.Width = ui.WaveTabs.ClientSize.Width - 8;
+				view.Height = ui.TabControlWaves.Height - 30;
+				view.Width = ui.TabControlWaves.ClientSize.Width - 8;
 				view.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right); // Resize waveView with the window
-				view.ZoomX = Convert.ToDouble(ui.textBoxZoomX.Text);
-				view.RefreshRate = Convert.ToDouble(ui.textBoxRefresh.Text);
+				view.ZoomX = 0.1;
+				Double.TryParse(ui.textBoxZoomX.Text, out view.ZoomX);
 
-				// subscribe to the channel's data trigger
-				var dataEvent = channel.Events.First(x => x.Name == InputChannel.TRIGGER_DATA);
-				dataEvent.Add(view.AddData, null);
-
-				// Subscribe to the trigger trigger
-				var triggerEvent = channel.Events.First(x => x.Name == InputChannel.TRIGGER_ON);
-				triggerEvent.Add(this.Trigger, null);
-				triggerEvent.Add(view.Trigger, null);
-
-				var page = new TabPage("Ch " + channel.Channel);
-				ui.WaveTabs.TabPages.Add(page);
+				var page = new TabPage("");
+				ui.TabControlWaves.TabPages.Add(page);
 				page.Controls.Add(view);
 				ui.Views.Add(view);
 			}
@@ -62,9 +54,7 @@ namespace KickBrain.Controllers
 		public void Trigger(object sender_)
 		{
 			var sender = (InputChannel)sender_;
-			var velocity = CurrentChannel.GetPower();
-			//if (sender != this.CurrentChannel)
-			//	return;
+			var power = CurrentChannel.GetPower();
 
 			// Invoke from main thread
 			Action<object> TriggerDele = Trigger;
@@ -74,19 +64,12 @@ namespace KickBrain.Controllers
 				return;
 			}
 
-			if (velocity == 0.0)
+			if (power == 0.0)
 				return;
 
-			ui.velocityMapControl1.SetTrigger(velocity);
+			ui.velocityMapControl1.SetTrigger(power);
 
-			velocity = ((InputChannelConfig)CurrentChannel.Config).Velocity.Map(velocity);
-
-			double barValue = velocity * ui.progressBarVelocity.Maximum;
-			if (barValue > ui.progressBarVelocity.Maximum)
-				barValue = ui.progressBarVelocity.Maximum;
-			ui.progressBarVelocity.Value = (int)(barValue);
-
-			ui.textBoxVelocity.Text = Math.Round(velocity, 3).ToString();
+			ui.textBoxVelocity.Text = Math.Round(power, 3).ToString();
 			int hits = 0;
 			Int32.TryParse(ui.textBoxHits.Text, out hits);
 			ui.textBoxHits.Text = (hits + 1).ToString();
@@ -98,28 +81,31 @@ namespace KickBrain.Controllers
 				wave.ZoomX = zoom;
 		}
 
-		public void SetRefresh(double rate)
+		public void LoadInput(int channel)
 		{
-			foreach (var wave in ui.Views)
-				wave.RefreshRate = rate;
-		}
+			// Remove previous triggers
+			Brain.KB.Sources.DetachAllEvents(this.Trigger);
 
-		public void SetActiveChannel()
-		{
-			SetActiveChannel(ui.WaveTabs.SelectedIndex);
-		}
-
-		public void SetActiveChannel(int channel)
-		{
-			if (channel < 0 || channel >= Brain.KB.Input.ChannelCount)
+			
+			if (channel >= Brain.KB.ChannelCount)
 				return;
 
-			CurrentChannel = ((WaveView)(ui.WaveTabs.SelectedTab.Controls[0])).Channel;
+			SelectedIndex = channel;
+			ui.TabControlWaves.SelectedIndex = channel;
+
+			if (channel < 0)
+				return;
+
+			CurrentChannel = (InputChannel)Brain.KB.Sources.InputChannels[channel];
 
 			ui.propertyGrid1.SelectedObject = CurrentChannel.Config;
 			ui.velocityMapControl1.Map = ((InputChannelConfig)CurrentChannel.Config).Velocity;
 			ui.textBoxHits.Text = "0";
 			ui.textBoxVelocity.Text = "";
+
+			// Subscribe to the trigger event
+			var triggerEvent = CurrentChannel.Events.First(x => x.Name == InputChannel.TRIGGER_EVENT);
+			triggerEvent.Add(this.Trigger, null);
 
 			ui.velocityMapControl1.Invalidate();
 		}
@@ -129,18 +115,44 @@ namespace KickBrain.Controllers
 			((InputChannelConfig)CurrentChannel.Config).Enabled = enabled;
 		}
 
-		public void UpdateControls()
+		public void LoadInputs()
 		{
+			int idx = SelectedIndex;
+
 			// remove current tabs
-			ui.WaveTabs.TabPages.Clear();
+			ui.TabControlWaves.TabPages.Clear();
+			ui.Views.Clear();
 
 			// Bind the channels to the views
 			foreach (InputChannel channel in Brain.KB.Sources.InputChannels)
-				ui.Ctrl.AddWiew(channel);
+				ui.Ctrl.AddWiew();
 
-			// initialize processing values
-			ui.Ctrl.SetActiveChannel(0);
+			// Load channel names
+			var channels = Brain.KB.Sources.InputChannels;
+			for (int i = 0; i < channels.Count; i++)
+				ui.TabControlWaves.TabPages[i].Text = channels[i].ChannelName;
+
+			// Load triggers for all views
+
+			for (int i = 0; i < Brain.KB.Sources.InputChannels.Count; i++)
+			{
+				var ch = Brain.KB.Sources.InputChannels[i];
+
+				// subscribe to the channel's data trigger
+				var dataEvent = ch.Events.First(x => x.Name == InputChannel.TRIGGER_DATA);
+				dataEvent.Add(ui.Views[i].AddData, null);
+
+				// Subscribe to the trigger trigger
+				var triggerEvent = ch.Events.First(x => x.Name == InputChannel.TRIGGER_EVENT);
+				triggerEvent.Add(ui.Views[i].Trigger, null);
+			}
+
+			if (idx == -1)
+				idx = 0;
+			if (idx < ui.TabControlWaves.TabCount)
+				LoadInput(idx);
 		}
+
 
 		public void SetByterate(int bytesPerSec)
 		{
@@ -172,7 +184,29 @@ namespace KickBrain.Controllers
 		{
 			CurrentChannel.ConfigUpdated();
 			ui.velocityMapControl1.Invalidate();
-			ui.WaveTabs.SelectedTab.Text = CurrentChannel.ChannelName;
+			ui.TabControlWaves.SelectedTab.Text = CurrentChannel.ChannelName;
+		}
+
+		internal void setNoInput(bool noInput)
+		{
+			// Invoke from main thread
+			Action<bool> dele = setNoInput;
+			if (ui.InvokeRequired)
+			{
+				ui.Invoke(dele, new object[] { noInput });
+				return;
+			}
+
+			if (noInput)
+			{
+				ui.textBoxByteRate.Text = "No Input";
+				ui.textBoxByteRate.ForeColor = System.Drawing.Color.Red;
+			}
+			else
+			{
+				ui.textBoxByteRate.Text = "";
+				ui.textBoxByteRate.ForeColor = System.Drawing.Color.Black;
+			}
 		}
 	}
 }

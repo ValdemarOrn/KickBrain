@@ -16,8 +16,6 @@ namespace KickBrain.Views
 		public List<WaveView> Views;
 		public InputController Ctrl;
 
-		Timer TriggerRefreshTimer;
-
 		public InputView()
 		{
 			System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -27,13 +25,6 @@ namespace KickBrain.Views
 
 			Ctrl = new InputController(this);
 			Views = new List<WaveView>();
-
-			TriggerRefreshTimer = new Timer();
-			TriggerRefreshTimer.Tick += delegate(object sender, EventArgs e)
-			{ progressBarVelocity.Value = (int)(0.9 * progressBarVelocity.Value); };
-
-			TriggerRefreshTimer.Interval = 1000 / 30;
-			TriggerRefreshTimer.Start();
 		}
 
 		private void buttonZoomX_Click(object sender, EventArgs e)
@@ -53,32 +44,36 @@ namespace KickBrain.Views
 			Ctrl.SetZoom(zoom);
 		}
 
-		private void buttonRefresh_Click(object sender, EventArgs e)
-		{
-			double rate = 30.0;
-
-			try
-			{
-				rate = Convert.ToDouble(textBoxRefresh.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Unable to read refresh rate value: " + textBoxRefresh.Text);
-				return;
-			}
-
-			Ctrl.SetRefresh(rate);
-		}
-
 		public void WaveTabs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Ctrl.SetActiveChannel();
+			Ctrl.LoadInput(this.TabControlWaves.SelectedIndex);
 		}
 
 		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
 			Ctrl.PropertyChanged();
+			Brain.KB.ui.Ctrl.SetLabelNames();
+		}
 
+		private void InputView_VisibleChanged(object sender, EventArgs e)
+		{
+			if (!Visible)
+			{
+				// Remove all triggers
+				Brain.KB.Sources.DetachAllEvents(Ctrl.Trigger);
+
+				foreach (var view in Views)
+				{
+					Brain.KB.Sources.DetachAllEvents(view.AddData);
+					Brain.KB.Sources.DetachAllEvents(view.Trigger);
+				}
+
+				return;
+			}
+
+			Ctrl.LoadInputs();
+
+			Ctrl.LoadInput(Ctrl.SelectedIndex);
 		}
 	}
 }

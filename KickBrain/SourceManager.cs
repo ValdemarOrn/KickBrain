@@ -177,6 +177,15 @@ namespace KickBrain
 			// returns a shallow copy
 			return OutputPorts.Select(x => x).ToList();
 		}
+
+		public void RemoveOutputPort(OutputPort port)
+		{
+			if (!OutputPorts.Contains(port))
+				return;
+
+			OutputPorts.Remove(port);
+			port.Dispose();
+		}
 		
 	}
 }

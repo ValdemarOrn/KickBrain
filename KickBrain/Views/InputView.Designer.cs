@@ -37,15 +37,12 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-			this.progressBarVelocity = new System.Windows.Forms.ProgressBar();
-			this.WaveTabs = new System.Windows.Forms.TabControl();
+			this.TabControlWaves = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.buttonRefresh = new System.Windows.Forms.Button();
-			this.textBoxRefresh = new System.Windows.Forms.TextBox();
 			this.buttonZoomX = new System.Windows.Forms.Button();
 			this.textBoxZoomX = new System.Windows.Forms.TextBox();
 			this.velocityMapControl1 = new AudioLib.UI.VelocityMapControl();
-			this.WaveTabs.SuspendLayout();
+			this.TabControlWaves.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textBoxSamplerate
@@ -131,29 +128,18 @@
 			this.propertyGrid1.ToolbarVisible = false;
 			this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
 			// 
-			// progressBarVelocity
+			// TabControlWaves
 			// 
-			this.progressBarVelocity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.progressBarVelocity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.progressBarVelocity.Location = new System.Drawing.Point(89, 487);
-			this.progressBarVelocity.Maximum = 10000;
-			this.progressBarVelocity.Name = "progressBarVelocity";
-			this.progressBarVelocity.Size = new System.Drawing.Size(105, 23);
-			this.progressBarVelocity.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.progressBarVelocity.TabIndex = 28;
-			// 
-			// WaveTabs
-			// 
-			this.WaveTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.TabControlWaves.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.WaveTabs.Controls.Add(this.tabPage1);
-			this.WaveTabs.Location = new System.Drawing.Point(8, 12);
-			this.WaveTabs.Name = "WaveTabs";
-			this.WaveTabs.SelectedIndex = 0;
-			this.WaveTabs.Size = new System.Drawing.Size(688, 309);
-			this.WaveTabs.TabIndex = 26;
-			this.WaveTabs.SelectedIndexChanged += new System.EventHandler(this.WaveTabs_SelectedIndexChanged);
+			this.TabControlWaves.Controls.Add(this.tabPage1);
+			this.TabControlWaves.Location = new System.Drawing.Point(8, 12);
+			this.TabControlWaves.Name = "TabControlWaves";
+			this.TabControlWaves.SelectedIndex = 0;
+			this.TabControlWaves.Size = new System.Drawing.Size(688, 309);
+			this.TabControlWaves.TabIndex = 26;
+			this.TabControlWaves.SelectedIndexChanged += new System.EventHandler(this.WaveTabs_SelectedIndexChanged);
 			// 
 			// tabPage1
 			// 
@@ -164,26 +150,6 @@
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "NoChannels";
 			this.tabPage1.UseVisualStyleBackColor = true;
-			// 
-			// buttonRefresh
-			// 
-			this.buttonRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.buttonRefresh.Location = new System.Drawing.Point(89, 400);
-			this.buttonRefresh.Name = "buttonRefresh";
-			this.buttonRefresh.Size = new System.Drawing.Size(105, 23);
-			this.buttonRefresh.TabIndex = 25;
-			this.buttonRefresh.Text = "Refresh Rate";
-			this.buttonRefresh.UseVisualStyleBackColor = true;
-			this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
-			// 
-			// textBoxRefresh
-			// 
-			this.textBoxRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textBoxRefresh.Location = new System.Drawing.Point(8, 402);
-			this.textBoxRefresh.Name = "textBoxRefresh";
-			this.textBoxRefresh.Size = new System.Drawing.Size(65, 20);
-			this.textBoxRefresh.TabIndex = 24;
-			this.textBoxRefresh.Text = "30";
 			// 
 			// buttonZoomX
 			// 
@@ -229,15 +195,13 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.propertyGrid1);
-			this.Controls.Add(this.progressBarVelocity);
-			this.Controls.Add(this.WaveTabs);
-			this.Controls.Add(this.buttonRefresh);
-			this.Controls.Add(this.textBoxRefresh);
+			this.Controls.Add(this.TabControlWaves);
 			this.Controls.Add(this.buttonZoomX);
 			this.Controls.Add(this.textBoxZoomX);
 			this.Name = "InputView";
 			this.Size = new System.Drawing.Size(953, 513);
-			this.WaveTabs.ResumeLayout(false);
+			this.VisibleChanged += new System.EventHandler(this.InputView_VisibleChanged);
+			this.TabControlWaves.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -255,11 +219,8 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		internal System.Windows.Forms.PropertyGrid propertyGrid1;
-		internal System.Windows.Forms.ProgressBar progressBarVelocity;
-		internal System.Windows.Forms.TabControl WaveTabs;
+		internal System.Windows.Forms.TabControl TabControlWaves;
 		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.Button buttonRefresh;
-		internal System.Windows.Forms.TextBox textBoxRefresh;
 		private System.Windows.Forms.Button buttonZoomX;
 		internal System.Windows.Forms.TextBox textBoxZoomX;
 	}

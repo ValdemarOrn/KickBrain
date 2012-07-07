@@ -8,16 +8,14 @@ namespace KickBrain
 {
 	public class InputChannel : IInput
 	{
-		public const string TRIGGER_ON = "On Event";
-		public const string TRIGGER_OFF = "Off Event";
+		public const string TRIGGER_EVENT = "Trigger Event";
 		public const string TRIGGER_DATA = "Data Event";
 		public const string VALUE_POWER = "Power";
 		public const string VALUE_VALUE = "Value";
 
 		/// Event that triggers when new data is available on the channel
 		Event DataEvent;
-		Event TriggerOnEvent;
-		Event TriggerOffEvent;
+		Event TriggerEvent;
 
 		public int Channel;
 
@@ -37,7 +35,7 @@ namespace KickBrain
 		public object Config
 		{
 			get { return InputConfig; }
-			set { InputConfig = (InputChannelConfig)value; }
+			set { InputConfig = (InputChannelConfig)value; InputConfig.SetOwner(this); }
 		}
 
 		private InputChannelConfig InputConfig { get; set; }
@@ -59,17 +57,15 @@ namespace KickBrain
 
 			// Set up IChannel - GetValue
 			Signals = new List<Signal>();
-			Signals.Add(new Signal(this, VALUE_POWER, GetPower));
+			Signals.Add(new Signal(this, VALUE_POWER, GetPowerMapped));
 			Signals.Add(new Signal(this, VALUE_VALUE, GetValue));
 
 			// Set up ITrigger
-			TriggerOnEvent = new Event(this, TRIGGER_ON);
-			TriggerOffEvent = new Event(this, TRIGGER_OFF);
+			TriggerEvent = new Event(this, TRIGGER_EVENT);
 			DataEvent = new Event(this, TRIGGER_DATA);
 
 			Events = new List<Event>();
-			Events.Add(TriggerOnEvent);
-			Events.Add(TriggerOffEvent);
+			Events.Add(TriggerEvent);
 			Events.Add(DataEvent);
 
 			Brain.KB.Sources.AddSignalChannel(this);
@@ -111,7 +107,7 @@ namespace KickBrain
 
 			// assign the value to the power. In CC mode power = processed signal
 			outputPower = InputConfig.Velocity.Map(value);
-			outputValue = InputConfig.Velocity.Map(value);
+			outputValue = value;
 		}
 
 		/// Boolean state that tells if a trigger is currently on. Used to
@@ -146,8 +142,8 @@ namespace KickBrain
 
 			// ------------------- Get channel power (max peak value) ------------
 
-			outputPower = InputConfig.Velocity.Map(Buffer.GetMax(InputConfig.TriggerLength + InputConfig.TriggerAttack));
-			outputValue = InputConfig.Velocity.Map(value);
+			outputPower = Buffer.GetMax(InputConfig.TriggerLength + InputConfig.TriggerAttack);
+			outputValue = value;
 
 			// -------------------Trigger sensor---------------------------
 
@@ -167,7 +163,7 @@ namespace KickBrain
 			if (triggerAtSample == currentSample)
 			{
 				if (InputConfig.Enabled)
-					TriggerOnEvent.Invoke(this);
+					TriggerEvent.Invoke(this);
 			}
 
 			// turn off
@@ -179,7 +175,7 @@ namespace KickBrain
 				triggerIsOn = false;
 				if (InputConfig.Enabled)
 				{ 
-					TriggerOffEvent.Invoke(this); 
+					TriggerEvent.Invoke(this); 
 				}
 			}
 		}
@@ -194,6 +190,11 @@ namespace KickBrain
 		public double GetPower()
 		{
 			return outputPower;
+		}
+
+		public double GetPowerMapped()
+		{
+			return InputConfig.Velocity.Map(outputPower);
 		}
 
 		public string ToXML()

@@ -73,16 +73,17 @@ namespace KickBrain
 		/// <param name="sender"></param>
 		public void Invoke(object sender)
 		{
-
-			// We use the orderByDelegate to order all the actions.
-			// we use the SignalChannelObjects to find which object corresponds to which delegate
-			// Todo: Fix this, it's a bottleneck!
-			List<Action<object>> orderedList = Actions.OrderBy(x => OrderByDelegate(SignalChannelObjects[x])).ToList();
-
-			foreach (var del in orderedList)
+			var ac = Actions;
+			lock (lockObject)
+			{
+				ac = Actions.Select(x => x).ToList();
+			}
+			
+			foreach (var del in ac)
 			{
 				del(sender);
 			}
+			
 		}
 
 		public string ToXML()

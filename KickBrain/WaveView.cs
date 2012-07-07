@@ -11,14 +11,9 @@ namespace KickBrain
 	public class WaveView : UserControl
 	{
 		public double ZoomX;
-		public InputChannel Channel;
+		//public InputChannel Channel;
 
 		double _refreshRate;
-		public double RefreshRate
-		{
-			get { return _refreshRate; }
-			set { _refreshRate = value; RefreshTimer.Interval = (int)(1/_refreshRate * 1000); }
-		}
 
 		Timer RefreshTimer;
 
@@ -41,10 +36,10 @@ namespace KickBrain
 
 			this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
 			RefreshTimer = new Timer();
+			RefreshTimer.Interval = (int)(1.0 / 30.0 * 1000);
 			RefreshTimer.Tick += delegate(object sender, EventArgs e) { this.Invalidate(); };
 
 			ZoomX = 0.25;
-			RefreshRate = 30.0;
 
 			RefreshTimer.Start();
 		}
@@ -130,7 +125,8 @@ namespace KickBrain
 
 		public void Trigger(object sender)
 		{
-			var power = Channel.GetPower();
+			var channel = (InputChannel)sender;
+			var power = channel.GetPower();
 
 			int delay = 0;// Channel.Config.TriggerLength;
 			if(power > 0.0)
@@ -141,6 +137,8 @@ namespace KickBrain
 
 		public void AddData(object sender)
 		{
+			var channel = (InputChannel)sender;
+
 			lock (Values)
 			{
 				// NOTE: Width is zero when the control is not visible on screen
@@ -158,7 +156,7 @@ namespace KickBrain
 
 				if (ScanPos < Values.Count) // because width might be zero
 				{
-					Values[ScanPos] = Channel.GetValue();
+					Values[ScanPos] = channel.GetValue();
 					//Values[ScanPos] = data;
 
 					if (ScanPos == 0)

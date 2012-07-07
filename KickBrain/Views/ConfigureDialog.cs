@@ -40,7 +40,7 @@ namespace KickBrain
 
 		public string COMPort
 		{
-			get { return comboBox1.SelectedItem.ToString(); }
+			get { return (comboBox1.SelectedItem != null) ? comboBox1.SelectedItem.ToString() : ""; }
 		}
 
 		public int MidiDeviceID
@@ -52,7 +52,7 @@ namespace KickBrain
 				for (int i = 0; i < PortMidi.Pm_CountDevices(); i++)
 				{
 					var info = PortMidi.Pm_GetDeviceInfo(i);
-					if (info.name == comboBox2.SelectedItem.ToString() && info.output > 0)
+					if (comboBox2.SelectedItem != null && info.name == comboBox2.SelectedItem.ToString() && info.output > 0)
 					{
 						deviceId = i;
 						break;
