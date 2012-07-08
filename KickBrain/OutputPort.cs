@@ -124,8 +124,10 @@ namespace KickBrain
 		public string ToXML()
 		{
 			string output = "<Output>";
-			output += Signal.ToXML();
-			output += Event.ToXML();
+			if(Signal != null)
+				output += Signal.ToXML();
+			if(Event != null)
+				output += Event.ToXML();
 			output += "<Name>" + Name + "</Name>";
 			output += "<Enabled>" + Enabled + "</Enabled>";
 			output += "<MidiChannel>" + MidiChannel + "</MidiChannel>";
@@ -134,7 +136,8 @@ namespace KickBrain
 			output += "<FilterEnabled>" + FilterEnabled + "</FilterEnabled>";
 			output += "<FilterMin>" + FilterMin + "</FilterMin>";
 			output += "<FilterMax>" + FilterMax + "</FilterMax>";
-			output += "<Filter>" + Filter.ToXML() + "</Filter>";
+			if(Filter != null)
+				output += "<Filter>" + Filter.ToXML() + "</Filter>";
 
 			output += "<CrosstalkSignals>";
 			foreach (var xtalk in CrosstalkSignals)
@@ -188,10 +191,15 @@ namespace KickBrain
 
 			try
 			{
-				Signal = Signals.First(
-					x => x.Name == doc.SelectSingleNode("Output/Signal/Name").InnerText && 
-					x.Owner.ChannelName == doc.SelectSingleNode("Output/Signal/Owner").InnerText
-					);
+				var nodeName = doc.SelectSingleNode("Output/Signal/Name");
+				var nodeOwner = doc.SelectSingleNode("Output/Signal/Owner");
+				if (nodeName != null && nodeOwner != null)
+				{
+					Signal = Signals.First(
+						x => x.Name == doc.SelectSingleNode("Output/Signal/Name").InnerText &&
+						x.Owner.ChannelName == doc.SelectSingleNode("Output/Signal/Owner").InnerText
+						);
+				}
 			}
 			catch (Exception e)
 			{ 
@@ -203,10 +211,15 @@ namespace KickBrain
 
 			try
 			{
-				Filter = Signals.First(
-					x => x.Name == doc.SelectSingleNode("Output/Filter/Signal/Name").InnerText && 
-					x.Owner.ChannelName == doc.SelectSingleNode("Output/Filter/Signal/Owner").InnerText
-					);
+				var nodeName = doc.SelectSingleNode("Output/Filter/Signal/Name");
+				var nodeOwner = doc.SelectSingleNode("Output/Filter/Signal/Owner");
+				if (nodeName != null && nodeOwner != null)
+				{
+					Filter = Signals.First(
+						x => x.Name == doc.SelectSingleNode("Output/Filter/Signal/Name").InnerText &&
+						x.Owner.ChannelName == doc.SelectSingleNode("Output/Filter/Signal/Owner").InnerText
+						);
+				}
 			}
 			catch (Exception e)
 			{
@@ -218,10 +231,15 @@ namespace KickBrain
 
 			try
 			{
-				Event = Events.First(
-					x => x.Name == doc.SelectSingleNode("Output/Event/Name").InnerText &&
-					x.Owner.ChannelName == doc.SelectSingleNode("Output/Event/Owner").InnerText
-					);
+				var nodeName = doc.SelectSingleNode("Output/Event/Name");
+				var nodeOwner = doc.SelectSingleNode("Output/Event/Owner");
+				if (nodeName != null && nodeOwner != null)
+				{
+					Event = Events.First(
+						x => x.Name == doc.SelectSingleNode("Output/Event/Name").InnerText &&
+						x.Owner.ChannelName == doc.SelectSingleNode("Output/Event/Owner").InnerText
+						);
+				}
 			}
 			catch (Exception e)
 			{
@@ -232,6 +250,8 @@ namespace KickBrain
 			}
 
 			var xtalkSignals = doc.SelectNodes("Output/CrosstalkSignals");
+			if (xtalkSignals == null)
+				return;
 
 			for(int i =0; i<xtalkSignals.Count; i++)
 			{
@@ -239,13 +259,20 @@ namespace KickBrain
 
 				try
 				{
-					var sig = Signals.First(
-						x => x.Name == signal.SelectSingleNode("Crosstalk/Signal/Name").InnerText &&
-						x.Owner.ChannelName == signal.SelectSingleNode("Crosstalk/Signal/Owner").InnerText
-						);
+					var nodeName = signal.SelectSingleNode("Crosstalk/Signal/Name");
+					var nodeOwner = signal.SelectSingleNode("Crosstalk/Signal/Owner");
+					var nodeFactor = signal.SelectSingleNode("Crosstalk/Factor");
 
-					double factor = Convert.ToDouble(signal.SelectSingleNode("Crosstalk/Factor").InnerText);
-					CrosstalkSignals.Add(new Crosstalk(sig, factor));
+					if (nodeName != null && nodeOwner != null && nodeFactor != null)
+					{
+						var sig = Signals.First(
+							x => x.Name == signal.SelectSingleNode("Crosstalk/Signal/Name").InnerText &&
+							x.Owner.ChannelName == signal.SelectSingleNode("Crosstalk/Signal/Owner").InnerText
+							);
+
+						double factor = Convert.ToDouble(signal.SelectSingleNode("Crosstalk/Factor").InnerText);
+						CrosstalkSignals.Add(new Crosstalk(sig, factor));
+					}
 				}
 				catch (Exception e)
 				{

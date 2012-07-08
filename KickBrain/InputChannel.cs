@@ -38,7 +38,7 @@ namespace KickBrain
 			set { InputConfig = (InputChannelConfig)value; InputConfig.SetOwner(this); }
 		}
 
-		private InputChannelConfig InputConfig { get; set; }
+		public InputChannelConfig InputConfig { get; private set; }
 
 		public void ConfigUpdated()
 		{
@@ -49,7 +49,7 @@ namespace KickBrain
 		{
 			Channel = channel;
 			//Data = new List<double>();
-			movingAverage = new AudioLib.TF.MovingAverage(4);
+			movingAverage = new AudioLib.TF.MovingAverage(1);
 			Buffer = new Buffer(10000);
 
 			Config = new InputChannelConfig(this);
@@ -108,6 +108,13 @@ namespace KickBrain
 			// assign the value to the power. In CC mode power = processed signal
 			outputPower = InputConfig.Velocity.Map(value);
 			outputValue = value;
+
+			// execute the trigger event once TriggerLength has passed
+			if (value != lastSample)
+			{
+				if (InputConfig.Enabled)
+					TriggerEvent.Invoke(this);
+			}
 		}
 
 		/// Boolean state that tells if a trigger is currently on. Used to
@@ -213,6 +220,7 @@ namespace KickBrain
 			var configText = doc.SelectSingleNode("Input/InputChannelConfig").OuterXml;
 			var cfg = (InputChannelConfig)Serializer.DeserializeToXML(configText, typeof(InputChannelConfig));
 			cfg.SetOwner(this);
+			this.Config = cfg;
 			Channel = Convert.ToInt32(doc.ChildNodes[0].Attributes["Index"].Value);
 			ChannelName = doc.SelectSingleNode("Input/InputChannelConfig/Name").InnerText;
 		}

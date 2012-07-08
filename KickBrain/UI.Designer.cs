@@ -144,7 +144,6 @@
 			// 
 			this.panelMeters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.panelMeters.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelMeters.Location = new System.Drawing.Point(0, 519);
 			this.panelMeters.Name = "panelMeters";
 			this.panelMeters.Size = new System.Drawing.Size(976, 142);

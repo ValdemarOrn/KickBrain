@@ -319,7 +319,8 @@ namespace KickBrain.Controllers
 				ui.CrosstalkLabels[i].Text = String.Format("{0:0.000}", val);
 				if (CurrentPort.IsCrosstalk(xtalk))
 					ui.CrosstalkLabels[i].ForeColor = System.Drawing.Color.Red;
-
+				else
+					ui.CrosstalkLabels[i].ForeColor = System.Drawing.Color.Black;
 				i++;
 			}
 

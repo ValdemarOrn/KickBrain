@@ -42,10 +42,7 @@ namespace KickBrain
 		public MidiOutput Output;
 		public UI ui;
 
-		public int ChannelCount
-		{
-			get { return (Input != null) ? Input.ChannelCount : 0; }
-		}
+		public int ChannelCount;
 
 		public int Baudrate
 		{
@@ -115,6 +112,7 @@ namespace KickBrain
 			while (Sources.InputChannels.Count > numChannels)
 				Sources.RemoveInputChannel(Sources.InputChannels.Count - 1);
 
+			ChannelCount = numChannels;
 			ui.Ctrl.LoadInputs();
 		}
 		
@@ -132,7 +130,7 @@ namespace KickBrain
 			SerialInput SerialInput = null;
 			try
 			{
-				SerialInput = new SerialInputMock();
+				SerialInput = new SerialInput();
 				SerialInput.Connect(COMPort, BaudRate, NumberOfChannels);
 			}
 			catch (Exception ex)

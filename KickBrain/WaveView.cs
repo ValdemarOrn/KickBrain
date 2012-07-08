@@ -129,9 +129,12 @@ namespace KickBrain
 			var power = channel.GetPower();
 
 			int delay = 0;// Channel.Config.TriggerLength;
-			if(power > 0.0)
+
+			if(channel.InputConfig.ContinuousControl)
 				TriggerPos.Add(ScanPos - delay);
-			if(power == 0.0)
+			else if(power > 0.0)
+				TriggerPos.Add(ScanPos - delay);
+			else if(power == 0.0)
 				TriggerOffPos.Add(ScanPos - delay);
 		}
 

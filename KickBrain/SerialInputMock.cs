@@ -15,7 +15,7 @@ namespace KickBrain
 			ChannelCount = channelCount;
 		}
 
-
+		long kk = 0;
 		DateTime lastTrig;
 		Random r = new Random();
 		protected override void Receive()
@@ -23,7 +23,7 @@ namespace KickBrain
 			while (!Stopping)
 			{
 				Thread.Sleep(1);
-				byte[] buf = new byte[8 + 1];
+				byte[] buf = new byte[10 + 1];
 
 
 				// Data rate
@@ -41,6 +41,9 @@ namespace KickBrain
 				{
 					buf[i] = (byte)r.Next(1,4);
 				}
+
+				buf[9] = (byte)((Math.Sin(0.005 * kk)+1)*127);
+				kk++;
 
 				if (DateTime.Now > lastTrig.AddSeconds(1))
 				{
