@@ -1,9 +1,6 @@
 main
 	UART1_Init
-	ADCsample
-		TrySendSerial
 	loop
-		Mul_16x16_U
 		ADCsample
 			TrySendSerial
 		TrySendSerial

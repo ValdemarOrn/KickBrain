@@ -1,12 +1,9 @@
 
 #define HIHAT_ENABLED 1 // sets whether this model has a hi-hat input
-#define REFERENCE_CHANNEL 10
-#define CHANNEL_COUNT 11 // 10 AD channel + 1 digital bit channel (contains 8 bits/switches)
+#define CHANNEL_COUNT 12 // 10 AD channel + Hihat Channel + 1 digital bit channel (contains 8 bits/switches)
 unsigned char Data[CHANNEL_COUNT]; // reserve space for channels
 
 int i; // -1 = zero (stop value)
-
-int reference;
 
 void loop();
 void serialEvent();
@@ -76,9 +73,6 @@ void main()
 
 	i = -1;
 
-	
-	reference = ADCsample(REFERENCE_CHANNEL);
-
 	// Blink the LED to indicate life
 	PORTD.F0 = 1;
 	Delay_ms(200);
@@ -131,16 +125,9 @@ void loop()
 	int value;
 	int k;
 	
-	// check for incoming data
-//	if(UART1_Data_Ready() == 1)
-//		serialEvent();
-	
-	// gets the reference voltage. This ADC pin must be connected to the bias voltage
-	reference = (reference * 7 + ADCsample(REFERENCE_CHANNEL)) >> 3; // (7*ref + 1*read) / 8
-  
 	for(k=0; k < CHANNEL_COUNT; k++)
 	{
-		if(k == 9 && HIHAT_ENABLED) // read the hihat value, if this is a hihat model
+		if(k == 10) // channel 10 is hihat channel
 		{
 			value = ADCsample(k);
 			value = value >> 2;
@@ -149,27 +136,22 @@ void loop()
 			if (value <= 0)
 				value = 1;
 
-			if(value > Data[k]) // preserve peaks
-				Data[k] = (unsigned char)value;
+			Data[k] = (unsigned char)value;
 		}
-		else if (k == 10) // AD channels are 0-9, channel 10 is for digital switches
+		else if (k == 11) // AD channels are 0-9, channel 10 is hihat, 11 is for digital switches
 		{
-			value = 1 | (PORTC.F0 << 4) | (PORTC.F1 << 5);
+			value = 1 | (!PORTC.F1 << 1) | (!PORTC.F2 << 2) | (!PORTC.F3 << 3);
 			
 			Data[k] = (unsigned char)value;
 		}
 		else // Read normal AD triggers
 		{
 			value = ADCsample(k);
-			value = (value-reference);
-			
-			if(value < 0)
-				value = 0;
 				
-			//value = value >> 1; // divide by two
+			//value = value >> 2; // divide by 4
 			
-			if(value > 255)  // because reference is not exactly 512, 
-				value = 255; // there can be a slight offset. Make sure numbers don't overflow
+			if(value > 255)
+				value = 255; // Make sure numbers don't overflow
 				
 			// Zeroes are interpreted as frame-markers, prevent values from containing zeros
 			if (value <= 0)

@@ -14,7 +14,7 @@ namespace KickBrain
 	public partial class ConfigureDialog : Form
 	{
 		public SerialInput SerialInput;
-		public MidiOutput MidiOutput;
+		public NAudioMidiOutput MidiOutput;
 		public bool Connected;
 
 		public ConfigureDialog()
@@ -24,11 +24,11 @@ namespace KickBrain
 			foreach (var port in ports)
 				comboBox1.Items.Add(port);
 
-			for (int i = 0; i < AudioLib.PortMidi.Pm_CountDevices(); i++)
+			var midiDevices = NAudioMidiOutput.GetMIDIOutDevices();
+
+			foreach (var device in midiDevices)
 			{
-				var info = AudioLib.PortMidi.Pm_GetDeviceInfo(i);
-				if (info.output > 0)
-					comboBox2.Items.Add(info.name);
+				comboBox2.Items.Add(device.Item1);
 			}
 		}
 
@@ -47,18 +47,9 @@ namespace KickBrain
 		{
 			get
 			{
-				// find the device ID
-				int deviceId = -1;
-				for (int i = 0; i < PortMidi.Pm_CountDevices(); i++)
-				{
-					var info = PortMidi.Pm_GetDeviceInfo(i);
-					if (comboBox2.SelectedItem != null && info.name == comboBox2.SelectedItem.ToString() && info.output > 0)
-					{
-						deviceId = i;
-						break;
-					}
-				}
-				return deviceId;
+				var midiDevices = NAudioMidiOutput.GetMIDIOutDevices();
+				var item = midiDevices.First(x => x.Item1 == comboBox2.SelectedItem.ToString());
+				return item.Item2;
 			}
 		}
 

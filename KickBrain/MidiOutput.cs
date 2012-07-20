@@ -5,7 +5,7 @@ using System.Text;
 using AudioLib;
 
 namespace KickBrain
-{
+{/*
 	public class MidiOutput
 	{
 		[Newtonsoft.Json.JsonIgnore]
@@ -112,5 +112,5 @@ namespace KickBrain
 			if (err != PortMidi.PmError.pmNoError)
 				Brain.KB.ShowError("Error sending CC: " + err.ToString());
 		}
-	}
+	}*/
 }

@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio">
+      <HintPath>..\Binaries\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.WindowsMediaFormat">
+      <HintPath>..\Binaries\NAudio.WindowsMediaFormat.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -52,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Controllers\OutputController.cs" />
     <Compile Include="Controllers\SignalController.cs" />
+    <Compile Include="NAudioMidiOutput.cs" />
     <Compile Include="OutputPort.cs" />
     <Compile Include="SerialInputMock.cs" />
     <Compile Include="Signal.cs" />

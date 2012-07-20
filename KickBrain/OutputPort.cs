@@ -100,7 +100,7 @@ namespace KickBrain
 					return;
 
 			if (IsNote)
-				Brain.KB.Output.NoteOn(MidiChannel, CCNumber, (int)(val * 127.0));
+				Brain.KB.Output.Note(MidiChannel, CCNumber, (int)(val * 127.0));
 			else
 				Brain.KB.Output.CC(MidiChannel, CCNumber, (int)(val * 127.0));
 		}

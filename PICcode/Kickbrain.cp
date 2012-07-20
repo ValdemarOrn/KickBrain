@@ -2,12 +2,9 @@
 
 
 
-
-unsigned char Data[ 11 ];
+unsigned char Data[ 12 ];
 
 int i;
-
-int reference;
 
 void loop();
 void serialEvent();
@@ -72,13 +69,10 @@ void main()
 
 
 
- for(k = 0; k <  11 ; k++)
+ for(k = 0; k <  12 ; k++)
  Data[k] = 0;
 
  i = -1;
-
-
- reference = ADCsample( 10 );
 
 
  PORTD.F0 = 1;
@@ -122,7 +116,7 @@ void TrySendSerial()
  }
 
  i++;
- if(i >=  11 )
+ if(i >=  12 )
  i = -1;
 }
 
@@ -132,16 +126,9 @@ void loop()
  int value;
  int k;
 
-
-
-
-
-
- reference = (reference * 7 + ADCsample( 10 )) >> 3;
-
- for(k=0; k <  11 ; k++)
+ for(k=0; k <  12 ; k++)
  {
- if(k == 9 &&  1 )
+ if(k == 10)
  {
  value = ADCsample(k);
  value = value >> 2;
@@ -150,22 +137,17 @@ void loop()
  if (value <= 0)
  value = 1;
 
- if(value > Data[k])
  Data[k] = (unsigned char)value;
  }
- else if (k == 10)
+ else if (k == 11)
  {
- value = 1 | (PORTC.F0 << 4) | (PORTC.F1 << 5);
+ value = 1 | (!PORTC.F1 << 1) | (!PORTC.F2 << 2) | (!PORTC.F3 << 3);
 
  Data[k] = (unsigned char)value;
  }
  else
  {
  value = ADCsample(k);
- value = (value-reference);
-
- if(value < 0)
- value = 0;
 
 
 

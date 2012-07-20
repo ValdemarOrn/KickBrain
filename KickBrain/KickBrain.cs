@@ -39,7 +39,7 @@ namespace KickBrain
 		public SourceManager Sources;
 
 		public SerialInput Input;
-		public MidiOutput Output;
+		public NAudioMidiOutput Output;
 		public UI ui;
 
 		public int ChannelCount;
@@ -149,7 +149,7 @@ namespace KickBrain
 		private void OpenMidiOutput(int DeviceID)
 		{
 			if (Output != null)
-				Output.Close();
+				Output.Dispose();
 
 			AudioLib.PortMidi.Pm_CountDevices();
 
@@ -161,7 +161,7 @@ namespace KickBrain
 
 			try
 			{
-				var MidiOutput = new MidiOutput(DeviceID);
+				var MidiOutput = new NAudioMidiOutput(DeviceID);
 				Output = MidiOutput;
 			}
 			catch (Exception e)
