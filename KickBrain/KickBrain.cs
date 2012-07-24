@@ -151,8 +151,6 @@ namespace KickBrain
 			if (Output != null)
 				Output.Dispose();
 
-			AudioLib.PortMidi.Pm_CountDevices();
-
 			if (DeviceID < 0)
 			{
 				ShowError("Illegal Device ID for Midi Output. ID: " + DeviceID);

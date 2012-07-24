@@ -1,11 +1,11 @@
 ISIS SCHEMATIC DESCRIPTION FORMAT 6.1
 =====================================
-Design:   C:\Src\_Tree\Audio\KickBrain\Schematic.V2\Power Board Hihat.DSN
+Design:   C:\Src\_Tree\Audio\KickBrain\Schematic\Power Board.DSN
 Doc. no.: <NONE>
 Revision: <NONE>
 Author:   <NONE>
 Created:  05/05/12
-Modified: 20/07/12
+Modified: 24/07/12
 
 *PROPERTIES,0    
 
@@ -225,34 +225,34 @@ C8,PS,+
 U4,OP,6
 C9,PS,-
 
-#00120,3
+#00118,3
 U3,IP,5
 R16,PS,2
 J_T1,PS,2
 
-#00121,2
+#00119,2
 U3,IP,6
 RV12,PS,2
 
-#00126,3
+#00124,3
 U5,IP,3
 R1,PS,2
 J_T2,PS,2
 
-#00127,2
+#00125,2
 U5,IP,2
 RV10,PS,2
 
-#00131,3
+#00129,3
 U5,IP,5
 R13,PS,2
 J_T3,PS,2
 
-#00132,2
+#00130,2
 U5,IP,6
 RV11,PS,2
 
-#00136,2
+#00134,2
 R4,PS,1
 RV13,PS,2
 
@@ -407,13 +407,13 @@ U2,IO,26
 
 SER_TX,3
 SER_TX,LBL
-J_SER,PS,1
 U4,OP,14
+J_SER,PS,1
 
 SER_RX,3
 SER_RX,LBL
-J_SER,PS,2
 U4,IP,13
+J_SER,PS,2
 
 T1,3
 T1,LBL

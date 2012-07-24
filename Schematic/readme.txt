@@ -1,0 +1,1 @@
+The design files are for Proteus Isis. Also provided are pdf files of the schematic diagram, pdf for the pcb layout and a picture of part placement on the board

@@ -55,6 +55,7 @@ namespace KickBrain.Controllers
 		{
 			var sender = (InputChannel)sender_;
 			var power = CurrentChannel.GetPower();
+			var val = CurrentChannel.GetValue();
 
 			// Invoke from main thread
 			Action<object> TriggerDele = Trigger;
@@ -64,10 +65,10 @@ namespace KickBrain.Controllers
 				return;
 			}
 
-			if (power == 0.0)
+			if (sender.InputConfig.ContinuousControl == false && power == 0.0)
 				return;
 
-			ui.velocityMapControl1.SetTrigger(power);
+			ui.velocityMapControl1.SetTrigger(val);
 
 			ui.textBoxVelocity.Text = Math.Round(power, 3).ToString();
 			int hits = 0;

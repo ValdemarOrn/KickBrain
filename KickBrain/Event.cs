@@ -73,17 +73,13 @@ namespace KickBrain
 		/// <param name="sender"></param>
 		public void Invoke(object sender)
 		{
-			var ac = Actions;
 			lock (lockObject)
 			{
-				ac = Actions.Select(x => x).ToList();
+				foreach (var del in Actions)
+				{
+					del(sender);
+				}
 			}
-			
-			foreach (var del in ac)
-			{
-				del(sender);
-			}
-			
 		}
 
 		public string ToXML()

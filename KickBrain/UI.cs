@@ -94,7 +94,7 @@ namespace KickBrain
 			doc.WriteTo(xtw);
 
 			SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-			saveFileDialog1.Filter = "XML File|*.xml";
+			saveFileDialog1.Filter = "KickBrain File|*.kickb";
 			saveFileDialog1.Title = "Save Configuration";
 			saveFileDialog1.RestoreDirectory = true;
 			saveFileDialog1.ShowDialog();
@@ -119,7 +119,7 @@ namespace KickBrain
 		{
 			OpenFileDialog openFileDialog1 = new OpenFileDialog();
 			openFileDialog1.InitialDirectory = "c:\\" ;
-			openFileDialog1.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*" ;
+			openFileDialog1.Filter = "KickBrain Files (*.kickb)|*.kickb|All files (*.*)|*.*" ;
 			openFileDialog1.FilterIndex = 0 ;
 			openFileDialog1.RestoreDirectory = true ;
 
@@ -140,6 +140,13 @@ namespace KickBrain
 		private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			Ctrl.LeaveBackgroundMode();
+		}
+
+		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var ab = new AboutBox();
+			ab.ShowDialog();
+
 		}
 	}
 }

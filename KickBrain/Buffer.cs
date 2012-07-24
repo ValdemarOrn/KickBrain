@@ -33,22 +33,5 @@ namespace KickBrain
 			return Data[GetIndex(offset)];
 		}
 
-		public double GetMax(int offset)
-		{
-			int x = GetIndex(offset);
-			double max = double.MinValue;
-			while (true)
-			{
-				if (Data[x] > max)
-					max = Data[x];
-
-				if (x == i)
-					break;
-				else
-					x = (x + 1) % Data.Length;
-			}
-
-			return max;
-		}
 	}
 }

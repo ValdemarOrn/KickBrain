@@ -147,9 +147,11 @@ namespace KickBrain
 			int x = Buffer.GetIndex(InputConfig.TriggerAttack);
 			double valuePre = Buffer.Data[x];
 
-			// ------------------- Get channel power (max peak value) ------------
+			// --- Output power looks at the last two samples and finds the maximum
+			outputPower = Buffer.Data[x];
+			if (x > 0 && (Buffer.Data[x - 1] > outputPower))
+				outputPower = Buffer.Data[x - 1];
 
-			outputPower = Buffer.GetMax(InputConfig.TriggerLength + InputConfig.TriggerAttack);
 			outputValue = value;
 
 			// -------------------Trigger sensor---------------------------
