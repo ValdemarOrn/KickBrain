@@ -2,7 +2,7 @@
 
 
 
-![](./raw/master/ReadmeFiles/Icon-small.png)
+![](https://github.com/ValdemarOrn/KickBrain/raw/master/ReadmeFiles/Icon-small.png)
 
 
 # Introduction #
@@ -19,7 +19,7 @@ Schematics and PCB layouts can be found
 [here](https://github.com/ValdemarOrn/KickBrain/tree/master/Schematic)
 ## The Hardware
 
-![](./raw/master/ReadmeFiles/PCB.png)
+![](https://github.com/ValdemarOrn/KickBrain/raw/master/ReadmeFiles/PCB.png)
 
 KickBrain is a single, very simple PCB. It is laid out as a single sided, through-hole component board and is ideal for hobbyists. The board is powered by a cheap PIC18 8-bit microcontroller. It function is to read the analog input voltages from the inputs and convert them into a digital format.
 
@@ -33,11 +33,11 @@ The software provides a visual representation of the input signals that are conn
 
 **Input Panel**
 
-![](./raw/master/ReadmeFiles/screenshot-small.png)
+![](https://github.com/ValdemarOrn/KickBrain/raw/master/ReadmeFiles/screenshot-small.png)
 
 **Output Panel**
 
-![](./raw/master/ReadmeFiles/screenshot2-small.png)
+![](https://github.com/ValdemarOrn/KickBrain/raw/master/ReadmeFiles/screenshot2-small.png)
 
 
 
