@@ -11,6 +11,8 @@ KickBrain is a combination of hardware and PC software that enables drummers to 
 
 [Video showing how to Set Up a simple Snare trigger](http://www.youtube.com/watch?v=PUKn4v0qlmI)
 
+<iframe width="560" height="315" src="http://www.youtube.com/embed/PUKn4v0qlmI" frameborder="0" allowfullscreen></iframe>
+
 ## Download
 
 You can download the latest version of the [KickBrain software Here](https://github.com/ValdemarOrn/KickBrain/tree/master/Releases)
