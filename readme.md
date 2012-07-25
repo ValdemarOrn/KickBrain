@@ -87,7 +87,7 @@ That depends. This is still a work in progress. Although both the hardware and s
 
 ## What.. I can use an Arduino?!
 
-Yes. You see, since the input protocol is so simple you can set up just about anything to serve as an input module, and that includes an Arduino. There is an Arduino sketch in the Git repository, under ArduinoAudioFastSerial. It simply reads the analog inputs, from zero to five, and outputs the data to the serial port. Channel 5 is used to the hi-hat input, the only difference being that the hi-hat input value is divided by 4, but trigger inputs are simply limited between 1 and 255. You still have place two protection diodes on every input, one to prevent the signal from going negative, and another to prevent it going (too far) above 5V. **If you don't do this it may damage your Arduino board!** (Schematics will be added soon).
+Yes. You see, since the input protocol is so simple you can set up just about anything to serve as an input module, and that includes an Arduino. There is an Arduino sketch in the Git repository, under ArduinoAudioFastSerial. It simply reads the analog inputs, from zero to five, and outputs the data to the serial port. Channel 5 is used for the hi-hat input, the only difference being that the hi-hat input value is divided by 4, but trigger inputs are simply limited between 1 and 255. You still have to place two protection diodes on every input, one to prevent the signal from going negative, and another to prevent it going (too far) above 5V. **If you don't do this it may damage your Arduino board!** (Schematics will be added soon).
 
 ## I'm getting horrible latency!
 
